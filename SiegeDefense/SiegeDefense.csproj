@@ -38,15 +38,18 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameObjects\Camera.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="GameObjects\Map\HeightMap.cs" />
+    <Compile Include="GameObjects\Primitives\Quad.cs" />
     <Compile Include="GameObjects\TitleScreen\TitleMenu.cs" />
     <Compile Include="GameObjects\TitleScreen\TitleScreenBackground.cs" />
     <Compile Include="GameObjects\TitleScreen\TitleMenuButton.cs" />
     <Compile Include="GameObjects\TitleScreen\TitleScreen.cs" />
     <Compile Include="GameObjects\Static2DSprite.cs" />
     <Compile Include="Input\GameInput.cs" />
+    <Compile Include="Input\IInputManager.cs" />
     <Compile Include="Input\InputManager.cs" />
-    <Compile Include="Input\MouseButton.cs" />
     <Compile Include="SiegeDefenseGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

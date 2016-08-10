@@ -14,7 +14,7 @@ namespace SiegeDefense.GameObjects.TitleScreen {
             Rectangle frameDrawArea = Utility.CalculateDrawArea(framePosition, frameSize, 
                 Game.Services.GetService<GraphicsDeviceManager>());
             Color frameColor = Color.White;
-            childObjects.Add(new Static2DSprite(frameTexture, frameDrawArea, frameColor));
+            AddChild(new Static2DSprite(frameTexture, frameDrawArea, frameColor));
 
             // Load buttons
             string[] buttonTexts = { "New Game", "Option", "Credit", "Exit" };
@@ -23,7 +23,7 @@ namespace SiegeDefense.GameObjects.TitleScreen {
 
             for (int i = 0; i < buttonTexts.Length; i++) {
                 double buttonY = i * 1.0 / (buttonTexts.Length + 1) + 0.1;
-                childObjects.Add(new TitleMenuButton(buttonTexts[i], buttonX, buttonY, buttonWidth, buttonHeight, frameDrawArea));
+                AddChild(new TitleMenuButton(buttonTexts[i], buttonX, buttonY, buttonWidth, buttonHeight, frameDrawArea));
             }
         }
 

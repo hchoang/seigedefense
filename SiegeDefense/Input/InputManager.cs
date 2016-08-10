@@ -1,85 +1,84 @@
-﻿using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using SiegeDefense.GameObjects;
 
 namespace SiegeDefense.Input {
-    public class InputManager {
-
-        private enum State {
-            Current,
-            Previous
-        }
-
-        private Dictionary<GameInput, Keys> inputToKeyboardMap = new Dictionary<GameInput, Keys>();
-        private KeyboardState previousKeyboardState;
+    public class InputManager : GameObject, IInputManager {
         private KeyboardState currentKeyboardState;
+        private KeyboardState previousKeyboardState;
 
-        private Dictionary<GameInput, string> inputToMouseButtonMap = new Dictionary<GameInput, string>();
-        private MouseState previousMouseState;
         private MouseState currentMouseState;
+        private MouseState previousMouseState;
 
-        public InputManager() {
-            inputToKeyboardMap.Add(GameInput.Up, Keys.Up);
-            inputToKeyboardMap.Add(GameInput.Down, Keys.Down);
-            inputToKeyboardMap.Add(GameInput.Left, Keys.Left);
-            inputToKeyboardMap.Add(GameInput.Right, Keys.Right);
+        private enum MouseButton {
+            LeftButton,
+            RightButton,
+            MiddleButton,
+            XButton1,
+            XButton2
         }
 
-        public double getValue(GameInput input) {
-            return 0;
-        }
-
-        private bool isPress(GameInput input, State state) {
-            KeyboardState keyboardState = currentKeyboardState;
-            MouseState mouseState = currentMouseState;
-            if (state == State.Previous) {
-                keyboardState = previousKeyboardState;
-                mouseState = previousMouseState;
-            }
-
-            // map to keyboard
-            Keys key;
-            bool isKeyMapped = inputToKeyboardMap.TryGetValue(input, out key);
-            if (isKeyMapped)
-                return keyboardState.IsKeyDown(key);
-
-            // map to mouse
-            string buttonName;
-            ButtonState buttonState = ButtonState.Released;
-            isKeyMapped = inputToMouseButtonMap.TryGetValue(input, out buttonName);
-            if (isKeyMapped) {
-                if (buttonName == "left") buttonState = mouseState.LeftButton;
-                else if (buttonName == "right") buttonState = mouseState.RightButton;
-                else if (buttonName == "middle") buttonState = mouseState.MiddleButton;
-                else if (buttonName == "x1") buttonState = mouseState.XButton1;
-                else if (buttonName == "x2") buttonState = mouseState.XButton2;
-
-                return buttonState == ButtonState.Pressed;
-            }
-
-            // map to gamepad
-
-            // no mapping found
-            return false;
-        }
-
-        public bool isPressing(GameInput input) {
-            return isPress(input, State.Current);
-        }
-
-        public bool isTriggered(GameInput input) {
-            return isPress(input, State.Current) && !isPress(input, State.Previous);
-        }
-
-        public bool isReleased(GameInput input) {
-            return !isPress(input, State.Current) && isPress(input, State.Previous);
-        }
-
-        public void Update() {
+        public override void Update(GameTime gameTime) {
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
+        }
+
+        public float GetValue(GameInput input, bool isCurrent = true) {
+
+            // Logical to physical input mapping
+            if (input == GameInput.Up)
+                return GetValue(Keys.Up, isCurrent);
+
+            if (input == GameInput.Down)
+                return GetValue(Keys.Down, isCurrent);
+
+            if (input == GameInput.Left)
+                return GetValue(Keys.Left, isCurrent);
+
+            if (input == GameInput.Right)
+                return GetValue(Keys.Right, isCurrent);
+
+            if (input == GameInput.Zoom)
+                return GetMouseScroll(false) - GetMouseScroll(true);
+
+            return 0;
+        }
+
+        public bool isPressing(GameInput input) {
+            return GetValue(input) != 0;
+        }
+
+        public bool isTriggered(GameInput input) {
+            return GetValue(input, false) == 0 && GetValue(input) != 0;
+        }
+
+        public bool isReleased(GameInput input) {
+            return GetValue(input, false) != 0 && GetValue(input) == 0;
+        }
+
+        private float GetValue(Keys key, bool isCurrent) {
+            KeyboardState kbs = isCurrent ? currentKeyboardState : previousKeyboardState;
+
+            return kbs.IsKeyDown(key) ? 1 : 0;
+        }
+
+        private float GetValue(MouseButton button, bool isCurrent) {
+            MouseState ms = isCurrent ? currentMouseState : previousMouseState;
+            ButtonState state = (ButtonState)typeof(MouseState).GetProperty(button.ToString()).GetValue(ms);
+            return state == ButtonState.Pressed ? 1 : 0;
+        }
+
+        private float GetMouseScroll(bool isCurrent) {
+            MouseState ms = isCurrent ? currentMouseState : previousMouseState;
+            return ms.ScrollWheelValue;
+        }
+
+        private Vector2 getMousePosition(bool isCurrent) {
+            MouseState ms = isCurrent ? currentMouseState : previousMouseState;
+            return ms.Position.ToVector2();
         }
     }
 }

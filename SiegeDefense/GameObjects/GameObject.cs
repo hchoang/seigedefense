@@ -5,7 +5,10 @@ namespace SiegeDefense.GameObjects {
     public abstract class GameObject : DrawableGameComponent{
 
         private static Game _game;
-        protected List<GameObject> childObjects = new List<GameObject>();
+        private List<GameObject> childObjects = new List<GameObject>();
+
+        public Matrix WorldMatrix { get; set; } = Matrix.Identity;
+        public GameObject ParentObject { get; set; } = null;
 
         protected List<T> findObject<T>() where T : GameObject {
             GameObject root = Game.Services.GetService<Stack<GameObject>>().Peek();
@@ -32,6 +35,11 @@ namespace SiegeDefense.GameObjects {
 
         public GameObject() : base(_game) {
 
+        }
+
+        protected void AddChild(GameObject child) {
+            childObjects.Add(child);
+            child.ParentObject = this;
         }
 
         public override void Draw(GameTime gameTime) {

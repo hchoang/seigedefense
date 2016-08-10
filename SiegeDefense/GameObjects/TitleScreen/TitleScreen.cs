@@ -5,8 +5,8 @@ namespace SiegeDefense.GameObjects.TitleScreen {
     public class TitleScreen : GameObject {
 
         public TitleScreen() {
-            childObjects.Add(new TitleScreenBackground());
-            childObjects.Add(new TitleMenu());
+            AddChild(new TitleScreenBackground());
+            AddChild(new TitleMenu());
         }
     }
 }

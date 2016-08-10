@@ -3,6 +3,7 @@
         Up,
         Down,
         Left,
-        Right
+        Right,
+        Zoom
     }
 }
