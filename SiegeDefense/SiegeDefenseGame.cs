@@ -1,19 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SiegeDefense.GameObjects;
-using SiegeDefense.GameObjects.Map;
-using SiegeDefense.GameObjects.TitleScreen;
-using SiegeDefense.Input;
+using SiegeDefense.GameComponents;
+using SiegeDefense.GameComponents.Input;
 using System.Collections.Generic;
+using SiegeDefense.GameComponents.Cameras;
+using SiegeDefense.GameScreens;
 
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
         GraphicsDeviceManager graphicDeviceManager;
-        Stack<GameObject> rootObjectStack = new Stack<GameObject>();
-        GameObject inputManager = new InputManager();
+        GameObject inputManager;
         Camera mainCamera;
-        BasicEffect effect;
+        BasicEffect basicEffect;
+        Effect advancedEffect;
 
         public SiegeDefenseGame() {
             graphicDeviceManager = new GraphicsDeviceManager(this);
@@ -21,64 +21,58 @@ namespace SiegeDefense {
         }
 
         protected override void Initialize() {
-            base.Initialize();
-
             graphicDeviceManager.PreferredBackBufferWidth = 1024;
             graphicDeviceManager.PreferredBackBufferHeight = 768;
             graphicDeviceManager.ApplyChanges();
-            IsMouseVisible = true;
+            //IsMouseVisible = true;
 
             GameObject.Initialize(this);
-
             RegisterServices();
 
-            //rootObjectStack.Push(new TitleScreen());
-            rootObjectStack.Push(HeightMap.createFromTexture(Content.Load<Texture2D>(@"Sprites\terrain"), 1));
+            Components.Add(mainCamera);
+            Components.Add(inputManager);
+            Components.Add(new MainGameScreen());
+
+            base.Initialize();
+        }
+
+        protected override void LoadContent() {
+            base.LoadContent();
         }
 
         private void RegisterServices() {
+            // Input
+            inputManager = new InputManager();
+            Services.AddService(typeof(IInputManager), inputManager);
 
             // Graphics device
             Services.AddService(graphicDeviceManager);
 
-            // Input
-            Services.AddService(typeof(IInputManager), inputManager);
-
             // 2D - SpriteBatch
             Services.AddService(new SpriteBatch(GraphicsDevice));
 
-            // 3D
-            // Camera
-            mainCamera = new Camera(new Vector3(20, 200, 0), new Vector3(100, 0, 100), Vector3.Up);
-            Services.AddService(typeof(Camera), mainCamera);
+            // 3D - Effect
+            basicEffect = new BasicEffect(GraphicsDevice);
+            basicEffect.EnableDefaultLighting();
+            Services.AddService(basicEffect);
 
-            // Effect
-            effect = new BasicEffect(GraphicsDevice);
-            effect.View = mainCamera.ViewMatrix;
-            effect.Projection = mainCamera.ProjectionMatrix;
-            effect.EnableDefaultLighting();
-            Services.AddService(effect);
+            advancedEffect = Content.Load<Effect>("customShader");
+            Services.AddService(advancedEffect);
 
-            Services.AddService(rootObjectStack);
+            // 3D - Camera
+            mainCamera = new Camera(new Vector3(10, 20, 0), new Vector3(0, 0, 0), Vector3.Up);
+            Services.AddService(mainCamera);
         }
         
         protected override void Update(GameTime gameTime) {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            mainCamera.Update(gameTime);
-            effect.Projection = mainCamera.ProjectionMatrix;
-            inputManager.Update(gameTime);
-            rootObjectStack.Peek().Update(gameTime);
-
             base.Update(gameTime);
         }
         
         protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            inputManager.Draw(gameTime);
-            rootObjectStack.Peek().Draw(gameTime);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
             base.Draw(gameTime);
         }

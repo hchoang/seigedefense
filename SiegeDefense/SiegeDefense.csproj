@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -37,19 +38,27 @@
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GameObjects\Camera.cs" />
-    <Compile Include="GameObjects\GameObject.cs" />
-    <Compile Include="GameObjects\Map\HeightMap.cs" />
-    <Compile Include="GameObjects\Primitives\Quad.cs" />
-    <Compile Include="GameObjects\TitleScreen\TitleMenu.cs" />
-    <Compile Include="GameObjects\TitleScreen\TitleScreenBackground.cs" />
-    <Compile Include="GameObjects\TitleScreen\TitleMenuButton.cs" />
-    <Compile Include="GameObjects\TitleScreen\TitleScreen.cs" />
-    <Compile Include="GameObjects\Static2DSprite.cs" />
-    <Compile Include="Input\GameInput.cs" />
-    <Compile Include="Input\IInputManager.cs" />
-    <Compile Include="Input\InputManager.cs" />
+    <Compile Include="GameComponents\3DGameObject.cs" />
+    <Compile Include="GameComponents\Lights\LightManager.cs" />
+    <Compile Include="GameComponents\Lights\SunLight.cs" />
+    <Compile Include="GameScreens\MainGameScreen.cs" />
+    <Compile Include="GameComponents\Map\MultiTexturedHeightMap.cs" />
+    <Compile Include="GameComponents\Map\VertexMultitextured.cs" />
+    <Compile Include="GameComponents\Sky\Skybox.cs" />
+    <Compile Include="GameComponents\Cameras\Camera.cs" />
+    <Compile Include="GameComponents\GameObject.cs" />
+    <Compile Include="GameScreens\TitleScreen\TitleMenu.cs" />
+    <Compile Include="GameScreens\TitleScreen\TitleScreenBackground.cs" />
+    <Compile Include="GameScreens\TitleScreen\TitleMenuButton.cs" />
+    <Compile Include="GameScreens\TitleScreen\TitleScreenRoot.cs" />
+    <Compile Include="GameScreens\Static2DSprite.cs" />
+    <Compile Include="GameComponents\Input\GameInput.cs" />
+    <Compile Include="GameComponents\Input\IInputManager.cs" />
+    <Compile Include="GameComponents\Input\InputManager.cs" />
     <Compile Include="SiegeDefenseGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
