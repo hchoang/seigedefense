@@ -170,22 +170,96 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float4 viewPosition = mul(worldPosition, View);
     output.Position = mul(viewPosition, Projection);
  
-    float4 VertexPosition = mul(input.Position, World);
-    output.TextureCoordinate = VertexPosition - CameraPosition;
+    output.TextureCoordinate = worldPosition - CameraPosition;
  
     return output;
 }
  
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
-    return texCUBE(SkyBoxSampler, normalize(input.TextureCoordinate));
+    return texCUBE(SkyBoxSampler, input.TextureCoordinate);
 }
  
 technique Skybox
 {
-    pass Pass1
+    pass Pass0
     {
         VertexShader = compile VS_SHADERMODEL VertexShaderFunction();
         PixelShader = compile PS_SHADERMODEL PixelShaderFunction();
     }
+}
+
+//-------------------------------------------------------------------
+//-----------------Technique: day&night circle skybox ---------------
+//-------------------------------------------------------------------
+
+Texture afternoonSkyTexture;
+Texture morningSkyTexture;
+Texture sunsetSkyTexture;
+Texture nightSkyTexture;
+
+float4 timeWeight;
+
+
+samplerCUBE morningSkySampler = sampler_state 
+{ 
+   texture = <morningSkyTexture>; 
+   magfilter = LINEAR; 
+   minfilter = LINEAR; 
+   mipfilter = LINEAR; 
+   AddressU = Mirror; 
+   AddressV = Mirror; 
+};
+
+samplerCUBE afternnonSkySampler = sampler_state 
+{ 
+   texture = <afternoonSkyTexture>; 
+   magfilter = LINEAR; 
+   minfilter = LINEAR; 
+   mipfilter = LINEAR; 
+   AddressU = Mirror; 
+   AddressV = Mirror; 
+};
+
+samplerCUBE sunsetSkySampler = sampler_state 
+{ 
+   texture = <sunsetSkyTexture>; 
+   magfilter = LINEAR; 
+   minfilter = LINEAR; 
+   mipfilter = LINEAR; 
+   AddressU = Mirror; 
+   AddressV = Mirror; 
+};
+
+samplerCUBE nightSkySampler = sampler_state 
+{ 
+   texture = <nightSkyTexture>; 
+   magfilter = LINEAR; 
+   minfilter = LINEAR; 
+   mipfilter = LINEAR; 
+   AddressU = Mirror; 
+   AddressV = Mirror; 
+};
+
+void DayNightSkyboxVS(float4 inPos : POSITION0, out float4 outPos : POSITION0, out float3 texCoord : TEXCOORD0) {
+	float4 worldPosition = mul(inPos, World);
+	float4 viewPosition = mul(worldPosition, View);
+	outPos = mul(viewPosition, Projection);
+	
+	texCoord = worldPosition - CameraPosition;
+}
+
+float4 DayNightSkyBoxPS(float4 inPos: POSITION0, float3 texCoord : TEXCOORD0) : COLOR0 {
+	return texCUBE(morningSkySampler, texCoord) * timeWeight.x 
+		+ texCUBE(afternnonSkySampler, texCoord) * timeWeight.y
+		+ texCUBE(sunsetSkySampler, texCoord) * timeWeight.z
+		+ texCUBE(nightSkySampler, texCoord) * timeWeight.w;
+;
+}
+
+technique DayNightSkybox{
+	pass Pass0{
+		VertexShader = compile VS_SHADERMODEL DayNightSkyboxVS();
+        PixelShader = compile PS_SHADERMODEL DayNightSkyBoxPS();
+	}
 }

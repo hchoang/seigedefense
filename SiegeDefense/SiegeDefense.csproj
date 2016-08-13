@@ -43,13 +43,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GameComponents\3DGameObject.cs" />
+    <Compile Include="GameComponents\Cameras\Camera.cs" />
     <Compile Include="GameComponents\Lights\LightManager.cs" />
     <Compile Include="GameComponents\Lights\SunLight.cs" />
+    <Compile Include="GameComponents\Maps\GridMap.cs" />
+    <Compile Include="GameComponents\Maps\Map.cs" />
+    <Compile Include="GameComponents\Physics\GamePhysics.cs" />
     <Compile Include="GameScreens\MainGameScreen.cs" />
-    <Compile Include="GameComponents\Map\MultiTexturedHeightMap.cs" />
-    <Compile Include="GameComponents\Map\VertexMultitextured.cs" />
+    <Compile Include="GameComponents\Maps\MultiTexturedHeightMap.cs" />
+    <Compile Include="GameComponents\Maps\VertexMultitextured.cs" />
     <Compile Include="GameComponents\Sky\Skybox.cs" />
-    <Compile Include="GameComponents\Cameras\Camera.cs" />
+    <Compile Include="GameComponents\Cameras\FPSCamera.cs" />
     <Compile Include="GameComponents\GameObject.cs" />
     <Compile Include="GameScreens\TitleScreen\TitleMenu.cs" />
     <Compile Include="GameScreens\TitleScreen\TitleScreenBackground.cs" />

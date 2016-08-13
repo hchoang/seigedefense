@@ -11,7 +11,6 @@ namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
         GraphicsDeviceManager graphicDeviceManager;
         GameObject inputManager;
-        Camera mainCamera;
         BasicEffect basicEffect;
         Effect advancedEffect;
 
@@ -29,7 +28,6 @@ namespace SiegeDefense {
             GameObject.Initialize(this);
             RegisterServices();
 
-            Components.Add(mainCamera);
             Components.Add(inputManager);
             Components.Add(new MainGameScreen());
 
@@ -45,9 +43,6 @@ namespace SiegeDefense {
             inputManager = new InputManager();
             Services.AddService(typeof(IInputManager), inputManager);
 
-            // Graphics device
-            Services.AddService(graphicDeviceManager);
-
             // 2D - SpriteBatch
             Services.AddService(new SpriteBatch(GraphicsDevice));
 
@@ -59,9 +54,8 @@ namespace SiegeDefense {
             advancedEffect = Content.Load<Effect>("customShader");
             Services.AddService(advancedEffect);
 
-            // 3D - Camera
-            mainCamera = new Camera(new Vector3(10, 20, 0), new Vector3(0, 0, 0), Vector3.Up);
-            Services.AddService(mainCamera);
+            //mainCamera = new FPSCamera(new Vector3(500, 100, 500), new Vector3(100, 20, 100), Vector3.Up);
+            //Services.AddService(mainCamera);
         }
         
         protected override void Update(GameTime gameTime) {
