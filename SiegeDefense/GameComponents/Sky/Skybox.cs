@@ -13,7 +13,7 @@ namespace SiegeDefense.GameComponents.Sky {
 
         private Effect advancedEffect;
         private BasicEffect basicEffect;
-        public Camera camera { get; set; }
+        private Camera camera;
 
         public Skybox() {
             morningSkytexture = Game.Content.Load<TextureCube>(@"Sky\morningSky");
@@ -25,6 +25,10 @@ namespace SiegeDefense.GameComponents.Sky {
             advancedEffect = Game.Services.GetService<Effect>();
             basicEffect = Game.Services.GetService<BasicEffect>();
             ScaleMatrix = Matrix.CreateScale(10);
+        }
+
+        public override void GetDependentComponents() {
+            camera = (Camera)FindObjectsByTag("Camera")[0];
         }
 
         public override void Update(GameTime gameTime) {

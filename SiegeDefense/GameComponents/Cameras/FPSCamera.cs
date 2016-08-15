@@ -8,8 +8,7 @@ namespace SiegeDefense.GameComponents.Cameras {
     public class FPSCamera : Camera {
         private GraphicsDevice graphicsDevice;
 
-        public MultiTexturedHeightMap map { protected get; set; }
-
+        private Map map;
         private float aspectRatio = 0.75f;
         private float nearPlane = 2;
         private float farPlane = 50000;
@@ -19,6 +18,7 @@ namespace SiegeDefense.GameComponents.Cameras {
         private float zoomSpeed = 0.02f;
         private float rotationSpeed = 0.2f;
         private IInputManager inputManager;
+        private float jumpForce = 0;
 
         public FPSCamera(Vector3 Position, Vector3 Target, Vector3 Up) {
             this.Position = Position;
@@ -32,6 +32,12 @@ namespace SiegeDefense.GameComponents.Cameras {
 
             aspectRatio = graphicsDevice.DisplayMode.AspectRatio;
             ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(currentZoom, aspectRatio, nearPlane, farPlane);
+        }
+
+        public override void GetDependentComponents() {
+            map = (Map)FindObjectsByTag("Map")[0];
+
+            base.GetDependentComponents();
         }
 
         public override void Update(GameTime gameTime) {
@@ -89,12 +95,25 @@ namespace SiegeDefense.GameComponents.Cameras {
             }
 
             float height = map.GetHeight(Position) + 20;
-            if (height != Position.Y) {
+            if (height != Position.Y && jumpForce == 0) {
                 Vector3 dY = new Vector3(0, height - Position.Y, 0);
                 Position += dY;
                 Target += dY;
                 ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
             }
+
+            if (inputManager.isTriggered(GameInput.Jump)) {
+                if (jumpForce == 0) {
+                    jumpForce = 1.5f;
+                }
+            }
+
+            Move(new Vector3(0, jumpForce, 0));
+
+            jumpForce -= 1.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (Position.Y <= height)
+                jumpForce = 0;
         }
 
         public void Move(Vector3 direction) {

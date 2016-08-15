@@ -6,6 +6,9 @@ namespace SiegeDefense.GameComponents {
     public abstract class GameObject : DrawableGameComponent{
 
         private static Game _game;
+        private List<GameObject> childObjects = new List<GameObject>();
+        public GameObject ParentObject { get; set; } = null;
+        public string Tag { get; set; }
 
         public static void Initialize(Game game) {
             _game = game;
@@ -14,13 +17,20 @@ namespace SiegeDefense.GameComponents {
         public GameObject() : base(_game) {
         }
 
-        protected virtual void GetDependentComponents() {
+        public virtual void GetDependentComponents() {
             foreach (GameObject childObject in childObjects)
                 childObject.GetDependentComponents();
         }
 
         public static List<T> FindObjects<T>() where T : GameObject {
             return _game.Components.Where(x => x.GetType() == typeof(T)).Cast<T>().ToList();
+        }
+
+        public static List<GameObject> FindObjectsByTag(string tag) {
+            if (tag == null)
+                return new List<GameObject>();
+
+            return _game.Components.Cast<GameObject>().Where(x => tag.Equals(x.Tag)).ToList();
         }
 
         public T FindComponent<T>() where T : GameObject {
@@ -31,7 +41,7 @@ namespace SiegeDefense.GameComponents {
         }
 
         private static T FindComponent<T>(GameObject current) where T : GameObject {
-            if (current.GetType() == typeof(T))
+            if (current is T)
                 return (T)current;
 
             T retValue = null;
@@ -44,8 +54,6 @@ namespace SiegeDefense.GameComponents {
             return retValue;
         }
 
-        private List<GameObject> childObjects = new List<GameObject>();
-        public GameObject ParentObject { get; set; } = null;
         public void AddChild(GameObject child) {
             childObjects.Add(child);
             child.ParentObject = this;
