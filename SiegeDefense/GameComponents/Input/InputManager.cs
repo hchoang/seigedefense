@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Input;
 using SiegeDefense.GameComponents;
 using System;
+using System.Collections.Generic;
 
 namespace SiegeDefense.GameComponents.Input {
     public class InputManager : GameObject, IInputManager {
@@ -51,7 +52,11 @@ namespace SiegeDefense.GameComponents.Input {
             currentMouseState = Mouse.GetState();
         }
 
-        public float GetValue(GameInput input, bool isCurrent = true) {
+        public float GetValue(GameInput input) {
+            return GetValue(input, true);
+        }
+
+        private float GetValue(GameInput input, bool isCurrent = true) {
 
             // Logical to physical input mapping
             if (input == GameInput.Up)
@@ -74,6 +79,9 @@ namespace SiegeDefense.GameComponents.Input {
 
             if (input == GameInput.Horizontal)
                 return GetMouseMovement().X;
+
+            if (input == GameInput.Jump)
+                return GetValue(Keys.Space, isCurrent);
 
             return 0;
         }

@@ -68,7 +68,7 @@ namespace SiegeDefense.GameComponents.Maps {
             }
         }
 
-        public bool Moveable(Vector3 position) {
+        public override bool Moveable(Vector3 position) {
             Vector3 firstVertexPosition = vertices[0].Position;
             Vector3 relativePosition = position - firstVertexPosition;
 
@@ -81,7 +81,7 @@ namespace SiegeDefense.GameComponents.Maps {
             return true;
         }
         
-        public float GetHeight(Vector3 position) {
+        public override float GetHeight(Vector3 position) {
             Vector3 firstVertexPosition = vertices[0].Position;
             Vector3 relativePosition = position - firstVertexPosition;
 
@@ -102,6 +102,29 @@ namespace SiegeDefense.GameComponents.Maps {
             float height = MathHelper.Lerp(h12, h34, cellPositionY);
 
             return height;
+        }
+
+        public override Vector3 GetNormal(Vector3 position) {
+            Vector3 firstVertexPosition = vertices[0].Position;
+            Vector3 relativePosition = position - firstVertexPosition;
+
+            int gridMapPositionX = (int)(relativePosition.X / mapCellSize);
+            int gridMapPositionY = (int)(relativePosition.Z / mapCellSize);
+
+            float cellPositionX = relativePosition.X % mapCellSize / mapCellSize;
+            float cellPositionY = relativePosition.Z % mapCellSize / mapCellSize;
+
+            Vector3 v1 = vertices[gridMapPositionX + gridMapPositionY * mapInfoWidth].Normal;
+            Vector3 v2 = vertices[gridMapPositionX + 1 + gridMapPositionY * mapInfoWidth].Normal;
+            Vector3 v3 = vertices[gridMapPositionX + (gridMapPositionY + 1) * mapInfoWidth].Normal;
+            Vector3 v4 = vertices[gridMapPositionX + 1 + (gridMapPositionY + 1) * mapInfoWidth].Normal;
+
+            Vector3 v12 = Vector3.Lerp(v1, v2, cellPositionX);
+            Vector3 v34 = Vector3.Lerp(v3, v4, cellPositionX);
+
+            Vector3 normal = Vector3.Lerp(v12, v34, cellPositionY);
+
+            return normal;
         }
 
         private void ReadTerrainFromTexture() {
@@ -214,12 +237,6 @@ namespace SiegeDefense.GameComponents.Maps {
             for (int i=0; i < vertices.Length; i++) {
                 vertices[i].Normal.Normalize();
             }
-        }
-
-        public override bool isOverGround(Vector3 Position) {
-            float mapHeight = GetHeight(Position);
-
-            return mapHeight < Position.Y;
         }
     }
 }

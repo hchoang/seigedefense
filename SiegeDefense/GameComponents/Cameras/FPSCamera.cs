@@ -10,17 +10,6 @@ namespace SiegeDefense.GameComponents.Cameras {
 
         public MultiTexturedHeightMap map { protected get; set; }
 
-        public override Vector3 Forward {
-            get {
-                return Vector3.Normalize(Target - Position);
-            }
-        }
-        public override Vector3 Side {
-            get {
-                return Vector3.Normalize(Vector3.Cross(Forward, Up));
-            }
-        }
-
         private float aspectRatio = 0.75f;
         private float nearPlane = 2;
         private float farPlane = 50000;
@@ -35,9 +24,7 @@ namespace SiegeDefense.GameComponents.Cameras {
             this.Position = Position;
             this.Target = Target;
             this.Up = Up;
-        }
 
-        protected override void LoadContent() {
             inputManager = Game.Services.GetService<IInputManager>();
             graphicsDevice = Game.GraphicsDevice;
 
@@ -58,38 +45,33 @@ namespace SiegeDefense.GameComponents.Cameras {
                 }
             }
 
+            Vector3 moveDirection = Vector3.Zero;
+
             if (inputManager.isPressing(GameInput.Up)) {
                 Vector3 goUpVector = Forward;
                 goUpVector.Normalize();
-                Position += goUpVector;
-                Target += goUpVector;
-                ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
+                moveDirection += goUpVector;
             } else if (inputManager.isPressing(GameInput.Down)) {
                 Vector3 goDownVector = -Forward;
                 goDownVector.Normalize();
-                Position += goDownVector;
-                Target += goDownVector;
-                ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
+                moveDirection += goDownVector;
             }
 
             if (inputManager.isPressing(GameInput.Left)) {
-                Vector3 goLeftVector = -Side;
+                Vector3 goLeftVector = Left;
                 goLeftVector.Y = 0;
                 goLeftVector.Normalize();
-                Position += goLeftVector;
-                Target += goLeftVector;
-                ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
+                moveDirection += goLeftVector;
             } else if (inputManager.isPressing(GameInput.Right)) {
-                Vector3 goRightVector = Side;
+                Vector3 goRightVector = -Left;
                 goRightVector.Y = 0;
                 goRightVector.Normalize();
-                Position += goRightVector;
-                Target += goRightVector;
-                ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
+                moveDirection += goRightVector;
             }
+            Move(moveDirection);
 
             if (inputManager.GetValue(GameInput.Vertical) != 0){
-                Matrix rotationMatrix = Matrix.CreateFromAxisAngle(Side, (float)-gameTime.ElapsedGameTime.TotalSeconds * inputManager.GetValue(GameInput.Vertical) * rotationSpeed);
+                Matrix rotationMatrix = Matrix.CreateFromAxisAngle(Left, (float)gameTime.ElapsedGameTime.TotalSeconds * inputManager.GetValue(GameInput.Vertical) * rotationSpeed);
 
                 Vector3 newTarget = Vector3.Transform(Forward, rotationMatrix) + Position;
                 Vector3 newForward = Vector3.Normalize(newTarget - Position);
@@ -113,6 +95,12 @@ namespace SiegeDefense.GameComponents.Cameras {
                 Target += dY;
                 ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
             }
+        }
+
+        public void Move(Vector3 direction) {
+            Position += direction;
+            Target += direction;
+            ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
         }
     }
 }

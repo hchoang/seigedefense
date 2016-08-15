@@ -1,32 +1,41 @@
 ﻿using Microsoft.Xna.Framework;
 using SiegeDefense.GameComponents.Maps;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SiegeDefense.GameComponents.Physics {
     public class GamePhysics : GameObject {
-        private static Vector3 gravity = new Vector3(0, -9.8f, 0);
+        protected static Vector3 gravityForce = new Vector3(0, -9.8f, 0);
 
-        public Vector3 Position { get; set; }
-        private Vector3 Acceleration = Vector3.Zero;
-        private Vector3 Velocity  = Vector3.Zero;
+        public CollisionBoundary Boundary { get; set; }
+        public _3DGameObject Target { get; set; }
         public float Mass { get; set; } = 1;
-        public MultiTexturedHeightMap map { get; set; }
+        public Vector3 Force { get; set; } = Vector3.Zero;
+        public Vector3 Acceleration {
+            get {
+                return Force / Mass;
+            }
+        }
+        public Vector3 Velocity { get; set; } = Vector3.Zero;
+        public Map map { get; set; }
 
-        public void AddForce(Vector3 Force) {
-            Acceleration = Force / Mass;
+        public void AddForce(Vector3 force) {
+            Force += force;
         }
 
         public override void Update(GameTime gameTime) {
-            if (map.isOverGround(Position)) {
-                Acceleration += gravity;
+
+            // update target position
+            Velocity += Acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Boundary.TranslationMatrix *= Matrix.CreateTranslation(Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            // update force
+            if (Boundary.GroundDistance(map) > 0) {
+                Force += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            } else {
+                Force = new Vector3(Force.X, 0, Force.Z);
             }
 
-            Velocity += Acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Vector3 groundNormal = map.GetNormal(Target.Position);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Maps;
+using SiegeDefense.GameComponents.Physics;
 using SiegeDefense.GameComponents.Sky;
 
 namespace SiegeDefense.GameScreens {
@@ -11,6 +12,7 @@ namespace SiegeDefense.GameScreens {
         private Skybox skyBox;
         private MultiTexturedHeightMap map;
         private FPSCamera camera;
+        private GamePhysics cameraPhysics;
 
         private BasicEffect basicEffect;
         private Effect advancedEffect;
@@ -22,14 +24,18 @@ namespace SiegeDefense.GameScreens {
 
             skyBox = new Skybox();
             map = new MultiTexturedHeightMap(10, 100);
-            camera = new FPSCamera(new Vector3(500, 0, 500), new Vector3(100, 20, 100), Vector3.Up);
+            camera = new FPSCamera(new Vector3(500, 200, 500), new Vector3(100, 20, 100), Vector3.Up);
+            cameraPhysics = new GamePhysics();
+
+            skyBox.camera = camera;
+
+            cameraPhysics.map = map;
+            cameraPhysics.Target = camera;
 
             Game.Components.Add(skyBox);
             Game.Components.Add(map);
             Game.Components.Add(camera);
-        }
 
-        public override void Initialize() {
             skyBox.camera = camera;
             camera.map = map;
         }

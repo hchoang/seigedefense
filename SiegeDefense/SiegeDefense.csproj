@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{312F83A8-C6C0-4A06-A326-B5AC6DD758F6}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SiegeDefense</RootNamespace>
     <AssemblyName>SiegeDefense</AssemblyName>
@@ -44,10 +44,9 @@
   <ItemGroup>
     <Compile Include="GameComponents\3DGameObject.cs" />
     <Compile Include="GameComponents\Cameras\Camera.cs" />
-    <Compile Include="GameComponents\Lights\LightManager.cs" />
-    <Compile Include="GameComponents\Lights\SunLight.cs" />
-    <Compile Include="GameComponents\Maps\GridMap.cs" />
     <Compile Include="GameComponents\Maps\Map.cs" />
+    <Compile Include="GameComponents\Physics\CollisionBox.cs" />
+    <Compile Include="GameComponents\Physics\CollisionBoundary.cs" />
     <Compile Include="GameComponents\Physics\GamePhysics.cs" />
     <Compile Include="GameScreens\MainGameScreen.cs" />
     <Compile Include="GameComponents\Maps\MultiTexturedHeightMap.cs" />

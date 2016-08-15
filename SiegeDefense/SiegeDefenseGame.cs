@@ -6,6 +6,7 @@ using SiegeDefense.GameComponents.Input;
 using System.Collections.Generic;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameScreens;
+using SiegeDefense.GameComponents.TitleScreen;
 
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
@@ -42,6 +43,9 @@ namespace SiegeDefense {
             // Input
             inputManager = new InputManager();
             Services.AddService(typeof(IInputManager), inputManager);
+
+            // Graphics device manager
+            Services.AddService(graphicDeviceManager);
 
             // 2D - SpriteBatch
             Services.AddService(new SpriteBatch(GraphicsDevice));
