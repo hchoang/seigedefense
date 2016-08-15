@@ -104,7 +104,7 @@ namespace SiegeDefense.GameComponents.Cameras {
 
             if (inputManager.isTriggered(GameInput.Jump)) {
                 if (jumpForce == 0) {
-                    jumpForce = 1.5f;
+                    jumpForce = 1.2f;
                 }
             }
 

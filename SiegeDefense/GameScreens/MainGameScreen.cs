@@ -22,7 +22,7 @@ namespace SiegeDefense.GameScreens {
             advancedEffect = Game.Services.GetService<Effect>();
 
             skyBox = new Skybox();
-            map = new MultiTexturedHeightMap(10, 100);
+            map = new MultiTexturedHeightMap(10, 200);
             Vector3 cameraPosition = new Vector3(500, 0, 500);
             cameraPosition = new Vector3(cameraPosition.X, map.GetHeight(cameraPosition), cameraPosition.Z);
             camera = new FPSCamera(cameraPosition, new Vector3(100, 20, 100), Vector3.Up);
