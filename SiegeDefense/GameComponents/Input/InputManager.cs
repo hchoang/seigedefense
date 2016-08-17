@@ -91,7 +91,9 @@ namespace SiegeDefense.GameComponents.Input {
         }
 
         public bool isTriggered(GameInput input) {
-            return GetValue(input, false) == 0 && GetValue(input) != 0;
+            bool ret = GetValue(input, false) == 0 && GetValue(input) != 0;
+
+            return ret;
         }
 
         public bool isReleased(GameInput input) {

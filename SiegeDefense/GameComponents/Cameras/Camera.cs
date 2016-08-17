@@ -19,5 +19,9 @@ namespace SiegeDefense.GameComponents.Cameras {
                 return Vector3.Normalize(Vector3.Cross(Up, Forward));
             }
         }
+
+        public Camera() {
+            Tag = "Camera";
+        }
     }
 }

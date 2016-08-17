@@ -12,7 +12,6 @@ namespace SiegeDefense.GameScreens {
         private Skybox skyBox;
         private MultiTexturedHeightMap map;
         private FPSCamera camera;
-        private GamePhysics cameraPhysics;
 
         private BasicEffect basicEffect;
         private Effect advancedEffect;
@@ -23,22 +22,20 @@ namespace SiegeDefense.GameScreens {
             advancedEffect = Game.Services.GetService<Effect>();
 
             skyBox = new Skybox();
-            map = new MultiTexturedHeightMap(10, 100);
-            camera = new FPSCamera(new Vector3(500, 200, 500), new Vector3(100, 20, 100), Vector3.Up);
-            cameraPhysics = new GamePhysics();
-
-            skyBox.camera = camera;
-
-            cameraPhysics.map = map;
-            cameraPhysics.Target = camera;
+            map = new MultiTexturedHeightMap(10, 200);
+            Vector3 cameraPosition = new Vector3(500, 0, 500);
+            cameraPosition = new Vector3(cameraPosition.X, map.GetHeight(cameraPosition), cameraPosition.Z);
+            camera = new FPSCamera(cameraPosition, new Vector3(100, 20, 100), Vector3.Up);
 
             Game.Components.Add(skyBox);
             Game.Components.Add(map);
             Game.Components.Add(camera);
 
-            skyBox.camera = camera;
-            camera.map = map;
+            skyBox.GetDependentComponents();
+            map.GetDependentComponents();
+            camera.GetDependentComponents();
         }
+
 
         public override void Update(GameTime gameTime) {
             basicEffect.View = camera.ViewMatrix;
@@ -46,6 +43,8 @@ namespace SiegeDefense.GameScreens {
 
             advancedEffect.Parameters["View"].SetValue(camera.ViewMatrix);
             advancedEffect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+
+            base.Update(gameTime);
         }
     }
 }

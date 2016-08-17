@@ -20,7 +20,7 @@ float4x4 View;
 float4x4 Projection;
 float4x4 World;
 float3 LightDirection;
-float3 CameraPosition;
+float4 CameraPosition;
 float Ambient;
 bool EnableLighting;
 
@@ -61,7 +61,7 @@ MTVertexToPixel MultiTexturedVS(float4 inPos : POSITION, float3 inNormal : NORMA
 	float4x4 preWorldViewProjection = mul(World, preViewProjection);
 
 	Output.Position = mul(inPos, preWorldViewProjection);
-	Output.Normal = mul(normalize(inNormal), World);
+	Output.Normal = (float3)mul(float4(normalize(inNormal), 0), World);
 	Output.TextureCoords = inTexCoords;
 	Output.LightDirection.xyz = -LightDirection;
 	Output.LightDirection.w = 1;
@@ -76,7 +76,7 @@ MTPixelToFrame MultiTexturedPS(MTVertexToPixel PSIn)
 
 	float lightingFactor = 1;
 	if (EnableLighting)
-		lightingFactor = saturate(saturate(dot(PSIn.Normal, PSIn.LightDirection)) + Ambient);
+		lightingFactor = saturate(saturate(dot(float4(PSIn.Normal, 0), PSIn.LightDirection)) + Ambient);
 
 	Output.Color = tex2D(TextureSampler0, PSIn.TextureCoords)*PSIn.TextureWeights.x;
 	Output.Color += tex2D(TextureSampler1, PSIn.TextureCoords)*PSIn.TextureWeights.y;
@@ -96,47 +96,6 @@ technique MultiTextured
 		PixelShader = compile PS_SHADERMODEL MultiTexturedPS();
 	}
 }
-
-
-// ----------Technique: Skysphere ----------
-
-
-sampler SkysphereSampler = sampler_state { 
-		texture = <xTexture0>; 
-		magfilter = LINEAR; 
-		minfilter = LINEAR; 
-		mipfilter = LINEAR; 
-		AddressU = Mirror; 
-		AddressV = Mirror; };
-
-void SkysphereVS(float3 pos : POSITION0, 
-				out float4 outPos : POSITION0, out float3 outTexCoord : TEXCOORD0) {
-								
-	float3 rotatedPosition = mul(pos, View);
-	
-	outPos = mul(float4(rotatedPosition, 1), Projection).xyww;
-	outTexCoord = pos;
-	
-	
-	/*outPos = mul(pos, World);
-	outPos = mul(outPos, View);
-	outPos = mul(outPos, Projection);
-	
-	float4 vertexWorldPos = mul(pos, World);
-	outTexCoord = vertexWorldPos - CameraPosition;*/
-}
-
-float4 SkyspherePS(float3 SkyCoord : TEXCOORD0) : COLOR0 {
-	return texCUBE(SkysphereSampler, normalize(SkyCoord)) * float4(2, 2, 2, 1);
-}
-
-technique Skysphere {
-	pass Pass0 {
-		VertexShader = compile VS_SHADERMODEL SkysphereVS();
-		PixelShader = compile PS_SHADERMODEL SkyspherePS();
-	}
-}
-
 
 
 //--------------Technique:Skybox----------------
@@ -170,7 +129,7 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
     float4 viewPosition = mul(worldPosition, View);
     output.Position = mul(viewPosition, Projection);
  
-    output.TextureCoordinate = worldPosition - CameraPosition;
+    output.TextureCoordinate = (worldPosition - CameraPosition).xyz;
  
     return output;
 }
@@ -246,7 +205,7 @@ void DayNightSkyboxVS(float4 inPos : POSITION0, out float4 outPos : POSITION0, o
 	float4 viewPosition = mul(worldPosition, View);
 	outPos = mul(viewPosition, Projection);
 	
-	texCoord = worldPosition - CameraPosition;
+	texCoord = (worldPosition - CameraPosition).xyz;
 }
 
 float4 DayNightSkyBoxPS(float4 inPos: POSITION0, float3 texCoord : TEXCOORD0) : COLOR0 {
