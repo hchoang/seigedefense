@@ -11,7 +11,7 @@ namespace SiegeDefense.GameComponents.Models
         }
 
         
-        public void Update()
+        public override void Update()
         {
 
         }

@@ -16,7 +16,7 @@ namespace SiegeDefense.GameComponents.Models
         public BaseModel(Model model)
         {
             this.model = model;
-            scaleMatrix = Matrix.CreateScale(1);
+            scaleMatrix = Matrix.CreateScale(0.5f);
             bouding = this.CalculateBouding();
         }
 
@@ -28,19 +28,20 @@ namespace SiegeDefense.GameComponents.Models
 
         public virtual void Draw(FPSCamera camera)
         {
-            //Matrix[] transform = new Matrix[model.Bones.Count];
-            //model.CopyAbsoluteBoneTransformsTo(transform);
+            Matrix[] transform = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transform);
 
             foreach (ModelMesh mesh in model.Meshes)
             {
                 BoundingBox box = BoundingBox.CreateFromSphere(mesh.BoundingSphere);
                 bouding = BoundingBox.CreateMerged(this.bouding, box);
+                
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
                     effect.Projection = camera.ProjectionMatrix;
                     effect.View = camera.ViewMatrix;
-                    effect.World = scaleMatrix * Matrix.CreateTranslation(new Vector3(1000, 200, 1000));
+                    effect.World = transform[mesh.ParentBone.Index] * scaleMatrix * WorldMatrix *  Matrix.CreateTranslation(position);
                 }
 
                 mesh.Draw();
