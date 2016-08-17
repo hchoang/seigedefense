@@ -12,7 +12,7 @@ namespace SiegeDefense.GameComponents.Models
     {
         public ModelManager(Game game) : base(game)
         {
-            InitializeComponent();
+            //InitializeComponent();
         }
     }
 }

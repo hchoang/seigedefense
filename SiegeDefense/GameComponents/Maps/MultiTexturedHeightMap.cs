@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents.Cameras;
+using SiegeDefense.GameComponents.Sky;
 using System;
 
 namespace SiegeDefense.GameComponents.Maps {
@@ -37,6 +38,17 @@ namespace SiegeDefense.GameComponents.Maps {
         VertexMultiTextured[] vertices;
         private int[] vertexIndices;
 
+        // Water
+        private Camera camera;
+        private float waterHeight = 0.12f;
+        private Skybox sky;
+        private RenderTarget2D refractionRenderTarget;
+        private RenderTarget2D reflectionRenderTarget;
+        private Matrix reflectionViewMatrix;
+        private VertexBuffer waterVertexBuffer;
+        private VertexPositionTexture[] waterVertices;
+        private Texture2D waterBumpMap;
+
         public MultiTexturedHeightMap(float mapCellSize, float mapDeltaHeight) {
             this.mapCellSize = mapCellSize;
             this.mapDeltaHeight = mapDeltaHeight;
@@ -45,6 +57,7 @@ namespace SiegeDefense.GameComponents.Maps {
             grassTexture = Game.Content.Load<Texture2D>(@"Terrain\grass");
             rockTexture = Game.Content.Load<Texture2D>(@"Terrain\rock");
             snowTexture = Game.Content.Load<Texture2D>(@"Terrain\snow");
+            waterBumpMap = Game.Content.Load<Texture2D>(@"Terrain\waterbump");
 
             advancedEffect = Game.Services.GetService<Effect>();
             advancedEffect.Parameters["EnableLighting"].SetValue(true);
@@ -52,10 +65,102 @@ namespace SiegeDefense.GameComponents.Maps {
             advancedEffect.Parameters["LightDirection"].SetValue(new Vector3(-0.5f, -1, -0.5f));
 
             ReadTerrainFromTexture();
-        }        
+
+            PresentationParameters pp = GraphicsDevice.PresentationParameters;
+            refractionRenderTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, true, pp.BackBufferFormat, pp.DepthStencilFormat);
+            reflectionRenderTarget = new RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, true, pp.BackBufferFormat, pp.DepthStencilFormat);
+
+            waterHeight = waterHeight * mapDeltaHeight;
+            SetupWater();
+        }
+
+        public override void GetDependentComponents() {
+            camera = (Camera)FindObjectsByTag("Camera")[0];
+            sky = (Skybox)FindObjectsByTag("Sky")[0];
+        }
 
         public override void Draw(GameTime gameTime) {
+            DrawRefractionMap(gameTime);
+            DrawReflectionMap(gameTime);
+
             advancedEffect.CurrentTechnique = advancedEffect.Techniques["MultiTextured"];
+            DrawMap();
+
+            DrawWater(gameTime);
+        }
+
+        private void DrawWater(GameTime gameTime) {
+            RasterizerState oldRsState = GraphicsDevice.RasterizerState;
+            RasterizerState rs = new RasterizerState();
+            rs.CullMode = CullMode.None;
+            GraphicsDevice.RasterizerState = rs;
+
+            Effect effect = advancedEffect.Clone();
+            effect.CurrentTechnique = effect.Techniques["Water"];
+            effect.Parameters["World"].SetValue(WorldMatrix);
+            effect.Parameters["View"].SetValue(camera.ViewMatrix);
+            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            effect.Parameters["ReflectionView"].SetValue(reflectionViewMatrix);
+            effect.Parameters["ReflectionMap"].SetValue(reflectionRenderTarget);
+            effect.Parameters["WaterBumpMap"].SetValue(waterBumpMap);
+            effect.Parameters["WaveLength"].SetValue(0.3f);
+            effect.Parameters["WaveHeight"].SetValue(0.01f);
+            effect.Parameters["RefractionMap"].SetValue(refractionRenderTarget);
+            effect.Parameters["CameraPosition"].SetValue(camera.Position);
+
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes) {
+                pass.Apply();
+
+                GraphicsDevice.SetVertexBuffer(waterVertexBuffer);
+                GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, waterVertices.Length / 3);
+            }
+
+            GraphicsDevice.RasterizerState = oldRsState;
+        }
+
+        private void DrawReflectionMap(GameTime gameTime) {
+            // calculate reflection matrix
+            Vector3 reflCameraPosition = camera.Position;
+            reflCameraPosition.Y = -camera.Position.Y + waterHeight * 2;
+            Vector3 reflTargetPos = camera.Target;
+            reflTargetPos.Y = -camera.Target.Y + waterHeight * 2;
+            Vector3 cameraRight = Vector3.Transform(new Vector3(1, 0, 0), camera.RotationMatrix);
+            Vector3 invUpVector = Vector3.Cross(cameraRight, reflTargetPos - reflCameraPosition);
+            reflectionViewMatrix = Matrix.CreateLookAt(reflCameraPosition, reflTargetPos, invUpVector);
+
+            // draw reflection map
+            RenderTargetUsage oldUseage = GraphicsDevice.PresentationParameters.RenderTargetUsage;
+            GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+            GraphicsDevice.SetRenderTarget(reflectionRenderTarget);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
+            sky.DrawReflection(gameTime, new Plane(new Vector4(Vector3.Up, -waterHeight + 0.5f)));
+
+            //advancedEffect.CurrentTechnique = advancedEffect.Techniques["MultiTexturedMapRefraction"];
+            //advancedEffect.Parameters["ClipPlane"].SetValue(new Vector4(Vector3.Up, -waterHeight + 0.5f));
+            //advancedEffect.Parameters["View"].SetValue(reflectionViewMatrix);
+            //DrawMap();
+
+            //advancedEffect.Parameters["View"].SetValue(camera.ViewMatrix);
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.PresentationParameters.RenderTargetUsage = oldUseage;
+        }
+
+        private void DrawRefractionMap(GameTime gameTime) {
+            RenderTargetUsage oldUseage = GraphicsDevice.PresentationParameters.RenderTargetUsage;
+            GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
+            GraphicsDevice.SetRenderTarget(refractionRenderTarget);
+            GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
+
+            advancedEffect.CurrentTechnique = advancedEffect.Techniques["MultiTexturedMapRefraction"];
+            advancedEffect.Parameters["ClipPlane"].SetValue(new Vector4(Vector3.Up, waterHeight + 1.5f));
+            DrawMap();
+
+            GraphicsDevice.SetRenderTarget(null);
+            GraphicsDevice.PresentationParameters.RenderTargetUsage = oldUseage;
+        }
+
+        private void DrawMap() {
             advancedEffect.Parameters["World"].SetValue(WorldMatrix);
             advancedEffect.Parameters["xTexture0"].SetValue(sandTexture);
             advancedEffect.Parameters["xTexture1"].SetValue(grassTexture);
@@ -101,6 +206,8 @@ namespace SiegeDefense.GameComponents.Maps {
 
             float height = MathHelper.Lerp(h12, h34, cellPositionY);
 
+            if (height < waterHeight) height = waterHeight;
+
             return height;
         }
 
@@ -125,6 +232,21 @@ namespace SiegeDefense.GameComponents.Maps {
             Vector3 normal = Vector3.Lerp(v12, v34, cellPositionY);
 
             return normal;
+        }
+
+        private void SetupWater() {
+            waterVertices = new VertexPositionTexture[6];
+
+            waterVertices[0] = new VertexPositionTexture(new Vector3(0, waterHeight, 0), new Vector2(0, 1));
+            waterVertices[2] = new VertexPositionTexture(new Vector3(mapInfoWidth * mapCellSize, waterHeight, mapInfoHeight * mapCellSize), new Vector2(1, 0));
+            waterVertices[1] = new VertexPositionTexture(new Vector3(0, waterHeight, mapInfoHeight * mapCellSize), new Vector2(0, 0));
+
+            waterVertices[3] = new VertexPositionTexture(new Vector3(0, waterHeight, 0), new Vector2(0, 1));
+            waterVertices[5] = new VertexPositionTexture(new Vector3(mapInfoWidth * mapCellSize, waterHeight, 0), new Vector2(1, 1));
+            waterVertices[4] = new VertexPositionTexture(new Vector3(mapInfoWidth * mapCellSize, waterHeight, mapInfoHeight * mapCellSize), new Vector2(1, 0));
+
+            waterVertexBuffer = new VertexBuffer(GraphicsDevice, VertexPositionTexture.VertexDeclaration, waterVertices.Length, BufferUsage.WriteOnly);
+            waterVertexBuffer.SetData(waterVertices);
         }
 
         private void ReadTerrainFromTexture() {
