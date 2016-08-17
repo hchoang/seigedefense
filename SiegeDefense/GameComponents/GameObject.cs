@@ -23,7 +23,7 @@ namespace SiegeDefense.GameComponents {
         }
 
         public static List<T> FindObjects<T>() where T : GameObject {
-            return _game.Components.Where(x => x.GetType() == typeof(T)).Cast<T>().ToList();
+            return _game.Components.Where(x => x is T).Cast<T>().ToList();
         }
 
         public static List<GameObject> FindObjectsByTag(string tag) {

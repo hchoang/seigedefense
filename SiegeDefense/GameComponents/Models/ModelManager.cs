@@ -5,14 +5,45 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SiegeDefense.GameScreens;
+using SiegeDefense.GameComponents.Cameras;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace SiegeDefense.GameComponents.Models
 {
-    public partial class ModelManager : GameComponent
+    public partial class ModelManager : GameObject
     {
-        public ModelManager(Game game) : base(game)
+        private List<BaseModel> models = new List<BaseModel>();
+
+        public ModelManager()
         {
+            models = new List<BaseModel>();
             //InitializeComponent();
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            foreach(BaseModel bm in models)
+            {
+                bm.Draw(GameObject.FindObjects<FPSCamera>()[0]);
+            }
+            base.Draw(gameTime);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            for (int i = 0; i < models.Count; i++)
+            {
+                models[i].Update();
+            }
+            base.Update(gameTime);
+        }
+
+        protected override void LoadContent()
+        {
+            Console.Out.WriteLine(123);
+            models.Add(new BaseModel(Game.Content.Load<Model>(@"Models/tank")));
+            base.LoadContent();
         }
     }
 }

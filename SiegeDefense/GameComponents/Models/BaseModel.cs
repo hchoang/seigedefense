@@ -1,37 +1,64 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Design;
 using SiegeDefense.GameComponents.Cameras;
+using SiegeDefense.GameComponents.Physics;
 
 namespace SiegeDefense.GameComponents.Models
 {
-    class BaseModel
+    class BaseModel : _3DGameObject
     {
         public Model model { get; protected set; }
-        protected Matrix world;
+        private Matrix scaleMatrix;
+        private Vector3 position;
+        private BoundingBox bouding;
 
         public BaseModel(Model model)
         {
             this.model = model;
+            scaleMatrix = Matrix.CreateScale(1);
+            bouding = this.CalculateBouding();
         }
 
-        protected virtual void Update()
+        public virtual void Update()
         {
+
 
         }
 
-        public void Draw(FPSCamera camera)
+        public virtual void Draw(FPSCamera camera)
         {
+            //Matrix[] transform = new Matrix[model.Bones.Count];
+            //model.CopyAbsoluteBoneTransformsTo(transform);
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                BoundingBox box = BoundingBox.CreateFromSphere(mesh.BoundingSphere);
+                bouding = BoundingBox.CreateMerged(this.bouding, box);
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.EnableDefaultLighting();
+                    effect.Projection = camera.ProjectionMatrix;
+                    effect.View = camera.ViewMatrix;
+                    effect.World = scaleMatrix * Matrix.CreateTranslation(new Vector3(1000, 200, 1000));
+                }
+
+                mesh.Draw();
+            }
+        }
+
+        public BoundingBox CalculateBouding()
+        {
+            bouding = new BoundingBox();
             Matrix[] transform = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transform);
 
-            foreach(ModelMesh mess in model.Meshes)
+            foreach (ModelMesh mesh in model.Meshes)
             {
-                foreach(BasicEffect effect in mess.Effects)
-                {
-                    effect.EnableDefaultLighting();
-
-                }
+                BoundingBox box = BoundingBox.CreateFromSphere(mesh.BoundingSphere);
+                bouding = BoundingBox.CreateMerged(this.bouding, box);
             }
+            return bouding;
         }
     }
 }
