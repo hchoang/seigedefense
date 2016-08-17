@@ -45,7 +45,6 @@
     <Compile Include="GameComponents\3DGameObject.cs" />
     <Compile Include="GameComponents\Cameras\Camera.cs" />
     <Compile Include="GameComponents\Maps\Map.cs" />
-<<<<<<< HEAD
     <Compile Include="GameComponents\Models\BaseModel.cs" />
     <Compile Include="GameComponents\Models\ModelManager.cs" />
     <Compile Include="GameComponents\Models\ModelManager.Designer.cs">
@@ -54,10 +53,6 @@
     <Compile Include="GameComponents\Models\Tank.cs" />
     <Compile Include="GameComponents\Physics\CollisionBox.cs" />
     <Compile Include="GameComponents\Physics\CollisionBoundary.cs" />
-=======
-    <Compile Include="GameComponents\Physics\ColliderBox.cs" />
-    <Compile Include="GameComponents\Physics\Collider.cs" />
->>>>>>> master
     <Compile Include="GameComponents\Physics\GamePhysics.cs" />
     <Compile Include="GameScreens\MainGameScreen.cs" />
     <Compile Include="GameComponents\Maps\MultiTexturedHeightMap.cs" />
