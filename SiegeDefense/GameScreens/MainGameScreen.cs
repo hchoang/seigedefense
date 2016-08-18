@@ -5,6 +5,7 @@ using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Physics;
 using SiegeDefense.GameComponents.Sky;
+using SiegeDefense.GameComponents.Models;
 
 namespace SiegeDefense.GameScreens {
     public class MainGameScreen : GameObject {
@@ -16,12 +17,17 @@ namespace SiegeDefense.GameScreens {
         private BasicEffect basicEffect;
         private Effect advancedEffect;
 
+        private ModelManager modelManager;
+
+
         public MainGameScreen() {
 
             basicEffect = Game.Services.GetService<BasicEffect>();
             advancedEffect = Game.Services.GetService<Effect>();
 
             skyBox = new Skybox();
+            modelManager = new ModelManager();
+
             map = new MultiTexturedHeightMap(10, 200);
             Vector3 cameraPosition = new Vector3(500, 0, 500);
             cameraPosition = new Vector3(cameraPosition.X, map.GetHeight(cameraPosition), cameraPosition.Z);
@@ -30,6 +36,7 @@ namespace SiegeDefense.GameScreens {
             Game.Components.Add(skyBox);
             Game.Components.Add(map);
             Game.Components.Add(camera);
+            Game.Components.Add(modelManager);
 
             skyBox.GetDependentComponents();
             map.GetDependentComponents();

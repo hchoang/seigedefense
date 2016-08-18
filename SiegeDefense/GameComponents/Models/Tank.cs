@@ -5,15 +5,13 @@ namespace SiegeDefense.GameComponents.Models
 {
     class Tank : BaseModel
     {
-        
-
         public Tank(Model model) : base(model)
         {
             
         }
 
         
-        public void Update()
+        public override void Update()
         {
 
         }
