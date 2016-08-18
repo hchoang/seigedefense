@@ -57,9 +57,6 @@ namespace SiegeDefense {
 
             advancedEffect = Content.Load<Effect>("customShader");
             Services.AddService(advancedEffect);
-
-            //mainCamera = new FPSCamera(new Vector3(500, 100, 500), new Vector3(100, 20, 100), Vector3.Up);
-            //Services.AddService(mainCamera);
         }
         
         protected override void Update(GameTime gameTime) {

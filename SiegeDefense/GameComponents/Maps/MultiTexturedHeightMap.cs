@@ -11,7 +11,7 @@ namespace SiegeDefense.GameComponents.Maps {
         private Texture2D rockTexture;
         private Texture2D snowTexture;
         
-        private Effect advancedEffect;
+        private Effect multiTexturedEffect;
 
         // Map attributes
         private int mapInfoWidth;
@@ -40,8 +40,11 @@ namespace SiegeDefense.GameComponents.Maps {
 
         // Water
         private Camera camera;
-        private float waterHeight = 0.12f;
+        private float waterHeight = 0.2f;
         private Skybox sky;
+        private Effect reflectionTechnique;
+        private Effect refractionTechnique;
+        private Effect waterTechnique;
         private RenderTarget2D refractionRenderTarget;
         private RenderTarget2D reflectionRenderTarget;
         private Matrix reflectionViewMatrix;
@@ -59,10 +62,18 @@ namespace SiegeDefense.GameComponents.Maps {
             snowTexture = Game.Content.Load<Texture2D>(@"Terrain\snow");
             waterBumpMap = Game.Content.Load<Texture2D>(@"Terrain\waterbump");
 
-            advancedEffect = Game.Services.GetService<Effect>();
-            advancedEffect.Parameters["EnableLighting"].SetValue(true);
-            advancedEffect.Parameters["Ambient"].SetValue(0.4f);
-            advancedEffect.Parameters["LightDirection"].SetValue(new Vector3(-0.5f, -1, -0.5f));
+            multiTexturedEffect = Game.Services.GetService<Effect>().Clone();
+            reflectionTechnique = Game.Services.GetService<Effect>().Clone();
+            refractionTechnique = Game.Services.GetService<Effect>().Clone();
+            waterTechnique = Game.Services.GetService<Effect>().Clone();
+
+            multiTexturedEffect.CurrentTechnique = multiTexturedEffect.Techniques["MultiTextured"];
+            waterTechnique.CurrentTechnique = waterTechnique.Techniques["Water"];
+            refractionTechnique.CurrentTechnique = refractionTechnique.Techniques["MapRefraction"];
+
+            multiTexturedEffect.Parameters["EnableLighting"].SetValue(true);
+            multiTexturedEffect.Parameters["Ambient"].SetValue(0.4f);
+            multiTexturedEffect.Parameters["LightDirection"].SetValue(new Vector3(-0.5f, -1, -0.5f));
 
             ReadTerrainFromTexture();
 
@@ -83,8 +94,7 @@ namespace SiegeDefense.GameComponents.Maps {
             DrawRefractionMap(gameTime);
             DrawReflectionMap(gameTime);
 
-            advancedEffect.CurrentTechnique = advancedEffect.Techniques["MultiTextured"];
-            DrawMap();
+            DrawMap(multiTexturedEffect, camera.ViewMatrix);
 
             DrawWater(gameTime);
         }
@@ -95,20 +105,22 @@ namespace SiegeDefense.GameComponents.Maps {
             rs.CullMode = CullMode.None;
             GraphicsDevice.RasterizerState = rs;
 
-            Effect effect = advancedEffect.Clone();
-            effect.CurrentTechnique = effect.Techniques["Water"];
-            effect.Parameters["World"].SetValue(WorldMatrix);
-            effect.Parameters["View"].SetValue(camera.ViewMatrix);
-            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-            effect.Parameters["ReflectionView"].SetValue(reflectionViewMatrix);
-            effect.Parameters["ReflectionMap"].SetValue(reflectionRenderTarget);
-            effect.Parameters["WaterBumpMap"].SetValue(waterBumpMap);
-            effect.Parameters["WaveLength"].SetValue(0.3f);
-            effect.Parameters["WaveHeight"].SetValue(0.01f);
-            effect.Parameters["RefractionMap"].SetValue(refractionRenderTarget);
-            effect.Parameters["CameraPosition"].SetValue(camera.Position);
+            Vector3 staticCameraPos = Vector3.Zero;
+            Vector3 staticCameraTarget = new Vector3(10, 0, 10);
+            Vector3 staticCameraUp = Vector3.Up;
 
-            foreach (EffectPass pass in effect.CurrentTechnique.Passes) {
+            waterTechnique.Parameters["World"].SetValue(WorldMatrix);
+            waterTechnique.Parameters["View"].SetValue(camera.ViewMatrix);
+            waterTechnique.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            waterTechnique.Parameters["ReflectionView"].SetValue(reflectionViewMatrix);
+            waterTechnique.Parameters["ReflectionMap"].SetValue(reflectionRenderTarget);
+            waterTechnique.Parameters["WaterBumpMap"].SetValue(waterBumpMap);
+            waterTechnique.Parameters["WaveLength"].SetValue(0.3f);
+            waterTechnique.Parameters["WaveHeight"].SetValue(0.01f);
+            waterTechnique.Parameters["RefractionMap"].SetValue(refractionRenderTarget);
+            waterTechnique.Parameters["CameraPosition"].SetValue(camera.Position);
+
+            foreach (EffectPass pass in waterTechnique.CurrentTechnique.Passes) {
                 pass.Apply();
 
                 GraphicsDevice.SetVertexBuffer(waterVertexBuffer);
@@ -120,12 +132,18 @@ namespace SiegeDefense.GameComponents.Maps {
 
         private void DrawReflectionMap(GameTime gameTime) {
             // calculate reflection matrix
+            Vector3 staticCameraPos = Vector3.Zero;
+            Vector3 staticCameraTarget = new Vector3(10, 0, 10);
+            Vector3 staticCameraUp = Vector3.Up;
+
             Vector3 reflCameraPosition = camera.Position;
             reflCameraPosition.Y = -camera.Position.Y + waterHeight * 2;
             Vector3 reflTargetPos = camera.Target;
             reflTargetPos.Y = -camera.Target.Y + waterHeight * 2;
-            Vector3 cameraRight = Vector3.Transform(new Vector3(1, 0, 0), camera.RotationMatrix);
+            Vector3 cameraRight = -camera.Left;
             Vector3 invUpVector = Vector3.Cross(cameraRight, reflTargetPos - reflCameraPosition);
+            //Vector3 invUpVector = Vector3.Up;
+            
             reflectionViewMatrix = Matrix.CreateLookAt(reflCameraPosition, reflTargetPos, invUpVector);
 
             // draw reflection map
@@ -134,14 +152,10 @@ namespace SiegeDefense.GameComponents.Maps {
             GraphicsDevice.SetRenderTarget(reflectionRenderTarget);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
-            sky.DrawReflection(gameTime, new Plane(new Vector4(Vector3.Up, -waterHeight + 0.5f)));
+            sky.DrawReflection(gameTime, reflectionViewMatrix, reflCameraPosition);
+            refractionTechnique.Parameters["ClipPlane"].SetValue(new Vector4(Vector3.Up, -waterHeight));
+            DrawMap(refractionTechnique, reflectionViewMatrix);
 
-            //advancedEffect.CurrentTechnique = advancedEffect.Techniques["MultiTexturedMapRefraction"];
-            //advancedEffect.Parameters["ClipPlane"].SetValue(new Vector4(Vector3.Up, -waterHeight + 0.5f));
-            //advancedEffect.Parameters["View"].SetValue(reflectionViewMatrix);
-            //DrawMap();
-
-            //advancedEffect.Parameters["View"].SetValue(camera.ViewMatrix);
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.PresentationParameters.RenderTargetUsage = oldUseage;
         }
@@ -152,21 +166,22 @@ namespace SiegeDefense.GameComponents.Maps {
             GraphicsDevice.SetRenderTarget(refractionRenderTarget);
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
-            advancedEffect.CurrentTechnique = advancedEffect.Techniques["MultiTexturedMapRefraction"];
-            advancedEffect.Parameters["ClipPlane"].SetValue(new Vector4(Vector3.Up, waterHeight + 1.5f));
-            DrawMap();
+            refractionTechnique.Parameters["ClipPlane"].SetValue(new Vector4(Vector3.Down, waterHeight));
+            DrawMap(refractionTechnique, camera.ViewMatrix);
 
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.PresentationParameters.RenderTargetUsage = oldUseage;
         }
 
-        private void DrawMap() {
-            advancedEffect.Parameters["World"].SetValue(WorldMatrix);
-            advancedEffect.Parameters["xTexture0"].SetValue(sandTexture);
-            advancedEffect.Parameters["xTexture1"].SetValue(grassTexture);
-            advancedEffect.Parameters["xTexture2"].SetValue(rockTexture);
-            advancedEffect.Parameters["xTexture3"].SetValue(snowTexture);
-            foreach (EffectPass pass in advancedEffect.CurrentTechnique.Passes) {
+        private void DrawMap(Effect effect, Matrix viewMatrix) {
+            effect.Parameters["World"].SetValue(WorldMatrix);
+            effect.Parameters["View"].SetValue(viewMatrix);
+            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            effect.Parameters["xTexture0"].SetValue(sandTexture);
+            effect.Parameters["xTexture1"].SetValue(grassTexture);
+            effect.Parameters["xTexture2"].SetValue(rockTexture);
+            effect.Parameters["xTexture3"].SetValue(snowTexture);
+            foreach (EffectPass pass in effect.CurrentTechnique.Passes) {
                 pass.Apply();
 
                 GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertices, 0, vertices.Length, vertexIndices, 0, vertexIndices.Length / 3);
@@ -180,8 +195,8 @@ namespace SiegeDefense.GameComponents.Maps {
             int gridMapPositionX = (int)(relativePosition.X / mapCellSize);
             int gridMapPositionY = (int)(relativePosition.Z / mapCellSize);
 
-            if (gridMapPositionX < 0 || gridMapPositionX > mapInfoWidth) return false;
-            if (gridMapPositionY < 0 || gridMapPositionY > mapInfoHeight) return false;
+            if (gridMapPositionX <= 0 || gridMapPositionX >= mapInfoWidth) return false;
+            if (gridMapPositionY <= 0 || gridMapPositionY >= mapInfoHeight) return false;
 
             return true;
         }
@@ -192,14 +207,21 @@ namespace SiegeDefense.GameComponents.Maps {
 
             int gridMapPositionX = (int)(relativePosition.X / mapCellSize);
             int gridMapPositionY = (int)(relativePosition.Z / mapCellSize);
+            int gridMapPositionNextX = gridMapPositionX + 1;
+            int gridMapPositionNextY = gridMapPositionY + 1;
+
+            if (gridMapPositionX == mapInfoWidth - 1)
+                gridMapPositionNextX -= 2;
+            if (gridMapPositionNextY == mapInfoHeight - 1)
+                gridMapPositionNextY -= 2;
 
             float cellPositionX = relativePosition.X % mapCellSize / mapCellSize;
             float cellPositionY = relativePosition.Z % mapCellSize / mapCellSize;
 
             float h1 = vertices[gridMapPositionX + gridMapPositionY * mapInfoWidth].Position.Y;
-            float h2 = vertices[gridMapPositionX + 1 + gridMapPositionY * mapInfoWidth].Position.Y;
-            float h3 = vertices[gridMapPositionX + (gridMapPositionY + 1) * mapInfoWidth].Position.Y;
-            float h4 = vertices[gridMapPositionX + 1 + (gridMapPositionY + 1) * mapInfoWidth].Position.Y;
+            float h2 = vertices[gridMapPositionNextX + gridMapPositionY * mapInfoWidth].Position.Y;
+            float h3 = vertices[gridMapPositionX + gridMapPositionNextY * mapInfoWidth].Position.Y;
+            float h4 = vertices[gridMapPositionNextX + gridMapPositionNextY * mapInfoWidth].Position.Y;
 
             float h12 = MathHelper.Lerp(h1, h2, cellPositionX);
             float h34 = MathHelper.Lerp(h3, h4, cellPositionX);
@@ -217,14 +239,21 @@ namespace SiegeDefense.GameComponents.Maps {
 
             int gridMapPositionX = (int)(relativePosition.X / mapCellSize);
             int gridMapPositionY = (int)(relativePosition.Z / mapCellSize);
+            int gridMapPositionNextX = gridMapPositionX + 1;
+            int gridMapPositionNextY = gridMapPositionY + 1;
+
+            if (gridMapPositionX == mapInfoWidth - 1)
+                gridMapPositionNextX -= 2;
+            if (gridMapPositionNextY == mapInfoHeight - 1)
+                gridMapPositionNextY -= 2;
 
             float cellPositionX = relativePosition.X % mapCellSize / mapCellSize;
             float cellPositionY = relativePosition.Z % mapCellSize / mapCellSize;
 
             Vector3 v1 = vertices[gridMapPositionX + gridMapPositionY * mapInfoWidth].Normal;
-            Vector3 v2 = vertices[gridMapPositionX + 1 + gridMapPositionY * mapInfoWidth].Normal;
-            Vector3 v3 = vertices[gridMapPositionX + (gridMapPositionY + 1) * mapInfoWidth].Normal;
-            Vector3 v4 = vertices[gridMapPositionX + 1 + (gridMapPositionY + 1) * mapInfoWidth].Normal;
+            Vector3 v2 = vertices[gridMapPositionNextX + gridMapPositionY * mapInfoWidth].Normal;
+            Vector3 v3 = vertices[gridMapPositionX + gridMapPositionNextY * mapInfoWidth].Normal;
+            Vector3 v4 = vertices[gridMapPositionNextX + gridMapPositionNextY * mapInfoWidth].Normal;
 
             Vector3 v12 = Vector3.Lerp(v1, v2, cellPositionX);
             Vector3 v34 = Vector3.Lerp(v3, v4, cellPositionX);

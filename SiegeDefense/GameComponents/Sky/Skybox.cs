@@ -12,7 +12,7 @@ namespace SiegeDefense.GameComponents.Sky {
         private Vector4 textureWeight = Vector4.Zero;
         private Model skyModel;
 
-        private Effect advancedEffect;
+        private Effect daynightEffect;
         private BasicEffect basicEffect;
         private Camera camera;
 
@@ -24,9 +24,13 @@ namespace SiegeDefense.GameComponents.Sky {
             nightSkyTexture = Game.Content.Load<TextureCube>(@"Sky\nightSky");
             skyModel = Game.Content.Load<Model>(@"Sky\cube");
 
-            advancedEffect = Game.Services.GetService<Effect>().Clone();
-            basicEffect = Game.Services.GetService<BasicEffect>();
-            ScaleMatrix = Matrix.CreateScale(10);
+            basicEffect = (BasicEffect)Game.Services.GetService<BasicEffect>().Clone();
+            daynightEffect = Game.Services.GetService<Effect>().Clone();
+            daynightEffect.CurrentTechnique = daynightEffect.Techniques["DayNightSkybox"];
+
+            skyModel.Meshes[0].MeshParts[0].Effect = daynightEffect.Clone();
+
+            ScaleMatrix = Matrix.CreateScale(500);
         }
 
         public override void GetDependentComponents() {
@@ -37,7 +41,7 @@ namespace SiegeDefense.GameComponents.Sky {
             TranslationMatrix = Matrix.CreateTranslation(camera.Position);
         }
 
-        public void DrawReflection(GameTime gameTime, Plane reflectionPlane) {
+        public void DrawReflection(GameTime gameTime, Matrix reflectionViewMatrix, Vector3 reflCamPos) {
             RasterizerState oldRsState = GraphicsDevice.RasterizerState;
             DepthStencilState oldDsState = GraphicsDevice.DepthStencilState;
             DepthStencilState newDsState = new DepthStencilState();
@@ -56,25 +60,21 @@ namespace SiegeDefense.GameComponents.Sky {
             Vector3 staticCameraTarget = new Vector3(10, 0, 10);
             Vector3 staticCameraUp = Vector3.Up;
 
-            advancedEffect.CurrentTechnique = advancedEffect.Techniques["MultiTexturedSkyReflection"];
-            foreach (EffectPass pass in advancedEffect.CurrentTechnique.Passes) {
-                pass.Apply();
-                foreach (ModelMesh mesh in skyModel.Meshes) {
-                    foreach (ModelMeshPart part in mesh.MeshParts) {
-                        part.Effect = advancedEffect.Clone();
-                        part.Effect.Parameters["World"].SetValue(WorldMatrix);
-                        part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
-                        part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                        part.Effect.Parameters["morningSkyTexture"].SetValue(morningSkytexture);
-                        part.Effect.Parameters["afternoonSkyTexture"].SetValue(afternoonSkyTexture);
-                        part.Effect.Parameters["sunsetSkyTexture"].SetValue(sunsetSkyTexture);
-                        part.Effect.Parameters["nightSkyTexture"].SetValue(nightSkyTexture);
-                        part.Effect.Parameters["timeWeight"].SetValue(textureWeight);
-                        part.Effect.Parameters["CameraPosition"].SetValue(camera.Position);
-                        //part.Effect.Parameters["ClipPlane"].SetValue(new Vector4(reflectionPlane.Normal, reflectionPlane.D));
-                    }
-                    mesh.Draw();
+            foreach (ModelMesh mesh in skyModel.Meshes) {
+                foreach (Effect effect in mesh.Effects) {
+                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * WorldMatrix;
+
+                    effect.Parameters["World"].SetValue(worldMatrix);
+                    effect.Parameters["View"].SetValue(reflectionViewMatrix);
+                    effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                    effect.Parameters["morningSkyTexture"].SetValue(morningSkytexture);
+                    effect.Parameters["afternoonSkyTexture"].SetValue(afternoonSkyTexture);
+                    effect.Parameters["sunsetSkyTexture"].SetValue(sunsetSkyTexture);
+                    effect.Parameters["nightSkyTexture"].SetValue(nightSkyTexture);
+                    effect.Parameters["timeWeight"].SetValue(textureWeight);
+                    effect.Parameters["CameraPosition"].SetValue(reflCamPos);
                 }
+                mesh.Draw();
             }
 
             GraphicsDevice.DepthStencilState = oldDsState;
@@ -103,6 +103,7 @@ namespace SiegeDefense.GameComponents.Sky {
         }
 
         public override void Draw(GameTime gameTime) {
+            
             // store graphics device state
             RasterizerState oldRsState = GraphicsDevice.RasterizerState;
             DepthStencilState oldDsState = GraphicsDevice.DepthStencilState;
@@ -122,24 +123,20 @@ namespace SiegeDefense.GameComponents.Sky {
 
             CalculateTextureWeight(gameTime);
 
-            advancedEffect.CurrentTechnique = advancedEffect.Techniques["DayNightSkybox"];
-            foreach (EffectPass pass in advancedEffect.CurrentTechnique.Passes) {
-                pass.Apply();
-                foreach (ModelMesh mesh in skyModel.Meshes) {
-                    foreach (ModelMeshPart part in mesh.MeshParts) {
-                        part.Effect = advancedEffect.Clone();
-                        part.Effect.Parameters["World"].SetValue(WorldMatrix);
-                        part.Effect.Parameters["View"].SetValue(camera.ViewMatrix);
-                        part.Effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
-                        part.Effect.Parameters["morningSkyTexture"].SetValue(morningSkytexture);
-                        part.Effect.Parameters["afternoonSkyTexture"].SetValue(afternoonSkyTexture);
-                        part.Effect.Parameters["sunsetSkyTexture"].SetValue(sunsetSkyTexture);
-                        part.Effect.Parameters["nightSkyTexture"].SetValue(nightSkyTexture);
-                        part.Effect.Parameters["timeWeight"].SetValue(textureWeight);
-                        part.Effect.Parameters["CameraPosition"].SetValue(camera.Position);
-                    }
-                    mesh.Draw();
+            foreach(ModelMesh mesh in skyModel.Meshes) {
+                foreach(Effect effect in mesh.Effects) {
+                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * WorldMatrix;
+                    effect.Parameters["World"].SetValue(worldMatrix);
+                    effect.Parameters["View"].SetValue(camera.ViewMatrix);
+                    effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+                    effect.Parameters["morningSkyTexture"].SetValue(morningSkytexture);
+                    effect.Parameters["afternoonSkyTexture"].SetValue(afternoonSkyTexture);
+                    effect.Parameters["sunsetSkyTexture"].SetValue(sunsetSkyTexture);
+                    effect.Parameters["nightSkyTexture"].SetValue(nightSkyTexture);
+                    effect.Parameters["timeWeight"].SetValue(textureWeight);
+                    effect.Parameters["CameraPosition"].SetValue(camera.Position);
                 }
+                mesh.Draw();
             }
 
             GraphicsDevice.DepthStencilState = oldDsState;

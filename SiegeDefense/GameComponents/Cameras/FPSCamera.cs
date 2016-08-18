@@ -11,7 +11,7 @@ namespace SiegeDefense.GameComponents.Cameras {
         private Map map;
         private float aspectRatio = 0.75f;
         private float nearPlane = 2;
-        private float farPlane = 50000;
+        private float farPlane = 1000;
         private float maxZoom = MathHelper.PiOver4;
         private float minZoom = 0.2f;
         private float currentZoom = MathHelper.PiOver4;
@@ -41,6 +41,8 @@ namespace SiegeDefense.GameComponents.Cameras {
         }
 
         public override void Update(GameTime gameTime) {
+
+            // zoom
             float zoomValue = (float)(inputManager.GetValue(GameInput.Zoom) * zoomSpeed * gameTime.ElapsedGameTime.TotalSeconds);
 
             if (zoomValue != 0) {
@@ -51,14 +53,16 @@ namespace SiegeDefense.GameComponents.Cameras {
                 }
             }
 
+            // move
             Vector3 moveDirection = Vector3.Zero;
-
             if (inputManager.isPressing(GameInput.Up)) {
                 Vector3 goUpVector = Forward;
+                goUpVector.Y = 0;
                 goUpVector.Normalize();
                 moveDirection += goUpVector;
             } else if (inputManager.isPressing(GameInput.Down)) {
                 Vector3 goDownVector = -Forward;
+                goDownVector.Y = 0;
                 goDownVector.Normalize();
                 moveDirection += goDownVector;
             }
@@ -76,6 +80,7 @@ namespace SiegeDefense.GameComponents.Cameras {
             }
             Move(moveDirection);
 
+            // look around
             if (inputManager.GetValue(GameInput.Vertical) != 0){
                 Matrix rotationMatrix = Matrix.CreateFromAxisAngle(Left, (float)gameTime.ElapsedGameTime.TotalSeconds * inputManager.GetValue(GameInput.Vertical) * rotationSpeed);
 
@@ -94,6 +99,7 @@ namespace SiegeDefense.GameComponents.Cameras {
                 ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
             }
 
+            // update height & jump
             float height = map.GetHeight(Position) + 20;
             if (height != Position.Y && jumpForce == 0) {
                 Vector3 dY = new Vector3(0, height - Position.Y, 0);
@@ -109,7 +115,7 @@ namespace SiegeDefense.GameComponents.Cameras {
             }
 
             Move(new Vector3(0, jumpForce, 0));
-
+            
             jumpForce -= 1.2f * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (Position.Y <= height)
@@ -117,7 +123,12 @@ namespace SiegeDefense.GameComponents.Cameras {
         }
 
         public void Move(Vector3 direction) {
-            Position += direction;
+
+            Vector3 newPosition = Position + direction;
+            if (!map.Moveable(newPosition))
+                return;
+
+            Position = newPosition;
             Target += direction;
             ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
         }
