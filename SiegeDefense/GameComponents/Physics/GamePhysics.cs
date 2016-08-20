@@ -21,11 +21,6 @@ namespace SiegeDefense.GameComponents.Physics {
             Force += force;
         }
 
-        public override void GetDependentComponents() {
-            map = (Map)FindObjectsByTag("Map")[0];
-            collider = FindComponent<Collider>();
-        }
-
         public override void Update(GameTime gameTime) {
 
             // update target position

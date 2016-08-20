@@ -8,7 +8,15 @@ namespace SiegeDefense.GameComponents.Cameras {
     public class FPSCamera : Camera {
         private GraphicsDevice graphicsDevice;
 
-        public Map map { get; private set; }
+        private Map _map;
+        public Map map {
+            get {
+                if (_map == null) {
+                    _map = FindObjects<Map>()[0];
+                }
+                return _map;
+            }
+        }
         private float aspectRatio = 0.75f;
         private float nearPlane = 2;
         private float farPlane = 1000;
@@ -32,12 +40,6 @@ namespace SiegeDefense.GameComponents.Cameras {
 
             aspectRatio = graphicsDevice.DisplayMode.AspectRatio;
             ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(currentZoom, aspectRatio, nearPlane, farPlane);
-        }
-
-        public override void GetDependentComponents() {
-            map = (Map)FindObjectsByTag("Map")[0];
-
-            base.GetDependentComponents();
         }
 
         public override void Update(GameTime gameTime) {

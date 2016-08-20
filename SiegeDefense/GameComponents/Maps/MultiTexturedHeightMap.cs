@@ -39,9 +39,25 @@ namespace SiegeDefense.GameComponents.Maps {
         private int[] vertexIndices;
 
         // Water
-        private Camera camera;
+        private Camera _camera;
+        private Camera camera {
+            get {
+                if (_camera == null) {
+                    _camera = FindObjects<Camera>()[0];
+                }
+                return _camera;
+            }
+        }
+        private Skybox _sky;
+        private Skybox sky {
+            get {
+                if (_sky == null) {
+                    _sky = FindObjects<Skybox>()[0];
+                }
+                return _sky;
+            }
+        }
         private float waterHeight = 0.2f;
-        private Skybox sky;
         private Effect reflectionTechnique;
         private Effect refractionTechnique;
         private Effect waterTechnique;
@@ -83,11 +99,6 @@ namespace SiegeDefense.GameComponents.Maps {
 
             waterHeight = waterHeight * mapDeltaHeight;
             SetupWater();
-        }
-
-        public override void GetDependentComponents() {
-            camera = (Camera)FindObjectsByTag("Camera")[0];
-            sky = (Skybox)FindObjectsByTag("Sky")[0];
         }
 
         public override void Draw(GameTime gameTime) {
@@ -258,7 +269,7 @@ namespace SiegeDefense.GameComponents.Maps {
             Vector3 v12 = Vector3.Lerp(v1, v2, cellPositionX);
             Vector3 v34 = Vector3.Lerp(v3, v4, cellPositionX);
 
-            Vector3 normal = Vector3.Lerp(v12, v34, cellPositionY);
+            Vector3 normal = Vector3.Normalize(Vector3.Lerp(v12, v34, cellPositionY));
 
             return normal;
         }

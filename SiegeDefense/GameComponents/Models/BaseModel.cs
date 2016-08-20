@@ -4,30 +4,45 @@ using Microsoft.Xna.Framework.Design;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Physics;
 using System;
+using SiegeDefense.GameComponents.Maps;
 
 namespace SiegeDefense.GameComponents.Models
 {
     class BaseModel : _3DGameObject
     {
         public Model model { get; protected set; }
-        private Matrix scaleMatrix;
-        private Vector3 position;
-        private BoundingBox bouding;
-        private FPSCamera camera;
+        protected BoundingBox bouding;
 
-        public BaseModel(Model model, FPSCamera camera)
-        {
-            this.model = model;
-            this.camera = camera;
-            scaleMatrix = Matrix.CreateScale(5);
-            bouding = this.CalculateBouding();
-            position = this.PositionGenerate();
+        private Camera _camera;
+        protected Camera camera {
+            get {
+                if (_camera == null) {
+                    _camera = FindObjects<Camera>()[0];
+                }
+                return _camera;
+            }
+        }
+        private Map _map;
+        protected Map map {
+            get {
+                if (_map == null) {
+                    _map = FindObjects<Map>()[0];
+                }
+                return _map;
+            }
         }
 
-        public virtual void Update()
+        public BaseModel(Model model)
         {
+            this.model = model;
+            ScaleMatrix = Matrix.CreateScale(5);
+            bouding = CalculateBouding();
+            Position = PositionGenerate();
+        }
 
-
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
         }
 
         public virtual void Draw()
@@ -45,7 +60,7 @@ namespace SiegeDefense.GameComponents.Models
                     effect.EnableDefaultLighting();
                     effect.Projection = camera.ProjectionMatrix;
                     effect.View = camera.ViewMatrix;
-                    effect.World = transform[mesh.ParentBone.Index] * scaleMatrix * WorldMatrix *  Matrix.CreateTranslation(position);
+                    effect.World = transform[mesh.ParentBone.Index] * WorldMatrix;
                 }
 
                 mesh.Draw();
@@ -70,7 +85,7 @@ namespace SiegeDefense.GameComponents.Models
         {
             Random rnd = new Random();
             Vector3 position =  new Vector3(rnd.Next(0, 500), 0, rnd.Next(0, 500));
-            float height = camera.map.GetHeight(position);
+            float height = map.GetHeight(position);
             position = position + new Vector3(0, height, 0);
             return position;
         }

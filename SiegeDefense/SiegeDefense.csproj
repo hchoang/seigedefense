@@ -44,6 +44,9 @@
   <ItemGroup>
     <Compile Include="GameComponents\3DGameObject.cs" />
     <Compile Include="GameComponents\Cameras\Camera.cs" />
+    <Compile Include="GameComponents\Cameras\FollowTargetCamera.cs" />
+    <Compile Include="GameComponents\Cameras\TargetPointOfViewCamera.cs" />
+    <Compile Include="GameComponents\Input\TankController.cs" />
     <Compile Include="GameComponents\Maps\Map.cs" />
     <Compile Include="GameComponents\Models\BaseModel.cs" />
     <Compile Include="GameComponents\Models\ModelManager.cs" />

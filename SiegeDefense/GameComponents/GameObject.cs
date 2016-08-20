@@ -17,11 +17,6 @@ namespace SiegeDefense.GameComponents {
         public GameObject() : base(_game) {
         }
 
-        public virtual void GetDependentComponents() {
-            foreach (GameObject childObject in childObjects)
-                childObject.GetDependentComponents();
-        }
-
         public static List<T> FindObjects<T>() where T : GameObject {
             return _game.Components.Where(x => x is T).Cast<T>().ToList();
         }

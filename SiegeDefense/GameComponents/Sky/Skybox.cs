@@ -14,7 +14,15 @@ namespace SiegeDefense.GameComponents.Sky {
 
         private Effect daynightEffect;
         private BasicEffect basicEffect;
-        private Camera camera;
+        private Camera _camera;
+        private Camera camera {
+            get {
+                if (_camera == null) {
+                    _camera = FindObjects<Camera>()[0];
+                }
+                return _camera;
+            }
+        }
 
         public Skybox() {
             Tag = "Sky";
@@ -30,15 +38,11 @@ namespace SiegeDefense.GameComponents.Sky {
 
             skyModel.Meshes[0].MeshParts[0].Effect = daynightEffect.Clone();
 
-            ScaleMatrix = Matrix.CreateScale(500);
-        }
-
-        public override void GetDependentComponents() {
-            camera = (Camera)FindObjectsByTag("Camera")[0];
+            WorldMatrix *= Matrix.CreateScale(500);
         }
 
         public override void Update(GameTime gameTime) {
-            TranslationMatrix = Matrix.CreateTranslation(camera.Position);
+            Position = camera.Position;
         }
 
         public void DrawReflection(GameTime gameTime, Matrix reflectionViewMatrix, Vector3 reflCamPos) {
@@ -116,7 +120,6 @@ namespace SiegeDefense.GameComponents.Sky {
 
             GraphicsDevice.DepthStencilState = newDsState;
             GraphicsDevice.RasterizerState = newRsState;
-
 
             Matrix[] modelTransforms = new Matrix[skyModel.Bones.Count];
             skyModel.CopyAbsoluteBoneTransformsTo(modelTransforms);

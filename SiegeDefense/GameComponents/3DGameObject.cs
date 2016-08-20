@@ -31,23 +31,32 @@ namespace SiegeDefense.GameComponents {
         }
         public virtual Vector3 Up {
             get {
-                return WorldMatrix.Up;
+                return Vector3.Normalize(WorldMatrix.Up);
             }
             set {
-                WorldMatrix = Matrix.CreateWorld(Position, Forward, value);
+                Vector3 rotationAxis = Vector3.Cross(Up, value);
+
+                if (rotationAxis != Vector3.Zero) {
+                    rotationAxis.Normalize();
+                    value.Normalize();
+                    float angle = MathHelper.Clamp(Vector3.Dot(Up, value), -1, 1);
+                    angle = (float)Math.Acos(angle);
+                    Matrix rotationMatrix = Matrix.CreateFromAxisAngle(rotationAxis, angle);
+
+
+
+                    RotationMatrix *= rotationMatrix;
+                }
             }
         }
         public virtual Vector3 Forward {
             get {
-                return Vector3.Normalize(WorldMatrix.Forward);
-            }
-            set {
-                WorldMatrix = Matrix.CreateWorld(Position, value, Up);
+                return Vector3.Normalize(RotationMatrix.Forward);
             }
         }
         public virtual Vector3 Left {
             get {
-                return Vector3.Normalize(WorldMatrix.Left);
+                return Vector3.Normalize(RotationMatrix.Left);
             }
         }
     }
