@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Design;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Physics;
+using System;
 
 namespace SiegeDefense.GameComponents.Models
 {
@@ -12,12 +13,15 @@ namespace SiegeDefense.GameComponents.Models
         private Matrix scaleMatrix;
         private Vector3 position;
         private BoundingBox bouding;
+        private FPSCamera camera;
 
-        public BaseModel(Model model)
+        public BaseModel(Model model, FPSCamera camera)
         {
             this.model = model;
-            scaleMatrix = Matrix.CreateScale(0.5f);
+            this.camera = camera;
+            scaleMatrix = Matrix.CreateScale(5);
             bouding = this.CalculateBouding();
+            position = this.PositionGenerate();
         }
 
         public virtual void Update()
@@ -26,11 +30,11 @@ namespace SiegeDefense.GameComponents.Models
 
         }
 
-        public virtual void Draw(FPSCamera camera)
+        public virtual void Draw()
         {
             Matrix[] transform = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transform);
-
+            
             foreach (ModelMesh mesh in model.Meshes)
             {
                 BoundingBox box = BoundingBox.CreateFromSphere(mesh.BoundingSphere);
@@ -60,6 +64,15 @@ namespace SiegeDefense.GameComponents.Models
                 bouding = BoundingBox.CreateMerged(this.bouding, box);
             }
             return bouding;
+        }
+
+        public Vector3 PositionGenerate()
+        {
+            Random rnd = new Random();
+            Vector3 position =  new Vector3(rnd.Next(0, 500), 0, rnd.Next(0, 500));
+            float height = camera.map.GetHeight(position);
+            position = position + new Vector3(0, height, 0);
+            return position;
         }
     }
 }

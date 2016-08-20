@@ -25,7 +25,7 @@ namespace SiegeDefense.GameComponents.Models
         {
             foreach(BaseModel bm in models)
             {
-                bm.Draw(GameObject.FindObjects<FPSCamera>()[0]);
+                bm.Draw();
             }
             base.Draw(gameTime);
         }
@@ -41,8 +41,7 @@ namespace SiegeDefense.GameComponents.Models
 
         protected override void LoadContent()
         {
-            Console.Out.WriteLine(123);
-            models.Add(new BaseModel(Game.Content.Load<Model>(@"Models/tank")));
+            models.Add(new Tank(Game.Content.Load<Model>(@"Models/tank"), GameObject.FindObjects<FPSCamera>()[0]));
             base.LoadContent();
         }
     }

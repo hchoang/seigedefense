@@ -8,7 +8,7 @@ namespace SiegeDefense.GameComponents.Cameras {
     public class FPSCamera : Camera {
         private GraphicsDevice graphicsDevice;
 
-        private Map map;
+        public Map map { get; private set; }
         private float aspectRatio = 0.75f;
         private float nearPlane = 2;
         private float farPlane = 1000;
