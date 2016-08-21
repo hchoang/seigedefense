@@ -20,7 +20,8 @@ namespace SiegeDefense.GameComponents.Cameras {
         }
 
         private void UpdateViewMatrix() {
-            Position = targetToFollow.Position + positionOffset;
+            Vector3 offset = Vector3.Transform(positionOffset, targetToFollow.RotationMatrix);
+            Position = targetToFollow.Position + offset;
             Target = targetToFollow.Position - targetToFollow.Forward * 100;
 
             ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);

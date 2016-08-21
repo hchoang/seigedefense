@@ -26,7 +26,7 @@ namespace SiegeDefense.GameComponents.Models
         {
             foreach(BaseModel bm in models)
             {
-                bm.Draw();
+                bm.Draw(gameTime);
             }
             base.Draw(gameTime);
         }
@@ -45,8 +45,8 @@ namespace SiegeDefense.GameComponents.Models
             Tank userControlledTank = new Tank(Game.Content.Load<Model>(@"Models/tank"));
             TankController tankController = new TankController();
 
-            Camera camera = new FollowTargetCamera(userControlledTank, 50);
-            //Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 20, -5));
+            //Camera camera = new FollowTargetCamera(userControlledTank, 50);
+            Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 20, 0));
             Game.Components.Add(camera);
 
             userControlledTank.AddChild(tankController);

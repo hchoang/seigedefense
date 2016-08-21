@@ -7,8 +7,10 @@ using System;
 namespace SiegeDefense.GameComponents.Input {
     public class TankController : GameObject {
         private IInputManager inputManager;
-        private float moveSpeed = 50.0f;
-        private float rotateSpeed = 2.0f;
+        private float tankMoveSpeed = 50.0f;
+        private float tankRotateSpeed = 2.0f;
+        private float turretRotateSpeed = 0.05f;
+        private float canonRotateSpeed = 0.05f;
 
         private Tank _controlledTank;
         private Tank controlledTank {
@@ -34,6 +36,8 @@ namespace SiegeDefense.GameComponents.Input {
         }
 
         public override void Update(GameTime gameTime) {
+
+            // move & rotate
             Vector3 moveDirection = Vector3.Zero;
             int rotationDirection = 1;
             if (inputManager.GetValue(GameInput.Up) != 0)
@@ -43,18 +47,19 @@ namespace SiegeDefense.GameComponents.Input {
                 rotationDirection = -1;
             }
 
-            if (moveDirection != Vector3.Zero)
-                moveDirection = Vector3.Normalize(moveDirection) * moveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (moveDirection != Vector3.Zero) {
+                moveDirection = Vector3.Normalize(moveDirection) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            controlledTank.Move(moveDirection);
+                controlledTank.Move(moveDirection);
+            }
 
             float rotationAngle = 0;
             if (moveDirection != Vector3.Zero) {
                 if (inputManager.GetValue(GameInput.Left) != 0) {
-                    rotationAngle += rotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    rotationAngle += tankRotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
                 if (inputManager.GetValue(GameInput.Right) != 0) {
-                    rotationAngle -= rotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    rotationAngle -= tankRotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
             }
 
@@ -63,7 +68,42 @@ namespace SiegeDefense.GameComponents.Input {
                 Matrix rotationMatrix = Matrix.CreateFromAxisAngle(controlledTank.Up, rotationAngle);
                 controlledTank.RotationMatrix *= rotationMatrix;
             }
+            // end move & rotate
 
+            // rotate turret & cannon
+            float turretRotationAngle = inputManager.GetValue(GameInput.Horizontal) * (float)gameTime.ElapsedGameTime.TotalSeconds * turretRotateSpeed;
+            float canonRotationAngle = inputManager.GetValue(GameInput.Vertical) * (float)gameTime.ElapsedGameTime.TotalSeconds * canonRotateSpeed;
+
+            if (turretRotationAngle != 0) {
+                Matrix turretMatrix = controlledTank.turretBone.Transform;
+                Vector3 turretForward = turretMatrix.Forward;
+                Vector3 turretPosition = turretMatrix.Translation;
+                Vector3 turretUp = turretMatrix.Up;
+
+                Matrix turretRotateMatrix = Matrix.CreateFromAxisAngle(turretMatrix.Up, -turretRotationAngle);
+                turretForward = Vector3.Transform(turretForward, turretRotateMatrix);
+                turretUp = Vector3.Transform(turretUp, turretRotateMatrix);
+
+                Matrix newTurretMatrix = Matrix.CreateWorld(turretPosition, turretForward, turretUp);
+                if (Math.Abs(newTurretMatrix.Rotation.Y) < 0.2f) {
+                    controlledTank.turretBone.Transform = newTurretMatrix;
+                }
+            }
+            if (canonRotationAngle != 0) {
+                Matrix canonMatrix = controlledTank.canonBone.Transform;
+                Vector3 canonForward = canonMatrix.Forward;
+                Vector3 canonPosition = canonMatrix.Translation;
+                Vector3 canonUp = canonMatrix.Up;
+
+                Matrix canonRotateMatrix = Matrix.CreateFromAxisAngle(canonMatrix.Left, -canonRotationAngle);
+                canonForward = Vector3.Transform(canonForward, canonRotateMatrix);
+                canonForward.Normalize();
+                if (-0.5f < canonForward.Y && canonForward.Y < 0.2f) {
+                    canonUp = Vector3.Transform(canonUp, canonRotateMatrix);
+                    controlledTank.canonBone.Transform = Matrix.CreateWorld(canonPosition, canonForward, canonUp);
+                }
+                
+            }
         }
     }
 }

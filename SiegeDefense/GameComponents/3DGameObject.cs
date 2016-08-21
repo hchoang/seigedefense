@@ -42,9 +42,6 @@ namespace SiegeDefense.GameComponents {
                     float angle = MathHelper.Clamp(Vector3.Dot(Up, value), -1, 1);
                     angle = (float)Math.Acos(angle);
                     Matrix rotationMatrix = Matrix.CreateFromAxisAngle(rotationAxis, angle);
-
-
-
                     RotationMatrix *= rotationMatrix;
                 }
             }

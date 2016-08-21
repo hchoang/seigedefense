@@ -12,6 +12,7 @@ namespace SiegeDefense.GameComponents.Models
     {
         public Model model { get; protected set; }
         protected BoundingBox bouding;
+        protected BoundingSphere boundingSphere = new BoundingSphere();
 
         private Camera _camera;
         protected Camera camera {
@@ -45,7 +46,7 @@ namespace SiegeDefense.GameComponents.Models
             base.Update(gameTime);
         }
 
-        public virtual void Draw()
+        public override void Draw(GameTime gameTime)
         {
             Matrix[] transform = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transform);
@@ -84,7 +85,8 @@ namespace SiegeDefense.GameComponents.Models
         public Vector3 PositionGenerate()
         {
             Random rnd = new Random();
-            Vector3 position =  new Vector3(rnd.Next(0, 500), 0, rnd.Next(0, 500));
+            //Vector3 position =  new Vector3(rnd.Next(0, 500), 0, rnd.Next(0, 500));
+            Vector3 position = new Vector3(500, 0, 500);
             float height = map.GetHeight(position);
             position = position + new Vector3(0, height, 0);
             return position;
