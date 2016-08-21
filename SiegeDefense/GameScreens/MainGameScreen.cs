@@ -14,7 +14,7 @@ namespace SiegeDefense.GameScreens {
 
         private Skybox skyBox;
         private MultiTexturedHeightMap map;
-        private FPSCamera camera;
+        //private FPSCamera camera;
         private SoundBankManager soundManager;
 
         private ModelManager modelManager;
@@ -33,8 +33,8 @@ namespace SiegeDefense.GameScreens {
 
             Game.Components.Add(skyBox);
             Game.Components.Add(map);
-            Game.Components.Add(soundManager);
             Game.Components.Add(modelManager);
+            Game.Components.Add(soundManager);
 
             //Vector3 position = new Vector3(100, 0, 100);
             //Matrix test = Matrix.CreateWorld(position, Vector3.Normalize(new Vector3(10, 0, 10)), Vector3.Up);

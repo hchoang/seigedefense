@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Models;
 using SiegeDefense.GameComponents.SoundBank;
@@ -19,13 +20,13 @@ namespace SiegeDefense.GameComponents.Input {
             {
                 if (_soundManager == null)
                 {
-                    _soundManager = FindComponent<SoundBankManager>();
+                    Console.Out.WriteLine(2);
+                    _soundManager = FindObjects<SoundBankManager>()[0];
                 }
+                
                 return _soundManager;
             }
         }
-
-
 
         private Tank _controlledTank;
         private Tank controlledTank {
@@ -84,7 +85,14 @@ namespace SiegeDefense.GameComponents.Input {
                 controlledTank.RotationMatrix *= rotationMatrix;
             }
             // end move & rotate
-
+            if (inputManager.GetValue(GameInput.Fire) != 0)
+            {
+                SoundEffectInstance sound = soundManager.FindSound("Tank");
+                if (sound.State != SoundState.Playing)
+                {
+                    sound.Play();
+                }
+            }
             // rotate turret & cannon
             float turretRotationAngle = inputManager.GetValue(GameInput.Horizontal) * (float)gameTime.ElapsedGameTime.TotalSeconds * turretRotateSpeed;
             float canonRotationAngle = inputManager.GetValue(GameInput.Vertical) * (float)gameTime.ElapsedGameTime.TotalSeconds * canonRotateSpeed;
