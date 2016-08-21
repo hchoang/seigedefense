@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Models;
+using SiegeDefense.GameComponents.SoundBank;
 using System;
 
 namespace SiegeDefense.GameComponents.Input {
@@ -11,6 +12,20 @@ namespace SiegeDefense.GameComponents.Input {
         private float tankRotateSpeed = 2.0f;
         private float turretRotateSpeed = 0.05f;
         private float canonRotateSpeed = 0.05f;
+
+        private SoundBankManager _soundManager;
+        private SoundBankManager soundManager {
+            get
+            {
+                if (_soundManager == null)
+                {
+                    _soundManager = FindComponent<SoundBankManager>();
+                }
+                return _soundManager;
+            }
+        }
+
+
 
         private Tank _controlledTank;
         private Tank controlledTank {
@@ -89,6 +104,7 @@ namespace SiegeDefense.GameComponents.Input {
                     controlledTank.turretBone.Transform = newTurretMatrix;
                 }
             }
+
             if (canonRotationAngle != 0) {
                 Matrix canonMatrix = controlledTank.canonBone.Transform;
                 Vector3 canonForward = canonMatrix.Forward;

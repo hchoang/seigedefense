@@ -54,6 +54,7 @@
     <Compile Include="GameComponents\Physics\Collider.cs" />
     <Compile Include="GameComponents\Physics\ColliderBox.cs" />
     <Compile Include="GameComponents\Physics\GamePhysics.cs" />
+    <Compile Include="GameComponents\SoundBank\SoundBankManager.cs" />
     <Compile Include="GameScreens\MainGameScreen.cs" />
     <Compile Include="GameComponents\Maps\MultiTexturedHeightMap.cs" />
     <Compile Include="GameComponents\Maps\VertexMultitextured.cs" />

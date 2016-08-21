@@ -7,6 +7,7 @@
         Zoom,
         Vertical,
         Horizontal,
-        Jump
+        Jump,
+        Fire
     }
 }

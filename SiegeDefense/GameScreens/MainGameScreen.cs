@@ -7,6 +7,7 @@ using SiegeDefense.GameComponents.Physics;
 using SiegeDefense.GameComponents.Sky;
 using SiegeDefense.GameComponents.Models;
 using System;
+using SiegeDefense.GameComponents.SoundBank;
 
 namespace SiegeDefense.GameScreens {
     public class MainGameScreen : GameObject {
@@ -14,6 +15,7 @@ namespace SiegeDefense.GameScreens {
         private Skybox skyBox;
         private MultiTexturedHeightMap map;
         private FPSCamera camera;
+        private SoundBankManager soundManager;
 
         private ModelManager modelManager;
 
@@ -22,6 +24,7 @@ namespace SiegeDefense.GameScreens {
 
             skyBox = new Skybox();
             modelManager = new ModelManager();
+            soundManager = new SoundBankManager();
 
             map = new MultiTexturedHeightMap(10, 200);
             Vector3 cameraPosition = new Vector3(500, 0, 500);
@@ -30,7 +33,7 @@ namespace SiegeDefense.GameScreens {
 
             Game.Components.Add(skyBox);
             Game.Components.Add(map);
-            //Game.Components.Add(camera);
+            Game.Components.Add(soundManager);
             Game.Components.Add(modelManager);
 
             //Vector3 position = new Vector3(100, 0, 100);

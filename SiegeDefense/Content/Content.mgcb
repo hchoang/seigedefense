@@ -243,3 +243,9 @@
 /processorParam:TextureFormat=Color
 /build:Models/turret_alt_diff_tex.tga
 
+#begin Sound\tank-fire
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Sound\tank-fire
+
