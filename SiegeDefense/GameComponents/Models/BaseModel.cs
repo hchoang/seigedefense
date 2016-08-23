@@ -41,6 +41,14 @@ namespace SiegeDefense.GameComponents.Models
             Position = PositionGenerate();
         }
 
+        public BaseModel(Model model, Vector3 Position)
+        {
+            this.model = model;
+            ScaleMatrix = Matrix.CreateScale(5);
+            bouding = CalculateBouding();
+            this.Position = Position;
+        }
+
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);

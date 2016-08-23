@@ -51,8 +51,8 @@ namespace SiegeDefense.GameComponents.Models
             Game.Components.Add(camera);
 
             userControlledTank.AddChild(tankController);
-
             models.Add(userControlledTank);
+            //models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.Position + new Vector3 (0, 0, 40)));
             base.LoadContent();
         }
     }

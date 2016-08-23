@@ -49,6 +49,7 @@
     <Compile Include="GameComponents\Input\TankController.cs" />
     <Compile Include="GameComponents\Maps\Map.cs" />
     <Compile Include="GameComponents\Models\BaseModel.cs" />
+    <Compile Include="GameComponents\Models\Bullet.cs" />
     <Compile Include="GameComponents\Models\ModelManager.cs" />
     <Compile Include="GameComponents\Models\Tank.cs" />
     <Compile Include="GameComponents\Physics\Collider.cs" />

@@ -20,11 +20,23 @@ namespace SiegeDefense.GameComponents.Input {
             {
                 if (_soundManager == null)
                 {
-                    Console.Out.WriteLine(2);
                     _soundManager = FindObjects<SoundBankManager>()[0];
                 }
                 
                 return _soundManager;
+            }
+        }
+
+        private ModelManager _modelManager;
+        private ModelManager modelManager
+        {
+            get
+            {
+                if (_modelManager == null)
+                {
+                    _modelManager = FindObjects<ModelManager>()[0];
+                }
+                return _modelManager;
             }
         }
 
@@ -52,6 +64,16 @@ namespace SiegeDefense.GameComponents.Input {
         }
 
         public override void Update(GameTime gameTime) {
+            // play sound when click mouse
+            if (inputManager.GetValue(GameInput.Fire) != 0)
+            {
+                Console.Out.WriteLine(1);
+                SoundEffectInstance sound = soundManager.FindSound("Tank");
+                if (sound.State != SoundState.Playing)
+                {
+                    sound.Play();
+                }
+            }
 
             // move & rotate
             Vector3 moveDirection = Vector3.Zero;
@@ -85,14 +107,9 @@ namespace SiegeDefense.GameComponents.Input {
                 controlledTank.RotationMatrix *= rotationMatrix;
             }
             // end move & rotate
-            if (inputManager.GetValue(GameInput.Fire) != 0)
-            {
-                SoundEffectInstance sound = soundManager.FindSound("Tank");
-                if (sound.State != SoundState.Playing)
-                {
-                    sound.Play();
-                }
-            }
+
+            
+
             // rotate turret & cannon
             float turretRotationAngle = inputManager.GetValue(GameInput.Horizontal) * (float)gameTime.ElapsedGameTime.TotalSeconds * turretRotateSpeed;
             float canonRotationAngle = inputManager.GetValue(GameInput.Vertical) * (float)gameTime.ElapsedGameTime.TotalSeconds * canonRotateSpeed;
