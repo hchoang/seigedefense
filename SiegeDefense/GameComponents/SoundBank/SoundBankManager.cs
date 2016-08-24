@@ -15,7 +15,7 @@ namespace SiegeDefense.GameComponents.SoundBank
 
         protected override void LoadContent()
         {
-            Console.Out.WriteLine(Game.Content.Load<SoundEffect>(@"Sound/tank-fire").Duration);
+            //Console.Out.WriteLine(Game.Content.Load<SoundEffect>(@"Sound/tank-fire").Duration);
             sounds.Add("Tank", Game.Content.Load<SoundEffect>(@"Sound/tank-fire").CreateInstance());
             //sounds.Add("TankMoving", Game.Content.Load<SoundEffect>(@"").Duration());
             //sounds.Add()

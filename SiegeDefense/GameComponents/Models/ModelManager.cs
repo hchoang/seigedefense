@@ -43,16 +43,15 @@ namespace SiegeDefense.GameComponents.Models
         protected override void LoadContent()
         {
             Tank userControlledTank = new Tank(Game.Content.Load<Model>(@"Models/tank"));
-            Console.Out.WriteLine(3);
             TankController tankController = new TankController();
 
             //Camera camera = new FollowTargetCamera(userControlledTank, 50);
-            Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 20, 0));
+            Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 30, -80));
             Game.Components.Add(camera);
 
             userControlledTank.AddChild(tankController);
             models.Add(userControlledTank);
-            //models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.Position + new Vector3 (0, 0, 40)));
+            models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.Position + new Vector3 (0, 0, 40)));
             base.LoadContent();
         }
     }

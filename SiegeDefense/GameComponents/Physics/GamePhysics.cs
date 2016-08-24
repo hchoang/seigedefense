@@ -6,7 +6,7 @@ namespace SiegeDefense.GameComponents.Physics {
     public class GamePhysics : GameObject {
         public static Vector3 gravityForce { get; private set; } = new Vector3(0, -9.8f, 0);
 
-        public Collider collider { get; set; }
+        public OrientedCollisionBox collider { get; set; }
         public float Mass { get; set; } = 1;
         public Vector3 Force { get; set; } = Vector3.Zero;
         public Vector3 Acceleration {
@@ -28,11 +28,11 @@ namespace SiegeDefense.GameComponents.Physics {
             collider.Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // update force
-            if (collider.GroundDistance(map) > 0) {
+            /*if (collider.GroundDistance(map) > 0) {
                 Force += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;
             } else {
                 Force = new Vector3(Force.X, 0, Force.Z);
-            }
+            }*/
         }
     }
 }

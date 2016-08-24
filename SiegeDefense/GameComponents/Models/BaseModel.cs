@@ -8,10 +8,9 @@ using SiegeDefense.GameComponents.Maps;
 
 namespace SiegeDefense.GameComponents.Models
 {
-    class BaseModel : _3DGameObject
+    public class BaseModel : _3DGameObject
     {
         public Model model { get; protected set; }
-        protected BoundingBox bounding;
 
         private Camera _camera;
         protected Camera camera {
@@ -36,7 +35,7 @@ namespace SiegeDefense.GameComponents.Models
         {
             this.model = model;
             ScaleMatrix = Matrix.CreateScale(5);
-            bounding = CalculateBounding();
+            AddChild(new OrientedCollisionBox(model));
             Position = PositionGenerate();
         }
 
@@ -44,7 +43,7 @@ namespace SiegeDefense.GameComponents.Models
         {
             this.model = model;
             ScaleMatrix = Matrix.CreateScale(5);
-            bounding = CalculateBounding();
+            AddChild(new OrientedCollisionBox(model));
             this.Position = Position;
         }
 
@@ -59,10 +58,7 @@ namespace SiegeDefense.GameComponents.Models
             model.CopyAbsoluteBoneTransformsTo(transform);
             
             foreach (ModelMesh mesh in model.Meshes)
-            {
-                BoundingBox box = BoundingBox.CreateFromSphere(mesh.BoundingSphere);
-                bounding = BoundingBox.CreateMerged(this.bounding, box);
-                
+            {   
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
@@ -73,59 +69,8 @@ namespace SiegeDefense.GameComponents.Models
 
                 mesh.Draw();
             }
-        }
 
-        public BoundingBox CalculateBounding()
-        {
-            bounding = new BoundingBox();
-            Matrix[] transform = new Matrix[model.Bones.Count];
-            model.CopyAbsoluteBoneTransformsTo(transform);
-
-            foreach (ModelMesh mesh in model.Meshes)
-            {
-                Vector3 meshBoundingSphereCenter = mesh.BoundingSphere.Center;
-                float meshBoundingSphereRadius = mesh.BoundingSphere.Radius;
-
-                Vector3 newCenter = Vector3.Transform(meshBoundingSphereCenter, transform[mesh.ParentBone.Index]);
-                Vector3 boneScale = transform[mesh.ParentBone.Index].Scale;
-                float maxScale = MathHelper.Max(boneScale.X, boneScale.Y);
-                maxScale = MathHelper.Max(maxScale, boneScale.Z);
-                float newRadius = meshBoundingSphereRadius * maxScale;
-
-                BoundingBox box = BoundingBox.CreateFromSphere(new BoundingSphere(newCenter, newRadius));
-                bounding = BoundingBox.CreateMerged(bounding, box);
-            }
-            return bounding;
-        }
-
-        protected BoundingBox CalculateBounding2() {
-            // Initialize minimum and maximum corners of the bounding box to max and min values
-            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-
-            // For each mesh of the model
-            foreach (ModelMesh mesh in model.Meshes) {
-                foreach (ModelMeshPart meshPart in mesh.MeshParts) {
-                    // Vertex buffer parameters
-                    int vertexStride = meshPart.VertexBuffer.VertexDeclaration.VertexStride;
-                    int vertexBufferSize = meshPart.NumVertices * vertexStride;
-
-                    // Get vertex data as float
-                    float[] vertexData = new float[vertexBufferSize / sizeof(float)];
-                    meshPart.VertexBuffer.GetData<float>(vertexData);
-
-                    // Iterate through vertices (possibly) growing bounding box, all calculations are done in world space
-                    for (int i = 0; i < vertexBufferSize / sizeof(float); i += vertexStride / sizeof(float)) {
-                        Vector3 transformedPosition = Vector3.Transform(new Vector3(vertexData[i], vertexData[i + 1], vertexData[i + 2]), WorldMatrix);
-
-                        min = Vector3.Min(min, transformedPosition);
-                        max = Vector3.Max(max, transformedPosition);
-                    }
-                }
-            }
-
-            // Create and return bounding box
-            return new BoundingBox(min, max);
+            base.Draw(gameTime);
         }
 
         public Vector3 PositionGenerate()

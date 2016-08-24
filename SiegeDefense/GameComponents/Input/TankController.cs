@@ -92,14 +92,14 @@ namespace SiegeDefense.GameComponents.Input {
             }
 
             float rotationAngle = 0;
-            if (moveDirection != Vector3.Zero) {
+           // if (moveDirection != Vector3.Zero) {
                 if (inputManager.GetValue(GameInput.Left) != 0) {
                     rotationAngle += tankRotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
                 if (inputManager.GetValue(GameInput.Right) != 0) {
                     rotationAngle -= tankRotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
-            }
+          //  }
 
             if (rotationAngle != 0) {
                 rotationAngle *= rotationDirection;

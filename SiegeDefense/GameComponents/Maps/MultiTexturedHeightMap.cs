@@ -310,7 +310,7 @@ namespace SiegeDefense.GameComponents.Maps {
                 }
             }
 
-            // normalize height data to [0-mapHeighMax]
+            // normalize height data to [0-mapDeltaHeight]
             if (maxMapHeight == minMapHeight) maxMapHeight = minMapHeight + 1;
             for (int x = 0; x < mapInfoWidth; x++) {
                 for (int y = 0; y < mapInfoHeight; y++) {
