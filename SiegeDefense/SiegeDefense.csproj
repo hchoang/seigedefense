@@ -47,7 +47,6 @@
     <Compile Include="GameComponents\Cameras\FollowTargetCamera.cs" />
     <Compile Include="GameComponents\Cameras\TargetPointOfViewCamera.cs" />
     <Compile Include="GameComponents\Input\TankController.cs" />
-    <Compile Include="GameComponents\Maps\GridMap.cs" />
     <Compile Include="GameComponents\Maps\Map.cs" />
     <Compile Include="GameComponents\Models\BaseModel.cs" />
     <Compile Include="GameComponents\Models\Bullet.cs" />
