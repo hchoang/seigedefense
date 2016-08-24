@@ -112,7 +112,6 @@ namespace SiegeDefense.GameComponents.Input {
         }
 
         private float GetValue(MouseButton button, bool isCurrent) {
-            Console.Out.WriteLine(1234);
             MouseState ms = isCurrent ? currentMouseState : previousMouseState;
             ButtonState state = (ButtonState)typeof(MouseState).GetProperty(button.ToString()).GetValue(ms);
             return state == ButtonState.Pressed ? 1 : 0;

@@ -108,7 +108,26 @@ namespace SiegeDefense.GameComponents.Input {
             }
             // end move & rotate
 
+            //rotate wheels
+            float travelDistance = moveDirection.Length();
             
+            if (travelDistance > 0)
+            {
+                for (int i = 0; i < controlledTank.wheelBones.Length; i++)
+                {
+                    Matrix wheelMatrix = controlledTank.wheelBones[i].Transform;
+                    Vector3 wheelForward = wheelMatrix.Forward;
+                    Vector3 wheelUp = wheelMatrix.Up;
+                    Vector3 position = wheelMatrix.Translation;
+                    
+                    wheelMatrix = Matrix.CreateFromAxisAngle(wheelMatrix.Right, MathHelper.PiOver4 * 0.25f);
+                    wheelForward = Vector3.Transform(wheelForward, wheelMatrix);
+                    wheelUp = Vector3.Transform(wheelUp, wheelMatrix);
+                    Matrix newFrontWheelMatrix = Matrix.CreateWorld(position, wheelForward, wheelUp);
+                    controlledTank.wheelBones[i].Transform = newFrontWheelMatrix;
+                }
+                
+            }
 
             // rotate turret & cannon
             float turretRotationAngle = inputManager.GetValue(GameInput.Horizontal) * (float)gameTime.ElapsedGameTime.TotalSeconds * turretRotateSpeed;

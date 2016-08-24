@@ -9,10 +9,18 @@ namespace SiegeDefense.GameComponents.Models
     {
         public ModelBone turretBone { get; protected set; }
         public ModelBone canonBone { get; protected set; }
+        public ModelBone[] wheelBones;
+
         public Tank(Model model) : base(model)
         {
             turretBone = model.Bones["turret_geo"];
             canonBone = model.Bones["canon_geo"];
+            wheelBones = new ModelBone[4];
+            wheelBones[0] = model.Bones["l_front_wheel_geo"];
+            wheelBones[1] = model.Bones["r_front_wheel_geo"];
+            wheelBones[2] = model.Bones["l_back_wheel_geo"];
+            wheelBones[3] = model.Bones["r_back_wheel_geo"];
+            
         }
 
         public override void Update(GameTime gameTime)
