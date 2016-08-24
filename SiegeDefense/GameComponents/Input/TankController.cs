@@ -65,13 +65,16 @@ namespace SiegeDefense.GameComponents.Input {
 
         public override void Update(GameTime gameTime) {
             // play sound when click mouse
-            if (inputManager.GetValue(GameInput.Fire) != 0)
+            if (inputManager.isTriggered(GameInput.Fire))
             {
-                SoundEffectInstance sound = soundManager.FindSound("Tank");
-                if (sound.State != SoundState.Playing)
-                {
-                    sound.Play();
-                }
+                SoundEffect se = Game.Content.Load<SoundEffect>(@"Sound/tank-fire");
+                se.Play();
+                //SoundEffectInstance sound = soundManager.FindSound("Tank");
+                //if (sound.State != SoundState.Playing)
+                //{
+                //    sound.Play();
+                //}
+                controlledTank.Fire();
             }
 
             // move & rotate

@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents.Cameras;
+using SiegeDefense.GameComponents.Physics;
 using System;
 
 namespace SiegeDefense.GameComponents.Models
 {
-    class Tank : BaseModel
+    public class Tank : BaseModel
     {
         protected int turretBoneIndex;
         protected int canonBoneIndex;
@@ -27,7 +28,6 @@ namespace SiegeDefense.GameComponents.Models
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            Console.Out.WriteLine(map.GetHeight(Position));
         }
 
         public void Move(Vector3 moveDirection) {
@@ -109,6 +109,34 @@ namespace SiegeDefense.GameComponents.Models
         public void RotateTank(float rotationAngle)
         {
             RotationMatrix *= Matrix.CreateFromAxisAngle(Up, rotationAngle);
+        }
+
+        public void Fire() {
+            BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"), Vector3.Zero);
+
+            // calculate bullet scale to appropriate size
+            OrientedCollisionBox bulletCollisionBox = bullet.FindComponent<OrientedCollisionBox>();
+            OrientedCollisionBox tankCollisionBox = FindComponent<OrientedCollisionBox>();
+            Vector3 bulletBaseSize = bulletCollisionBox.baseBoundingBox.Max - bulletCollisionBox.baseBoundingBox.Min;
+            Vector3 tankActualSize = (tankCollisionBox.baseBoundingBox.Max - tankCollisionBox.baseBoundingBox.Min) * ScaleMatrix.Scale;
+            Vector3 expectedSizeRatio = new Vector3(0.1f, 0.1f, 0.1f);
+            Vector3 bulletScale = expectedSizeRatio * tankActualSize / bulletBaseSize;
+            
+            // set bullet position & facing direction
+            Matrix canonAbosuluteMatrix = absoluteTranform[canonBoneIndex];
+            Matrix canonWorldMatrix = canonAbosuluteMatrix * WorldMatrix;
+            Vector3 canonPosition = canonWorldMatrix.Translation;
+            Vector3 canonForward = canonWorldMatrix.Forward;
+            Vector3 canonUp = canonWorldMatrix.Up;
+
+            bullet.WorldMatrix = Matrix.CreateWorld(canonPosition, canonForward, canonUp);
+            bullet.ScaleMatrix = Matrix.CreateScale(bulletScale);
+
+            GamePhysics bulletPhysics = new GamePhysics();
+            bulletPhysics.Velocity = -bullet.Forward * 1000;
+            bullet.AddChild(bulletPhysics);
+
+            modelManager.models.Add(bullet);
         }
     }
 }

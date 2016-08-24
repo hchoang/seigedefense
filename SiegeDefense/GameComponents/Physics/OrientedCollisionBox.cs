@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace SiegeDefense.GameComponents.Physics {
     public class OrientedCollisionBox : _3DGameObject {
-        protected static Dictionary<Model, BoundingBox> baseBoundingBoxCaching = new Dictionary<Model, BoundingBox>();
+        protected static Dictionary<int, BoundingBox> baseBoundingBoxCaching = new Dictionary<int, BoundingBox>();
 
-        protected BoundingBox baseBoundingBox;
+        public BoundingBox baseBoundingBox;
         protected BasicEffect basicEffect;
 
         protected Camera _camera;
@@ -34,11 +34,10 @@ namespace SiegeDefense.GameComponents.Physics {
         public OrientedCollisionBox(Model model) {
             basicEffect = Game.Services.GetService<BasicEffect>();
 
-            if (!baseBoundingBoxCaching.ContainsKey(model)) {
+            if (!baseBoundingBoxCaching.ContainsKey(model.GetHashCode())) {
                 baseBoundingBox = new BoundingBox();
                 Matrix[] transform = new Matrix[model.Bones.Count];
                 model.CopyAbsoluteBoneTransformsTo(transform);
-
                 foreach (ModelMesh mesh in model.Meshes) {
                     foreach (ModelMeshPart part in mesh.MeshParts) {
                         float[] vbData = new float[part.VertexBuffer.VertexDeclaration.VertexStride * part.VertexBuffer.VertexCount / sizeof(float)];
@@ -70,9 +69,11 @@ namespace SiegeDefense.GameComponents.Physics {
                         baseBoundingBox.Max = Vector3.Max(baseBoundingBox.Max, max);
                     }
                 }
+
+                baseBoundingBoxCaching.Add(model.GetHashCode(), baseBoundingBox);
             }
             else {
-                baseBoundingBox = baseBoundingBoxCaching[model];
+                baseBoundingBox = baseBoundingBoxCaching[model.GetHashCode()];
             }
         }
 

@@ -206,8 +206,8 @@ namespace SiegeDefense.GameComponents.Maps {
             int gridMapPositionX = (int)(relativePosition.X / mapCellSize);
             int gridMapPositionY = (int)(relativePosition.Z / mapCellSize);
 
-            if (gridMapPositionX <= 0 || gridMapPositionX >= mapInfoWidth) return false;
-            if (gridMapPositionY <= 0 || gridMapPositionY >= mapInfoHeight) return false;
+            if (gridMapPositionX < 0 || gridMapPositionX > mapInfoWidth - 1) return false;
+            if (gridMapPositionY < 0 || gridMapPositionY > mapInfoHeight - 1) return false;
 
             return true;
         }
@@ -221,9 +221,9 @@ namespace SiegeDefense.GameComponents.Maps {
             int gridMapPositionNextX = gridMapPositionX + 1;
             int gridMapPositionNextY = gridMapPositionY + 1;
 
-            if (gridMapPositionX == mapInfoWidth - 1)
+            if (gridMapPositionNextX == mapInfoWidth)
                 gridMapPositionNextX -= 2;
-            if (gridMapPositionNextY == mapInfoHeight - 1)
+            if (gridMapPositionNextY == mapInfoHeight)
                 gridMapPositionNextY -= 2;
 
             float cellPositionX = relativePosition.X % mapCellSize / mapCellSize;

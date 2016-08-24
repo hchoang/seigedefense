@@ -11,8 +11,18 @@ namespace SiegeDefense.GameComponents.Models
     public class BaseModel : _3DGameObject
     {
         public Model model { get; protected set; }
-        private Matrix[] absoluteTranform;
-        public Matrix[] relativeTransform;
+        protected Matrix[] absoluteTranform;
+        protected Matrix[] relativeTransform;
+
+        private ModelManager _modelManager;
+        protected ModelManager modelManager {
+            get {
+                if (_modelManager == null) {
+                    _modelManager = FindObjects<ModelManager>()[0];
+                }
+                return _modelManager;
+            }
+        }
 
         private Camera _camera;
         protected Camera camera {

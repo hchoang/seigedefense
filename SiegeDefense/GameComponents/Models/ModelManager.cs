@@ -14,12 +14,11 @@ namespace SiegeDefense.GameComponents.Models
 {
     public partial class ModelManager : GameObject
     {
-        private List<BaseModel> models = new List<BaseModel>();
+        public List<BaseModel> models = new List<BaseModel>();
 
         public ModelManager()
         {
             models = new List<BaseModel>();
-            //InitializeComponent();
         }
 
         public override void Draw(GameTime gameTime)
@@ -54,7 +53,7 @@ namespace SiegeDefense.GameComponents.Models
             userControlledTank.AddChild(tankController);
             models.Add(userControlledTank);
 
-            models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.Position + new Vector3 (0, 0, 40)));
+            //models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.Position + new Vector3 (0, 0, 40)));
             //models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.canonBone.Transform.Translation + userControlledTank.Position));
             models.Add(new Tank(Game.Content.Load<Model>(@"Models/tank")));
             base.LoadContent();
