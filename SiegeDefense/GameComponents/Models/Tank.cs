@@ -42,10 +42,7 @@ namespace SiegeDefense.GameComponents.Models
             angle = angle * 180 / MathHelper.Pi;
 
             if (Math.Abs(angle) > 45) return;
-<<<<<<< HEAD
-=======
 
->>>>>>> 4c3d3489527167be4e6676b127fc6c529ab1fdf9
             float newHeight = map.GetHeight(newPosition);
             Vector3 newPositionUpdated = new Vector3(newPosition.X, newHeight, newPosition.Z);
 
