@@ -46,12 +46,20 @@ namespace SiegeDefense.GameComponents.Models
             TankController tankController = new TankController();
 
             //Camera camera = new FollowTargetCamera(userControlledTank, 50);
+<<<<<<< HEAD
             Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 30, -80));
+=======
+            Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, -100));
+>>>>>>> 4c3d3489527167be4e6676b127fc6c529ab1fdf9
             Game.Components.Add(camera);
-
             userControlledTank.AddChild(tankController);
             models.Add(userControlledTank);
+<<<<<<< HEAD
             models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.Position + new Vector3 (0, 0, 40)));
+=======
+            //models.Add(new Bullet(Game.Content.Load<Model>(@"Models/bullet"), userControlledTank.canonBone.Transform.Translation + userControlledTank.Position));
+            models.Add(new Tank(Game.Content.Load<Model>(@"Models/tank")));
+>>>>>>> 4c3d3489527167be4e6676b127fc6c529ab1fdf9
             base.LoadContent();
         }
     }
