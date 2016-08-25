@@ -10,6 +10,7 @@ namespace SiegeDefense.GameComponents.Models
     {
         protected int turretBoneIndex;
         protected int canonBoneIndex;
+        protected int canonHeadBoneIndex;
         protected int[] wheelBoneIndex;
 
         public Tank(Model model) : base(model)
@@ -22,7 +23,8 @@ namespace SiegeDefense.GameComponents.Models
             wheelBoneIndex[3] = model.Bones["r_back_wheel_geo"].Index;
 
             turretBoneIndex = model.Bones["turret_geo"].Index;  
-            canonBoneIndex = model.Bones["canon_geo"].Index;       
+            canonBoneIndex = model.Bones["canon_geo"].Index;
+            canonHeadBoneIndex = model.Bones["canon_head_geo"].Index;   
         }
 
         public override void Update(GameTime gameTime)
@@ -32,11 +34,11 @@ namespace SiegeDefense.GameComponents.Models
 
         public void Move(Vector3 moveDirection) {
             Vector3 newPosition = Position + moveDirection;
-            if (!map.Moveable(newPosition))
+            if (!map.IsInsideMap(newPosition))
                 return;
 
-            Vector3 mapNormal = map.GetNormal(newPosition);
             // angle between map normal & up vector -- calculate map slope
+            Vector3 mapNormal = map.GetNormal(newPosition);
             float angle = MathHelper.Clamp(Vector3.Dot(mapNormal, Vector3.Up) / (mapNormal.Length()), -1, 1);
             angle = (float)Math.Acos(angle);
             angle = angle * 180 / MathHelper.Pi;
@@ -46,9 +48,8 @@ namespace SiegeDefense.GameComponents.Models
             float newHeight = map.GetHeight(newPosition);
             Vector3 newPositionUpdated = new Vector3(newPosition.X, newHeight, newPosition.Z);
 
-            float travelDistance = (newPositionUpdated - Position).Length();
+            if (!map.IsAccessibleByFoot(newPositionUpdated)) return;
 
-            RotateWheels(travelDistance);
             Position = new Vector3(newPosition.X, newHeight, newPosition.Z);
             Up = mapNormal;
         }
@@ -113,30 +114,84 @@ namespace SiegeDefense.GameComponents.Models
 
         public void Fire() {
             BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"), Vector3.Zero);
-
-            // calculate bullet scale to appropriate size
-            OrientedCollisionBox bulletCollisionBox = bullet.FindComponent<OrientedCollisionBox>();
-            OrientedCollisionBox tankCollisionBox = FindComponent<OrientedCollisionBox>();
-            Vector3 bulletBaseSize = bulletCollisionBox.baseBoundingBox.Max - bulletCollisionBox.baseBoundingBox.Min;
-            Vector3 tankActualSize = (tankCollisionBox.baseBoundingBox.Max - tankCollisionBox.baseBoundingBox.Min) * ScaleMatrix.Scale;
-            Vector3 expectedSizeRatio = new Vector3(0.1f, 0.1f, 0.1f);
-            Vector3 bulletScale = expectedSizeRatio * tankActualSize / bulletBaseSize;
             
             // set bullet position & facing direction
-            Matrix canonAbosuluteMatrix = absoluteTranform[canonBoneIndex];
-            Matrix canonWorldMatrix = canonAbosuluteMatrix * WorldMatrix;
-            Vector3 canonPosition = canonWorldMatrix.Translation;
-            Vector3 canonForward = canonWorldMatrix.Forward;
-            Vector3 canonUp = canonWorldMatrix.Up;
+            Matrix canonHeadAbsoluteMatrix = absoluteTranform[canonHeadBoneIndex] * WorldMatrix;
 
-            bullet.WorldMatrix = Matrix.CreateWorld(canonPosition, canonForward, canonUp);
-            bullet.ScaleMatrix = Matrix.CreateScale(bulletScale);
+            Vector3 bulletPosition = canonHeadAbsoluteMatrix.Translation;
+            Vector3 bulletForward = canonHeadAbsoluteMatrix.Forward;
+            Vector3 bulletUp = canonHeadAbsoluteMatrix.Up;
+
+            bullet.WorldMatrix = Matrix.CreateWorld(bulletPosition, bulletForward, bulletUp);
 
             GamePhysics bulletPhysics = new GamePhysics();
-            bulletPhysics.Velocity = -bullet.Forward * 1000;
+            bulletPhysics.Velocity = bullet.Forward * 1000;
             bullet.AddChild(bulletPhysics);
 
             modelManager.models.Add(bullet);
+        }
+
+        private BasicEffect basicEffect;
+        public override void Draw(GameTime gameTime) {
+
+            base.Draw(gameTime);
+
+            BoundingBox canonBaseBounding = OrientedCollisionBox.getBoundingBoxOfModelBone(model, canonBoneIndex);
+            Vector3[] boundingCorners = canonBaseBounding.GetCorners();
+            Matrix refWorldMatrix = WorldMatrix;
+            Vector3.Transform(boundingCorners, ref refWorldMatrix, boundingCorners);
+
+            VertexPositionColor[] vertices = new VertexPositionColor[8];
+
+            for (int i = 0; i < 8; i++) {
+                vertices[i].Position = boundingCorners[i];
+                vertices[i].Color = Color.DarkOrange;
+            }
+
+            int[] indices = new int[24];
+            indices[0] = 0;
+            indices[1] = 1;
+            indices[2] = 1;
+            indices[3] = 2;
+            indices[4] = 2;
+            indices[5] = 3;
+            indices[6] = 3;
+            indices[7] = 0;
+
+            indices[8] = 4;
+            indices[9] = 5;
+            indices[10] = 5;
+            indices[11] = 6;
+            indices[12] = 6;
+            indices[13] = 7;
+            indices[14] = 7;
+            indices[15] = 4;
+
+            indices[16] = 0;
+            indices[17] = 4;
+            indices[18] = 1;
+            indices[19] = 5;
+            indices[20] = 2;
+            indices[21] = 6;
+            indices[22] = 3;
+            indices[23] = 7;
+
+            if (basicEffect == null)
+                basicEffect = (BasicEffect)Game.Services.GetService<BasicEffect>().Clone();
+
+            basicEffect.VertexColorEnabled = true;
+            basicEffect.LightingEnabled = false;
+            basicEffect.FogEnabled = false;
+            basicEffect.World = Matrix.Identity;
+            basicEffect.View = camera.ViewMatrix;
+            basicEffect.Projection = camera.ProjectionMatrix;
+
+            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
+                pass.Apply();
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList, vertices, 0, 8, indices, 0, 12);
+            }
+
+            
         }
     }
 }

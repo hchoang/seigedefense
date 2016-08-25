@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Design;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Physics;
 using System;
@@ -13,7 +12,13 @@ namespace SiegeDefense.GameComponents.Models
         public Model model { get; protected set; }
         protected Matrix[] absoluteTranform;
         protected Matrix[] relativeTransform;
-
+        public float axisRightFixAngle = 0;
+        public float axisUpFixAngle = 0;
+        public float axisForwardFixAngle = 0;
+        protected Matrix axisRightFixMatrix = Matrix.Identity;
+        protected Matrix axisUpFixMatrix = Matrix.Identity;
+        protected Matrix axisForwardFixMatrix = Matrix.Identity;
+        
         private ModelManager _modelManager;
         protected ModelManager modelManager {
             get {
@@ -46,7 +51,6 @@ namespace SiegeDefense.GameComponents.Models
         public BaseModel(Model model)
         {
             this.model = model;
-            ScaleMatrix = Matrix.CreateScale(5);
             AddChild(new OrientedCollisionBox(model));
             Position = PositionGenerate();
 
@@ -66,11 +70,11 @@ namespace SiegeDefense.GameComponents.Models
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            
         }
 
         public override void Draw(GameTime gameTime)
         {
+            axisUpFixMatrix = Matrix.CreateFromAxisAngle(Up, axisUpFixAngle);
             model.CopyBoneTransformsFrom(relativeTransform);
             model.CopyAbsoluteBoneTransformsTo(absoluteTranform);
             foreach (ModelMesh mesh in model.Meshes)

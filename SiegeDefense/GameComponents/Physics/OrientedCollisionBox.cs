@@ -31,6 +31,51 @@ namespace SiegeDefense.GameComponents.Physics {
             }
         }
 
+        public static BoundingBox getBoundingBoxOfModelBone(Model model, int boneIndex) {
+            return getBoundingBoxOfModelBone(model, model.Bones[boneIndex]);
+        }
+
+        public static BoundingBox getBoundingBoxOfModelBone(Model model, string boneName) {
+            return getBoundingBoxOfModelBone(model, model.Bones[boneName]);
+        }
+
+        public static BoundingBox getBoundingBoxOfModelBone(Model model, ModelBone bone) {
+            if (baseBoundingBoxCaching.ContainsKey(bone.GetHashCode()))
+                return baseBoundingBoxCaching[bone.GetHashCode()];
+
+            BoundingBox retValue = new BoundingBox();
+            Matrix[] transform = new Matrix[model.Meshes.Count];
+            model.CopyAbsoluteBoneTransformsTo(transform);
+
+            foreach (ModelMesh mesh in model.Meshes) {
+                if (!mesh.ParentBone.Name.Equals(bone.Name))
+                    continue;
+                foreach (ModelMeshPart part in mesh.MeshParts) {
+                    float[] vbData = new float[part.VertexBuffer.VertexDeclaration.VertexStride * part.VertexBuffer.VertexCount / sizeof(float)];
+                    part.VertexBuffer.GetData(vbData);
+
+                    Vector3 min = new Vector3(vbData[0], vbData[1], vbData[2]);
+                    Vector3 max = min;
+                    for (int i = 0; i < vbData.Length; i += part.VertexBuffer.VertexDeclaration.VertexStride / sizeof(float)) {
+                        Vector3 pos = new Vector3(vbData[i], vbData[i + 1], vbData[i + 2]);
+
+                        min = Vector3.Min(min, pos);
+                        max = Vector3.Max(max, pos);
+                    }
+
+                    min = Vector3.Transform(min, transform[mesh.ParentBone.Index]);
+                    max = Vector3.Transform(max, transform[mesh.ParentBone.Index]);
+
+                    retValue.Min = Vector3.Min(retValue.Min, min);
+                    retValue.Max = Vector3.Max(retValue.Max, max);
+                }
+            }
+
+            baseBoundingBoxCaching.Add(bone.GetHashCode(), retValue);
+
+            return retValue;
+        }
+
         public OrientedCollisionBox(Model model) {
             basicEffect = Game.Services.GetService<BasicEffect>();
 

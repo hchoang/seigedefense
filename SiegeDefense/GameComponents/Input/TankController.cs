@@ -5,6 +5,8 @@ using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Models;
 using SiegeDefense.GameComponents.SoundBank;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace SiegeDefense.GameComponents.Input {
     public class TankController : GameObject {
@@ -81,9 +83,9 @@ namespace SiegeDefense.GameComponents.Input {
             Vector3 moveDirection = Vector3.Zero;
             int rotationDirection = 1;
             if (inputManager.GetValue(GameInput.Up) != 0)
-                moveDirection -= controlledTank.Forward;
-            else if (inputManager.GetValue(GameInput.Down) != 0) {
                 moveDirection += controlledTank.Forward;
+            else if (inputManager.GetValue(GameInput.Down) != 0) {
+                moveDirection -= controlledTank.Forward;
                 rotationDirection = -1;
             }
 

@@ -39,7 +39,7 @@ namespace SiegeDefense.GameComponents.Cameras {
             cameraToTargetDirection = targetToFollow.Forward;
             Vector3 newPosition = targetToFollow.Position + cameraToTargetDirection * targetDistance;
 
-            if (map.Moveable(newPosition)) {
+            if (map.IsInsideMap(newPosition)) {
                 float height = map.GetHeight(newPosition) + 20;
                 Position = new Vector3(newPosition.X, height, newPosition.Z);
             } else {

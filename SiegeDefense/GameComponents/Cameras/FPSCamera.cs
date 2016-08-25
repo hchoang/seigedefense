@@ -127,7 +127,7 @@ namespace SiegeDefense.GameComponents.Cameras {
         public void Move(Vector3 direction) {
 
             Vector3 newPosition = Position + direction;
-            if (!map.Moveable(newPosition))
+            if (!map.IsInsideMap(newPosition))
                 return;
 
             Position = newPosition;

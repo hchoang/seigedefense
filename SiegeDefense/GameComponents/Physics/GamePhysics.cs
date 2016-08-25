@@ -46,7 +46,7 @@ namespace SiegeDefense.GameComponents.Physics {
             baseModel.Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // update force
-            if (map.Moveable(baseModel.Position)) {
+            if (map.IsInsideMap(baseModel.Position)) {
                 float groundDistance = baseModel.Position.Y - map.GetHeight(baseModel.Position);
                 if (groundDistance > 0) {
                     Force += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;

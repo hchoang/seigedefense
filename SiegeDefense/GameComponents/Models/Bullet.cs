@@ -9,11 +9,10 @@ namespace SiegeDefense.GameComponents.Models
     {
         public Bullet(Model model, Vector3 Position): base(model, Position)
         {
-            ScaleMatrix = Matrix.CreateScale(1);
         }
 
         public override void Update(GameTime gameTime) {
-            if (!map.Moveable(Position)) {
+            if (!map.IsInsideMap(Position)) {
                 modelManager.models.Remove(this);
                 return;
             }
