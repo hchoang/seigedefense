@@ -77,6 +77,9 @@ namespace SiegeDefense.GameComponents.Input {
                 //    sound.Play();
                 //}
                 controlledTank.Fire();
+                //List<Tank> allTanks = modelManager.models.Where(x => x is Tank).Cast<Tank>().ToList();
+                //foreach (Tank tank in allTanks)
+                //    tank.Fire();
             }
 
             // move & rotate

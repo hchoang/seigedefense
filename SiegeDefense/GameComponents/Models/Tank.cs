@@ -61,10 +61,10 @@ namespace SiegeDefense.GameComponents.Models
             Vector3 canonPosition = canonMatrix.Translation;
             Vector3 canonUp = canonMatrix.Up;
 
-            Matrix canonRotateMatrix = Matrix.CreateFromAxisAngle(canonMatrix.Left, -rotationAngle);
+            Matrix canonRotateMatrix = Matrix.CreateFromAxisAngle(canonMatrix.Left, rotationAngle);
             canonForward = Vector3.Transform(canonForward, canonRotateMatrix);
             canonForward.Normalize();
-            if (-0.5f < canonForward.Y && canonForward.Y < 0.2f)
+            if (-0.2f < canonForward.Y && canonForward.Y < 0.5f)
             {
                 canonUp = Vector3.Transform(canonUp, canonRotateMatrix);
                 relativeTransform[canonBoneIndex] = Matrix.CreateWorld(canonPosition, canonForward, canonUp);
@@ -78,11 +78,12 @@ namespace SiegeDefense.GameComponents.Models
             Vector3 turretPosition = turretMatrix.Translation;
             Vector3 turretUp = turretMatrix.Up;
 
-            Matrix turretRotateMatrix = Matrix.CreateFromAxisAngle(turretMatrix.Up, -rotationAngle);
+            Matrix turretRotateMatrix = Matrix.CreateFromAxisAngle(turretMatrix.Down, rotationAngle);
             turretForward = Vector3.Transform(turretForward, turretRotateMatrix);
             turretUp = Vector3.Transform(turretUp, turretRotateMatrix);
 
             Matrix newTurretMatrix = Matrix.CreateWorld(turretPosition, turretForward, turretUp);
+
             if (Math.Abs(newTurretMatrix.Rotation.Y) < 0.2f)
             {
                 relativeTransform[turretBoneIndex] = newTurretMatrix;
@@ -114,7 +115,7 @@ namespace SiegeDefense.GameComponents.Models
 
         public void Fire() {
             BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"), Vector3.Zero);
-            
+
             // set bullet position & facing direction
             Matrix canonHeadAbsoluteMatrix = absoluteTranform[canonHeadBoneIndex] * WorldMatrix;
 
@@ -129,69 +130,6 @@ namespace SiegeDefense.GameComponents.Models
             bullet.AddChild(bulletPhysics);
 
             modelManager.models.Add(bullet);
-        }
-
-        private BasicEffect basicEffect;
-        public override void Draw(GameTime gameTime) {
-
-            base.Draw(gameTime);
-
-            BoundingBox canonBaseBounding = OrientedCollisionBox.getBoundingBoxOfModelBone(model, canonBoneIndex);
-            Vector3[] boundingCorners = canonBaseBounding.GetCorners();
-            Matrix refWorldMatrix = WorldMatrix;
-            Vector3.Transform(boundingCorners, ref refWorldMatrix, boundingCorners);
-
-            VertexPositionColor[] vertices = new VertexPositionColor[8];
-
-            for (int i = 0; i < 8; i++) {
-                vertices[i].Position = boundingCorners[i];
-                vertices[i].Color = Color.DarkOrange;
-            }
-
-            int[] indices = new int[24];
-            indices[0] = 0;
-            indices[1] = 1;
-            indices[2] = 1;
-            indices[3] = 2;
-            indices[4] = 2;
-            indices[5] = 3;
-            indices[6] = 3;
-            indices[7] = 0;
-
-            indices[8] = 4;
-            indices[9] = 5;
-            indices[10] = 5;
-            indices[11] = 6;
-            indices[12] = 6;
-            indices[13] = 7;
-            indices[14] = 7;
-            indices[15] = 4;
-
-            indices[16] = 0;
-            indices[17] = 4;
-            indices[18] = 1;
-            indices[19] = 5;
-            indices[20] = 2;
-            indices[21] = 6;
-            indices[22] = 3;
-            indices[23] = 7;
-
-            if (basicEffect == null)
-                basicEffect = (BasicEffect)Game.Services.GetService<BasicEffect>().Clone();
-
-            basicEffect.VertexColorEnabled = true;
-            basicEffect.LightingEnabled = false;
-            basicEffect.FogEnabled = false;
-            basicEffect.World = Matrix.Identity;
-            basicEffect.View = camera.ViewMatrix;
-            basicEffect.Projection = camera.ProjectionMatrix;
-
-            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
-                pass.Apply();
-                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList, vertices, 0, 8, indices, 0, 12);
-            }
-
-            
         }
     }
 }
