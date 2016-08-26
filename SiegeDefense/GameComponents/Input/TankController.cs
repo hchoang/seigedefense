@@ -70,7 +70,7 @@ namespace SiegeDefense.GameComponents.Input {
             if (inputManager.isTriggered(GameInput.Fire))
             {
                 SoundEffect se = Game.Content.Load<SoundEffect>(@"Sound/tank-fire");
-                se.Play();
+                //se.Play();
                 //SoundEffectInstance sound = soundManager.FindSound("Tank");
                 //if (sound.State != SoundState.Playing)
                 //{

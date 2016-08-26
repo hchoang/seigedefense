@@ -119,12 +119,8 @@ namespace SiegeDefense.GameComponents.Models
 
             // set bullet position & facing direction
             Matrix canonHeadAbsoluteMatrix = absoluteTranform[canonHeadBoneIndex] * WorldMatrix;
-
-            Vector3 bulletPosition = canonHeadAbsoluteMatrix.Translation;
-            Vector3 bulletForward = canonHeadAbsoluteMatrix.Forward;
-            Vector3 bulletUp = canonHeadAbsoluteMatrix.Up;
-
-            bullet.WorldMatrix = Matrix.CreateWorld(bulletPosition, bulletForward, bulletUp);
+            bullet.WorldMatrix = canonHeadAbsoluteMatrix;
+            bullet.ScaleMatrix = Matrix.CreateScale(1);
 
             GamePhysics bulletPhysics = new GamePhysics();
             bulletPhysics.Velocity = bullet.Forward * 1000;
