@@ -8,7 +8,7 @@ namespace SiegeDefense.GameComponents {
         private static Game _game;
         private List<GameObject> childObjects = new List<GameObject>();
         public GameObject ParentObject { get; set; } = null;
-        public string Tag { get; set; }
+        public string Tag { get; set; } = "";
 
         public static void Initialize(Game game) {
             _game = game;

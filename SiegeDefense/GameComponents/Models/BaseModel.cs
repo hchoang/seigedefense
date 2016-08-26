@@ -48,10 +48,13 @@ namespace SiegeDefense.GameComponents.Models
             }
         }
 
+        public OrientedCollisionBox collisionBox { get; set; }
+
         public BaseModel(Model model)
         {
             this.model = model;
-            AddChild(new OrientedCollisionBox(model));
+            collisionBox = new OrientedCollisionBox(this);
+            //AddChild(collisionBox);
             Position = PositionGenerate();
 
             absoluteTranform = new Matrix[model.Bones.Count];

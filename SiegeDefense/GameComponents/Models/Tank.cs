@@ -115,6 +115,7 @@ namespace SiegeDefense.GameComponents.Models
 
         public void Fire() {
             BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"), Vector3.Zero);
+            bullet.Tag = Tag;
 
             // set bullet position & facing direction
             Matrix canonHeadAbsoluteMatrix = absoluteTranform[canonHeadBoneIndex] * WorldMatrix;
@@ -130,6 +131,10 @@ namespace SiegeDefense.GameComponents.Models
             bullet.AddChild(bulletPhysics);
 
             modelManager.models.Add(bullet);
+        }
+
+        public void Destroy() {
+            modelManager.tankList.Remove(this);
         }
     }
 }

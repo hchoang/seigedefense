@@ -15,6 +15,7 @@ namespace SiegeDefense.GameComponents.Models
     public partial class ModelManager : GameObject
     {
         public List<BaseModel> models = new List<BaseModel>();
+        public List<Tank> tankList = new List<Tank>();
 
         public ModelManager()
         {
@@ -27,6 +28,10 @@ namespace SiegeDefense.GameComponents.Models
             {
                 bm.Draw(gameTime);
             }
+
+            foreach (Tank tank in tankList) {
+                tank.Draw(gameTime);
+            }
             base.Draw(gameTime);
         }
 
@@ -36,24 +41,26 @@ namespace SiegeDefense.GameComponents.Models
             {
                 models[i].Update(gameTime);
             }
+            foreach (Tank tank in tankList) {
+                tank.Update(gameTime);
+            }
             base.Update(gameTime);
         }
 
         protected override void LoadContent()
         {
             Tank userControlledTank = new Tank(Game.Content.Load<Model>(@"Models/tank"));
-            TankController tankController = new TankController();
+            userControlledTank.Tag = "Player";
+            userControlledTank.AddChild(new TankController());
+            tankList.Add(userControlledTank);
 
             //Camera camera = new FollowTargetCamera(userControlledTank, 50);
-
             //Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 20, -5));
             Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, 100));
-
             Game.Components.Add(camera);
-            userControlledTank.AddChild(tankController);
-            models.Add(userControlledTank);
-            
-            models.Add(new Tank(Game.Content.Load<Model>(@"Models/tank")));
+
+            Tank enemyTank = new Tank(Game.Content.Load<Model>(@"Models/tank"));
+            tankList.Add(enemyTank);
             base.LoadContent();
         }
     }
