@@ -27,6 +27,7 @@ namespace SiegeDefense.GameComponents.Models
 
             if (collidedTank != null) {
                 collidedTank.Destroy();
+                modelManager.models.Remove(this);
             }
 
             // remove bullet if outside map or hit the ground

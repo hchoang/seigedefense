@@ -16,14 +16,9 @@ namespace SiegeDefense.GameComponents.Physics {
                 return _baseModel;
             }
         }
-        public float Mass { get; set; } = 1;
-        public Vector3 Force { get; set; } = Vector3.Zero;
-        public Vector3 Acceleration {
-            get {
-                return Force / Mass;
-            }
-        }
-        public Vector3 Velocity { get; set; } = Vector3.Zero;
+        public float Mass = 1;
+        public Vector3 Acceleration = Vector3.Zero;
+        public Vector3 Velocity = Vector3.Zero;
 
         protected Map _map;
         protected Map map {
@@ -36,22 +31,22 @@ namespace SiegeDefense.GameComponents.Physics {
         }
 
         public void AddForce(Vector3 force) {
-            Force += force;
+            Acceleration += force / Mass;
         }
 
         public override void Update(GameTime gameTime) {
 
-            // update target position
+            // calculate target position, velocity & acceleration
             Velocity += Acceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
             baseModel.Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // update force
+            // apply gravity
             if (map.IsInsideMap(baseModel.Position)) {
                 float groundDistance = baseModel.Position.Y - map.GetHeight(baseModel.Position);
                 if (groundDistance > 0) {
-                    Force += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Acceleration += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 } else {
-                    Force = new Vector3(Force.X, 0, Force.Z);
+                    Acceleration.Y = 0;
                 }
             }
         }
