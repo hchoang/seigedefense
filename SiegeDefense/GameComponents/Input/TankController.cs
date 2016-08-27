@@ -119,7 +119,7 @@ namespace SiegeDefense.GameComponents.Input {
             
             if (travelDistance > 0)
             {
-                controlledTank.RotateWheels(travelDistance * rotationDirection);
+                controlledTank.RotateWheels(-rotationDirection);
             }
 
             // rotate turret & cannon

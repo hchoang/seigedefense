@@ -60,7 +60,7 @@ namespace SiegeDefense.GameComponents.Models
             Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, 100));
             Game.Components.Add(camera);
 
-            Tank enemyTank = new AIControlledTank(Game.Content.Load<Model>(@"Models/tank"), new Vector3(500, 0, 600), new TankAI(), userControlledTank);
+            Tank enemyTank = new AIControlledTank(Game.Content.Load<Model>(@"Models/tank"), new Vector3(500, 0, 400), new TankAI(), userControlledTank);
             tankList.Add(enemyTank);
             base.LoadContent();
         }

@@ -12,6 +12,7 @@ namespace SiegeDefense.GameComponents.Models
         protected int canonBoneIndex;
         protected int canonHeadBoneIndex;
         protected int[] wheelBoneIndex;
+        public float turretMaxRotaion { get { return 0.2f; } private set { } }
 
         public Tank(Model model) : base(model)
         {
@@ -71,7 +72,7 @@ namespace SiegeDefense.GameComponents.Models
             }
         }
 
-        public void RotateTurret(float rotationAngle)
+        public bool RotateTurret(float rotationAngle)
         {
             Matrix turretMatrix = relativeTransform[turretBoneIndex];
             Vector3 turretForward = turretMatrix.Forward;
@@ -84,13 +85,15 @@ namespace SiegeDefense.GameComponents.Models
 
             Matrix newTurretMatrix = Matrix.CreateWorld(turretPosition, turretForward, turretUp);
 
-            if (Math.Abs(newTurretMatrix.Rotation.Y) < 0.2f)
+            if (Math.Abs(newTurretMatrix.Rotation.Y) < turretMaxRotaion)
             {
                 relativeTransform[turretBoneIndex] = newTurretMatrix;
+                return true;
             }
+            return false;
         }
 
-        public void RotateWheels(float travelDistance)
+        public void RotateWheels(float travelDirection)
         {
             for (int i = 0; i < wheelBoneIndex.Length; i++)
             {
@@ -98,9 +101,9 @@ namespace SiegeDefense.GameComponents.Models
                 Vector3 wheelForward = wheelMatrix.Forward;
                 Vector3 wheelUp = wheelMatrix.Up;
                 Vector3 position = wheelMatrix.Translation;
-
-                wheelMatrix = Matrix.CreateFromAxisAngle(wheelMatrix.Right, MathHelper.PiOver4 * 0.25f);
-                wheelForward = Vector3.Transform(wheelForward, wheelMatrix);
+                
+                wheelMatrix = Matrix.CreateFromAxisAngle(wheelMatrix.Right * travelDirection, MathHelper.PiOver4 * 0.15f);
+                wheelForward = Vector3.Transform(wheelForward , wheelMatrix);
                 wheelUp = Vector3.Transform(wheelUp, wheelMatrix);
                 Matrix newFrontWheelMatrix = Matrix.CreateWorld(position, wheelForward, wheelUp);
                 relativeTransform[wheelBoneIndex[i]] = newFrontWheelMatrix;
@@ -131,6 +134,11 @@ namespace SiegeDefense.GameComponents.Models
 
         public void Destroy() {
             modelManager.tankList.Remove(this);
+        }
+
+        public Matrix turretMatrix()
+        {
+            return absoluteTranform[turretBoneIndex] * WorldMatrix;
         }
     }
 }

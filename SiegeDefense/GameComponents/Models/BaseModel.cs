@@ -100,7 +100,7 @@ namespace SiegeDefense.GameComponents.Models
         {
             Random rnd = new Random();
             //Vector3 position =  new Vector3(rnd.Next(0, 500), 0, rnd.Next(0, 500));
-            Vector3 position = new Vector3(500, 0, 200);
+            Vector3 position = new Vector3(500, 0, 600);
             float height;
             do
             {

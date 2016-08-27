@@ -12,6 +12,8 @@ namespace SiegeDefense.GameComponents.AI
     {
         private Vector3 lastEnemyPosition;
         private float tankMoveSpeed = 20f;
+        private float tankRotaionSpeed = 2f;
+        protected float turretRotateSpeed = 0.05f;
         public AIControlledTank _AITank;
         public AIControlledTank AITank
         {
@@ -28,25 +30,34 @@ namespace SiegeDefense.GameComponents.AI
         
         public override void Update(GameTime gameTime)
         {
+            lastEnemyPosition = AITank.enemy.Position;
             if (AITank.isInRange(AITank.enemy)) {
-                lastEnemyPosition = AITank.enemy.Position;
-                Vector3 newForward = AITank.enemy.Position - AITank.Position;
-                float rotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
-
-                Vector3 moveDirection = Vector3.Zero;
-                
-                moveDirection += AITank.Forward;
-                
-                if (moveDirection != Vector3.Zero)
+                Vector3 newForward = Vector3.Normalize(AITank.enemy.Position - AITank.Position);
+                float turretRotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
+                Console.Out.WriteLine(turretRotationAngle);
+                if (!AITank.RotateTurret(-turretRotationAngle * (float)gameTime.ElapsedGameTime.TotalSeconds))
                 {
-                    moveDirection = Vector3.Normalize(moveDirection) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Vector3 newTankForward = Vector3.Normalize(AITank.enemy.Position - AITank.Position);
+                    float rotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
+                    Vector3 moveDirection = Vector3.Zero;
 
+                    moveDirection += AITank.Forward;
+
+                    moveDirection = Vector3.Normalize(moveDirection) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    rotationAngle = rotationAngle * tankRotaionSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     AITank.Move(moveDirection);
                     AITank.RotateTank(rotationAngle);
+                    AITank.RotateWheels(-1);
                 }
                 
             }
+
             base.Update(gameTime);
+        }
+
+        public List<Vector3> PathFinding()
+        {
+            return null;
         }
     }
 }
