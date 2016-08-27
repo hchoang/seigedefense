@@ -11,7 +11,7 @@ namespace SiegeDefense.GameComponents.AI
     class TankAI : GameObject
     {
         private Vector3 lastEnemyPosition;
-        private float tankMoveSpeed = 50f;
+        private float tankMoveSpeed = 20f;
         public AIControlledTank _AITank;
         public AIControlledTank AITank
         {
@@ -31,7 +31,7 @@ namespace SiegeDefense.GameComponents.AI
             if (AITank.isInRange(AITank.enemy)) {
                 lastEnemyPosition = AITank.enemy.Position;
                 Vector3 newForward = AITank.enemy.Position - AITank.Position;
-                float rotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward);
+                float rotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
 
                 Vector3 moveDirection = Vector3.Zero;
                 
@@ -41,7 +41,7 @@ namespace SiegeDefense.GameComponents.AI
                 {
                     moveDirection = Vector3.Normalize(moveDirection) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-                    //AITank.Move(moveDirection);
+                    AITank.Move(moveDirection);
                     AITank.RotateTank(rotationAngle);
                 }
                 

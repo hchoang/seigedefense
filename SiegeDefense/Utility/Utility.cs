@@ -25,7 +25,7 @@ namespace SiegeDefense {
             return CalculateDrawArea(position.X, position.Y, size.X, size.Y, root);
         }
 
-        public static float RotationAngleCalculator(Vector3 origin, Vector3 destination)
+        public static float RotationAngleCalculator(Vector3 origin, Vector3 destination, Vector3 left)
         {
             float dot = Vector3.Dot(origin, destination);
             if (Math.Abs(dot - (-1.0f)) < 0.000001f)
@@ -36,9 +36,17 @@ namespace SiegeDefense {
             {
                 return 0f;
             }
+            float RotationDirection = 1;
+            if (Vector3.Dot(left, destination) < 0)
+            {
+                RotationDirection = -1;
+            }
 
+            float cosForward = dot / (origin.Length() * destination.Length());
 
-            return -(float) Math.Acos(dot / (origin.Length() * destination.Length()));
+            
+
+            return (float) Math.Acos(cosForward) * RotationDirection;
         }
     }
 }
