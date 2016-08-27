@@ -11,10 +11,10 @@ using System.Collections.Generic;
 namespace SiegeDefense.GameComponents.Input {
     public class TankController : GameObject {
         private IInputManager inputManager;
-        private float tankMoveSpeed = 50.0f;
-        private float tankRotateSpeed = 2.0f;
-        private float turretRotateSpeed = 0.05f;
-        private float canonRotateSpeed = 0.05f;
+        protected float tankMoveSpeed = 50.0f;
+        protected float tankRotateSpeed = 2.0f;
+        protected float turretRotateSpeed = 0.05f;
+        protected float canonRotateSpeed = 0.05f;
 
         private SoundBankManager _soundManager;
         private SoundBankManager soundManager {

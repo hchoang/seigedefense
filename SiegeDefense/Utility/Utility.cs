@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace SiegeDefense {
     public static class Utility {
@@ -22,6 +23,22 @@ namespace SiegeDefense {
 
         public static Rectangle CalculateDrawArea(Vector2 position, Vector2 size, Rectangle root) {
             return CalculateDrawArea(position.X, position.Y, size.X, size.Y, root);
+        }
+
+        public static float RotationAngleCalculator(Vector3 origin, Vector3 destination)
+        {
+            float dot = Vector3.Dot(origin, destination);
+            if (Math.Abs(dot - (-1.0f)) < 0.000001f)
+            {
+                return (float) Math.PI;
+            }
+            if (Math.Abs(dot - (1.0f)) < 0.000001f)
+            {
+                return 0f;
+            }
+
+
+            return (float) Math.Acos(dot / (origin.Length() * destination.Length()));
         }
     }
 }

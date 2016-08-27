@@ -9,6 +9,7 @@ using SiegeDefense.GameScreens;
 using SiegeDefense.GameComponents.Cameras;
 using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents.Input;
+using SiegeDefense.GameComponents.AI;
 
 namespace SiegeDefense.GameComponents.Models
 {
@@ -59,7 +60,7 @@ namespace SiegeDefense.GameComponents.Models
             Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, 100));
             Game.Components.Add(camera);
 
-            Tank enemyTank = new Tank(Game.Content.Load<Model>(@"Models/tank"));
+            Tank enemyTank = new AIControlledTank(Game.Content.Load<Model>(@"Models/tank"), new Vector3(500, 0, 600), new TankAI(), userControlledTank);
             tankList.Add(enemyTank);
             base.LoadContent();
         }

@@ -100,7 +100,7 @@ namespace SiegeDefense.GameComponents.Models
         {
             Random rnd = new Random();
             //Vector3 position =  new Vector3(rnd.Next(0, 500), 0, rnd.Next(0, 500));
-            Vector3 position = new Vector3(500, 0, 500);
+            Vector3 position = new Vector3(500, 0, 200);
             float height;
             do
             {
@@ -110,6 +110,11 @@ namespace SiegeDefense.GameComponents.Models
             
             position = position + new Vector3(0, height, 0);
             return position;
+        }
+
+        public float distanceCaculator(BaseModel model)
+        {
+            return Vector3.Distance(this.Position, model.Position);
         }
     }
 }
