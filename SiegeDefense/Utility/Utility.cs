@@ -38,7 +38,7 @@ namespace SiegeDefense {
             }
 
 
-            return (float) Math.Acos(dot / (origin.Length() * destination.Length()));
+            return -(float) Math.Acos(dot / (origin.Length() * destination.Length()));
         }
     }
 }
