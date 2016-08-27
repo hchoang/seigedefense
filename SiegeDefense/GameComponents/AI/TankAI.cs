@@ -26,7 +26,6 @@ namespace SiegeDefense.GameComponents.AI
                 return _AITank;
             }
         }
-
         
         public override void Update(GameTime gameTime)
         {

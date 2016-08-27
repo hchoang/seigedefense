@@ -34,24 +34,38 @@ namespace SiegeDefense.GameComponents.Models
         }
 
         public void Move(Vector3 moveDirection) {
+            Vector3 oldPosition = Position;
             Vector3 newPosition = Position + moveDirection;
+
+            // validate new position on map
             if (!map.IsInsideMap(newPosition))
                 return;
+            
+            //float angle = MathHelper.Clamp(Vector3.Dot(mapNormal, Vector3.Up) / (mapNormal.Length()), -1, 1);
+            //angle = (float)Math.Acos(angle);
+            //angle = angle * 180 / MathHelper.Pi;
 
-            // angle between map normal & up vector -- calculate map slope
-            Vector3 mapNormal = map.GetNormal(newPosition);
-            float angle = MathHelper.Clamp(Vector3.Dot(mapNormal, Vector3.Up) / (mapNormal.Length()), -1, 1);
-            angle = (float)Math.Acos(angle);
-            angle = angle * 180 / MathHelper.Pi;
-
-            if (Math.Abs(angle) > 45) return;
-
+            //if (Math.Abs(angle) > 45) return;
+            
+            // update new position height
             float newHeight = map.GetHeight(newPosition);
             Vector3 newPositionUpdated = new Vector3(newPosition.X, newHeight, newPosition.Z);
 
-            if (!map.IsAccessibleByFoot(newPositionUpdated)) return;
+            if (!map.IsAccessibleByFoot(newPositionUpdated))
+                return;
 
-            Position = new Vector3(newPosition.X, newHeight, newPosition.Z);
+            Position = newPositionUpdated;
+
+            // collision check with other tanks
+            foreach (Tank tank in modelManager.tankList) {
+                if (tank == this) continue;
+                if (collisionBox.SphereIntersect(tank.collisionBox)) {
+                    Position = oldPosition;
+                    return;
+                }
+            }
+
+            Vector3 mapNormal = map.GetNormal(Position);
             Up = mapNormal;
         }
 
@@ -117,17 +131,14 @@ namespace SiegeDefense.GameComponents.Models
         }
 
         public void Fire() {
-            BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"), Vector3.Zero);
+            BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"));
             bullet.Tag = Tag;
 
             // set bullet position & facing direction
             Matrix canonHeadAbsoluteMatrix = absoluteTranform[canonHeadBoneIndex] * WorldMatrix;
             bullet.WorldMatrix = canonHeadAbsoluteMatrix;
-            bullet.ScaleMatrix = Matrix.CreateScale(1);
-
-            GamePhysics bulletPhysics = new GamePhysics();
-            bulletPhysics.Velocity = bullet.Forward * 1000;
-            bullet.AddChild(bulletPhysics);
+            bullet.physics.MaxSpeed = 1000;
+            bullet.physics.Velocity = bullet.Forward * 1000;
 
             modelManager.models.Add(bullet);
         }

@@ -6,11 +6,13 @@ using System.Collections.Generic;
 
 namespace SiegeDefense.GameComponents.Physics {
     public class OrientedCollisionBox : _3DGameObject {
-        protected static Dictionary<int, BoundingBox> baseBoundingBoxCaching = new Dictionary<int, BoundingBox>();
+        protected static Dictionary<int, BoundingBox> boundingBoxCaching = new Dictionary<int, BoundingBox>();
+        protected static Dictionary<int, BoundingSphere> boundingSphereCaching = new Dictionary<int, BoundingSphere>();
 
-        public BoundingBox baseBoundingBox;
+        protected BoundingBox baseBoundingBox;
+        protected BoundingSphere baseBoundingSphere;
+
         protected BasicEffect basicEffect;
-
         protected Camera _camera;
         protected Camera camera {
             get {
@@ -22,17 +24,28 @@ namespace SiegeDefense.GameComponents.Physics {
         }
 
         protected BaseModel baseModel;
-
+        
         public OrientedCollisionBox(BaseModel baseModel) {
             this.baseModel = baseModel;
             basicEffect = Game.Services.GetService<BasicEffect>();
 
             Model model = baseModel.model;
-            if (!baseBoundingBoxCaching.ContainsKey(model.GetHashCode())) {
+            if (!boundingBoxCaching.ContainsKey(model.GetHashCode())) {
                 baseBoundingBox = new BoundingBox();
+                baseBoundingSphere = new BoundingSphere();
                 Matrix[] transform = new Matrix[model.Bones.Count];
                 model.CopyAbsoluteBoneTransformsTo(transform);
                 foreach (ModelMesh mesh in model.Meshes) {
+
+                    BoundingSphere additionalSphere = mesh.BoundingSphere;
+                    additionalSphere.Center = Vector3.Transform(additionalSphere.Center, transform[mesh.ParentBone.Index]);
+                    Vector3 scale = transform[mesh.ParentBone.Index].Scale;
+                    float maxScale = MathHelper.Max(scale.X, scale.Y);
+                    maxScale = MathHelper.Max(maxScale, scale.Z);
+                    additionalSphere.Radius *= maxScale;
+
+                    baseBoundingSphere = BoundingSphere.CreateMerged(baseBoundingSphere, additionalSphere);
+
                     foreach (ModelMeshPart part in mesh.MeshParts) {
                         float[] vbData = new float[part.VertexBuffer.VertexDeclaration.VertexStride * part.VertexBuffer.VertexCount / sizeof(float)];
                         part.VertexBuffer.GetData(vbData);
@@ -64,10 +77,12 @@ namespace SiegeDefense.GameComponents.Physics {
                     }
                 }
 
-                baseBoundingBoxCaching.Add(model.GetHashCode(), baseBoundingBox);
+                boundingBoxCaching.Add(model.GetHashCode(), baseBoundingBox);
+                boundingSphereCaching.Add(model.GetHashCode(), baseBoundingSphere);
             }
             else {
-                baseBoundingBox = baseBoundingBoxCaching[model.GetHashCode()];
+                baseBoundingBox = boundingBoxCaching[model.GetHashCode()];
+                baseBoundingSphere = boundingSphereCaching[model.GetHashCode()];
             }
         }
         
@@ -90,8 +105,18 @@ namespace SiegeDefense.GameComponents.Physics {
             return lowerBound <= val && val <= upperBound;
         }
 
-        public bool Instersect(OrientedCollisionBox other) {
+        public bool SphereIntersect(OrientedCollisionBox other) {
+            BoundingSphere bounding1 = baseBoundingSphere;
+            bounding1.Center = baseModel.Position;
 
+            BoundingSphere bounding2 = other.baseBoundingSphere;
+            bounding2.Center = other.baseModel.Position;
+
+            return bounding1.Intersects(bounding2);
+        }
+
+        public bool Intersect(OrientedCollisionBox other) {
+            
             Vector3[] boundingCorners1 = baseBoundingBox.GetCorners();
             Matrix refWorldMatrix1 = baseModel.WorldMatrix;
             Vector3.Transform(boundingCorners1, ref refWorldMatrix1, boundingCorners1);

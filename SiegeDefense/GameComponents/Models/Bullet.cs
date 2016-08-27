@@ -8,7 +8,7 @@ namespace SiegeDefense.GameComponents.Models
 {
     class Bullet : BaseModel
     {
-        public Bullet(Model model, Vector3 Position): base(model, Position)
+        public Bullet(Model model): base(model)
         {
         }
 
@@ -18,7 +18,7 @@ namespace SiegeDefense.GameComponents.Models
             foreach (Tank tank in modelManager.tankList) {
                 if (Tag.Equals(tank.Tag)) continue;
 
-                if (collisionBox.Instersect(tank.collisionBox)) {
+                if (collisionBox.Intersect(tank.collisionBox)) {
                     Console.Out.WriteLine("Intersect");
                     collidedTank = tank;
                     break;

@@ -12,13 +12,6 @@ namespace SiegeDefense.GameComponents.Models
         public Model model { get; protected set; }
         protected Matrix[] absoluteTranform;
         protected Matrix[] relativeTransform;
-        public float axisRightFixAngle = 0;
-        public float axisUpFixAngle = 0;
-        public float axisForwardFixAngle = 0;
-        protected Matrix axisRightFixMatrix = Matrix.Identity;
-        protected Matrix axisUpFixMatrix = Matrix.Identity;
-        protected Matrix axisForwardFixMatrix = Matrix.Identity;
-        
         private ModelManager _modelManager;
         protected ModelManager modelManager {
             get {
@@ -28,7 +21,6 @@ namespace SiegeDefense.GameComponents.Models
                 return _modelManager;
             }
         }
-
         private Camera _camera;
         protected Camera camera {
             get {
@@ -47,14 +39,17 @@ namespace SiegeDefense.GameComponents.Models
                 return _map;
             }
         }
-
         public OrientedCollisionBox collisionBox { get; set; }
+        public GamePhysics physics { get; set; }
 
         public BaseModel(Model model)
         {
             this.model = model;
             collisionBox = new OrientedCollisionBox(this);
-            //AddChild(collisionBox);
+            physics = new GamePhysics(this);
+            AddChild(collisionBox);
+            AddChild(physics);
+
             Position = PositionGenerate();
 
             absoluteTranform = new Matrix[model.Bones.Count];
@@ -77,7 +72,6 @@ namespace SiegeDefense.GameComponents.Models
 
         public override void Draw(GameTime gameTime)
         {
-            axisUpFixMatrix = Matrix.CreateFromAxisAngle(Up, axisUpFixAngle);
             model.CopyBoneTransformsFrom(relativeTransform);
             model.CopyAbsoluteBoneTransformsTo(absoluteTranform);
             foreach (ModelMesh mesh in model.Meshes)
