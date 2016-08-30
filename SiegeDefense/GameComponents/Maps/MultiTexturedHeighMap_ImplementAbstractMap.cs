@@ -9,7 +9,7 @@ namespace SiegeDefense.GameComponents.Maps {
     public partial class MultiTexturedHeightMap {
 
         public override bool IsAccessibleByFoot(Vector3 position) {
-
+            
             if (position.Y <= waterHeight + 1) return false;
             if (position.Y > 0.5f * mapDeltaHeight) return false;
             if (!IsInsideMap(position)) return false;
@@ -71,9 +71,9 @@ namespace SiegeDefense.GameComponents.Maps {
             int gridMapPositionNextX = gridMapPositionX + 1;
             int gridMapPositionNextY = gridMapPositionY + 1;
 
-            if (gridMapPositionX == mapInfoWidth - 1)
+            if (gridMapPositionX == mapInfoWidth)
                 gridMapPositionNextX -= 2;
-            if (gridMapPositionNextY == mapInfoHeight - 1)
+            if (gridMapPositionNextY == mapInfoHeight)
                 gridMapPositionNextY -= 2;
 
             float cellPositionX = relativePosition.X % mapCellSize / mapCellSize;
