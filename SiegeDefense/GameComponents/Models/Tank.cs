@@ -40,24 +40,24 @@ namespace SiegeDefense.GameComponents.Models
             // validate new position on map
             if (!map.IsInsideMap(newPosition))
                 return;
-            
-            //float angle = MathHelper.Clamp(Vector3.Dot(mapNormal, Vector3.Up) / (mapNormal.Length()), -1, 1);
-            //angle = (float)Math.Acos(angle);
-            //angle = angle * 180 / MathHelper.Pi;
 
-            //if (Math.Abs(angle) > 45) return;
-            
             // update new position height
-            float newHeight = map.GetHeight(newPosition);
-            Vector3 newPositionUpdated = new Vector3(newPosition.X, newHeight, newPosition.Z);
+            newPosition.Y = map.GetHeight(newPosition);
 
-            if (!map.IsAccessibleByFoot(newPositionUpdated))
+            if (!map.IsAccessibleByFoot(newPosition))
                 return;
 
-            Position = newPositionUpdated;
+            Vector3 mapNormal = map.GetNormal(newPosition);
+            float angle = MathHelper.Clamp(Vector3.Dot(mapNormal, Vector3.Up) / (mapNormal.Length()), -1, 1);
+            angle = (float)Math.Acos(angle);
+            angle = angle * 180 / MathHelper.Pi;
+
+            if (Math.Abs(angle) > 45) return;
+
+            Position = newPosition;
 
             // collision check with other tanks
-            foreach (Tank tank in modelManager.tankList) {
+            foreach (Tank tank in modelManager.getTankList()) {
                 if (tank == this) continue;
                 if (collisionBox.SphereIntersect(tank.collisionBox)) {
                     Position = oldPosition;
@@ -65,8 +65,9 @@ namespace SiegeDefense.GameComponents.Models
                 }
             }
 
-            Vector3 mapNormal = map.GetNormal(Position);
             Up = mapNormal;
+
+            Console.Out.WriteLine(Position);
         }
 
         public void RotateCanon(float rotationAngle)
@@ -140,11 +141,11 @@ namespace SiegeDefense.GameComponents.Models
             bullet.physics.MaxSpeed = 1000;
             bullet.physics.Velocity = bullet.Forward * 1000;
 
-            modelManager.models.Add(bullet);
+            modelManager.Add(bullet);
         }
 
         public void Destroy() {
-            modelManager.tankList.Remove(this);
+            modelManager.Remove(this);
         }
 
         public Matrix turretMatrix()

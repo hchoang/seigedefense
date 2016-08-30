@@ -18,7 +18,7 @@ namespace SiegeDefense.GameComponents.Models
             this.Position = position;
             this.AddChild(TankAI);
             this.enemy = enemy;
-            this.visibleRange = 200;
+            this.visibleRange = 0;
         }
 
         public bool isInRange(BaseModel model)

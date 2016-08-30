@@ -15,12 +15,31 @@ namespace SiegeDefense.GameComponents.Models
 {
     public partial class ModelManager : GameObject
     {
-        public List<BaseModel> models = new List<BaseModel>();
-        public List<Tank> tankList = new List<Tank>();
+        protected List<BaseModel> models = new List<BaseModel>();
+        protected List<Tank> tankList = new List<Tank>();
+        protected List<Vector3> spawnPoints = new List<Vector3>();
 
         public ModelManager()
         {
             models = new List<BaseModel>();
+        }
+
+        public List<Tank> getTankList() {
+            return tankList;
+        }
+
+        public void Add(BaseModel model) {
+            models.Add(model);
+            if (model is Tank) {
+                tankList.Add((Tank)model);
+            }
+        }
+
+        public void Remove(BaseModel model) {
+            models.Remove(model);
+            if (model is Tank) {
+                tankList.Remove((Tank)model);
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -28,10 +47,6 @@ namespace SiegeDefense.GameComponents.Models
             foreach(BaseModel bm in models)
             {
                 bm.Draw(gameTime);
-            }
-
-            foreach (Tank tank in tankList) {
-                tank.Draw(gameTime);
             }
             base.Draw(gameTime);
         }
@@ -42,9 +57,6 @@ namespace SiegeDefense.GameComponents.Models
             {
                 models[i].Update(gameTime);
             }
-            foreach (Tank tank in tankList) {
-                tank.Update(gameTime);
-            }
             base.Update(gameTime);
         }
 
@@ -53,7 +65,7 @@ namespace SiegeDefense.GameComponents.Models
             Tank userControlledTank = new Tank(Game.Content.Load<Model>(@"Models/tank"));
             userControlledTank.Tag = "Player";
             userControlledTank.AddChild(new TankController());
-            tankList.Add(userControlledTank);
+            Add(userControlledTank);
 
             //Camera camera = new FollowTargetCamera(userControlledTank, 50);
             //Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 20, -5));
@@ -61,7 +73,7 @@ namespace SiegeDefense.GameComponents.Models
             Game.Components.Add(camera);
 
             Tank enemyTank = new AIControlledTank(Game.Content.Load<Model>(@"Models/tank"), new Vector3(500, 0, 400), new TankAI(), userControlledTank);
-            tankList.Add(enemyTank);
+            Add(enemyTank);
             base.LoadContent();
         }
     }

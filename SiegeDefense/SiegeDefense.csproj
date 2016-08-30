@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GameComponents\3DGameObject.cs" />
+    <Compile Include="GameComponents\AI\TankBehaviour.cs" />
     <Compile Include="GameComponents\AI\TankAI.cs" />
     <Compile Include="GameComponents\Cameras\Camera.cs" />
     <Compile Include="GameComponents\Cameras\FollowTargetCamera.cs" />

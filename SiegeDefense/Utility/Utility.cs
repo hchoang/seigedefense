@@ -27,15 +27,18 @@ namespace SiegeDefense {
 
         public static float RotationAngleCalculator(Vector3 origin, Vector3 destination, Vector3 left)
         {
+            origin.Normalize();
+            destination.Normalize();
             float dot = Vector3.Dot(origin, destination);
-            if (Math.Abs(dot - (-1.0f)) < 0.000001f)
-            {
-                return (float) Math.PI;
-            }
-            if (Math.Abs(dot - (1.0f)) < 0.000001f)
-            {
-                return 0f;
-            }
+            
+            //if (Math.Abs(dot - (-1.0f)) < 0.000001f)
+            //{
+            //    return (float) Math.PI;
+            //}
+            //if (Math.Abs(dot - (1.0f)) < 0.000001f)
+            //{
+            //    return 0f;
+            //}
             float RotationDirection = 1;
             if (Vector3.Dot(left, destination) < 0)
             {
@@ -43,8 +46,6 @@ namespace SiegeDefense {
             }
 
             float cosForward = dot / (origin.Length() * destination.Length());
-
-            
 
             return (float) Math.Acos(cosForward) * RotationDirection;
         }
