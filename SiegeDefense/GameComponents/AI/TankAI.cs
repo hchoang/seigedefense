@@ -14,7 +14,7 @@ namespace SiegeDefense.GameComponents.AI
     class TankAI : GameObject
     {
         private Vector3 lastEnemyPosition;
-        private float tankMoveSpeed = 20f;
+        private float tankMoveSpeed = 30f;
         private float tankRotaionSpeed = 1f;
         private float turretRotateSpeed = 0.05f;
         private Vector3 tankTarget = Vector3.Zero;

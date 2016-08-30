@@ -57,7 +57,7 @@ namespace SiegeDefense.GameComponents.Maps {
                 return _sky;
             }
         }
-        private float waterHeight = 0.2f;
+        private float waterHeight = -0.2f;
         private Effect reflectionTechnique;
         private Effect refractionTechnique;
         private Effect waterTechnique;

@@ -66,8 +66,6 @@ namespace SiegeDefense.GameComponents.Models
             }
 
             Up = mapNormal;
-
-            Console.Out.WriteLine(Position);
         }
 
         public void RotateCanon(float rotationAngle)
