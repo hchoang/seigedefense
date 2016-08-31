@@ -107,7 +107,6 @@ namespace SiegeDefense.GameComponents.Sky {
         }
 
         public override void Draw(GameTime gameTime) {
-            
             // store graphics device state
             RasterizerState oldRsState = GraphicsDevice.RasterizerState;
             DepthStencilState oldDsState = GraphicsDevice.DepthStencilState;

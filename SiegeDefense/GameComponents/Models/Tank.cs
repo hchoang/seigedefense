@@ -13,6 +13,7 @@ namespace SiegeDefense.GameComponents.Models
         protected int canonHeadBoneIndex;
         protected int[] wheelBoneIndex;
         public float turretMaxRotaion { get { return 0.2f; } private set { } }
+        protected int blood;
 
         public Tank(Model model) : base(model)
         {
@@ -25,7 +26,8 @@ namespace SiegeDefense.GameComponents.Models
 
             turretBoneIndex = model.Bones["turret_geo"].Index;  
             canonBoneIndex = model.Bones["canon_geo"].Index;
-            canonHeadBoneIndex = model.Bones["canon_head_geo"].Index;   
+            canonHeadBoneIndex = model.Bones["canon_head_geo"].Index;
+            blood = 100;   
         }
 
         public override void Update(GameTime gameTime)
@@ -129,14 +131,14 @@ namespace SiegeDefense.GameComponents.Models
             RotationMatrix *= Matrix.CreateFromAxisAngle(Up, rotationAngle);
         }
 
-        public void Fire() {
+        public virtual void Fire() {
             BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"));
             bullet.Tag = Tag;
 
             // set bullet position & facing direction
             Matrix canonHeadAbsoluteMatrix = absoluteTranform[canonHeadBoneIndex] * WorldMatrix;
             bullet.WorldMatrix = canonHeadAbsoluteMatrix;
-            bullet.physics.MaxSpeed = 1000;
+            bullet.physics.MaxSpeed = 500;
             bullet.physics.Velocity = bullet.Forward * 1000;
 
             modelManager.Add(bullet);
@@ -149,6 +151,15 @@ namespace SiegeDefense.GameComponents.Models
         public Matrix turretMatrix()
         {
             return absoluteTranform[turretBoneIndex] * WorldMatrix;
+        }
+
+        public void Damaged(int damage)
+        {
+            this.blood -= damage;
+            if (this.blood <= 0)
+            {
+                this.Destroy();
+            }
         }
     }
 }

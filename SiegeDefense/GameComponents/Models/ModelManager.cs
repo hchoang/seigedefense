@@ -44,7 +44,7 @@ namespace SiegeDefense.GameComponents.Models
 
         public override void Draw(GameTime gameTime)
         {
-            foreach(BaseModel bm in models)
+            foreach (BaseModel bm in models)
             {
                 bm.Draw(gameTime);
             }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SiegeDefense.GameScreens;
 
 namespace SiegeDefense.GameComponents.TitleScreen {
     public class TitleMenu : GameObject {

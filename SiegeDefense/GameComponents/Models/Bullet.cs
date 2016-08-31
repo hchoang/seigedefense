@@ -8,8 +8,10 @@ namespace SiegeDefense.GameComponents.Models
 {
     class Bullet : BaseModel
     {
+        protected int damage;
         public Bullet(Model model): base(model)
         {
+            this.damage = 20;
         }
 
         public override void Update(GameTime gameTime) {
@@ -26,7 +28,7 @@ namespace SiegeDefense.GameComponents.Models
             }
 
             if (collidedTank != null) {
-                collidedTank.Destroy();
+                collidedTank.Damaged(damage);
                 modelManager.Remove(this);
             }
 
