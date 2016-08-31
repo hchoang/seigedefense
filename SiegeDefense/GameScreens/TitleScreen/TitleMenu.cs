@@ -28,14 +28,6 @@ namespace SiegeDefense.GameComponents.TitleScreen {
         }
 
         public override void Draw(GameTime gameTime) {
-            if (background == null) {
-                background = FindComponent<TitleScreenBackground>();
-                return;
-            }
-
-            if (!background.fadeInCompleted())
-                return;
-
             base.Draw(gameTime);
         }
     }

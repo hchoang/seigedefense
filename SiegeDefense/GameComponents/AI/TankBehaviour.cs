@@ -9,10 +9,19 @@ namespace SiegeDefense.GameComponents.AI {
     public static class TankBehaviour {
 
         //private static Random RNG = new Random();
+        //public const int nZone = 36;
+        //public static void ChaseTargetContext(Matrix currentTransform, Matrix targetTransform, ref Vector3[] dangerZone, ref Vector3[] interestZone) {
+        //    float rotateUnit = MathHelper.TwoPi / nZone;
+        //    for (int i = 0; i < nZone; i++) {
+        //        Matrix rotateMatrix = Matrix.CreateRotationY()
+        //    }
+        //}
 
-        public static Vector3 ChaseTargetBehaviour(Matrix currentTransform, Matrix targetTransform, float minDistance = 50) {
+        public static Vector3 ChaseTargetBehaviour(Matrix currentTransform, Matrix targetTransform, float minDistance = 0) {
             Vector3 currentPosition = currentTransform.Translation;
+            currentPosition.Y = 0;
             Vector3 targetPosition = targetTransform.Translation;
+            targetPosition.Y = 0;
             if ((targetPosition - currentPosition).Length() < minDistance)
                 return Vector3.Zero;
             return targetPosition - currentPosition;
@@ -28,32 +37,45 @@ namespace SiegeDefense.GameComponents.AI {
             return ChaseTargetBehaviour(currentTransform, Matrix.CreateTranslation(randomTarget), 0);
         }
         
-        public static Vector3 MovingOnLandBehaviour(Matrix currentTransform, Map map, float scanRadius = 100) {
-            Vector3 originalScanVector = Vector3.Normalize(currentTransform.Forward) * scanRadius;
-            Vector3 originalSeePoint = currentTransform.Translation + originalScanVector;
-
-            // do not change steering force if can move
-            if (map.IsAccessibleByFoot(originalSeePoint))
-                return Vector3.Zero;
+        public static Vector3 AdvoidObstacleBehaviour(Tank tank, Vector3 currentSteering, Map map, float scanRadius = 50) {
+            Vector3 originalScanVector = Vector3.Normalize(currentSteering) * scanRadius;
+            //Vector3 originalSeePoint = currentTransform.Translation + originalScanVector;
 
             // scan around to find moveable position
             float rotateAngle = 0;
-            float rotateStep = MathHelper.PiOver4 / 9;
+            float rotateStep = MathHelper.PiOver4;
 
-            while(rotateAngle < MathHelper.TwoPi) {
-                rotateAngle += rotateStep;
+            List<float> availableAngles = new List<float>();
+            Matrix rotateMatrix;
+            while (rotateAngle < MathHelper.TwoPi) {
 
-                Matrix rotateMatrix = Matrix.CreateRotationY(rotateAngle);
-                Vector3 scanPoint = currentTransform.Translation + Vector3.Transform(originalScanVector, rotateMatrix);
-                scanPoint.Y = map.GetHeight(scanPoint);
+                rotateMatrix = Matrix.CreateRotationY(rotateAngle);
+                Vector3 scanPoint = tank.Position + Vector3.Transform(originalScanVector, rotateMatrix);
 
-                if (map.IsAccessibleByFoot(scanPoint)) {
-                    return scanPoint - originalSeePoint;
+                if (tank.Moveable(scanPoint)) {
+                    availableAngles.Add(rotateAngle);
+                    return Vector3.Transform(currentSteering, rotateMatrix);
                 }
 
+                rotateAngle += rotateStep;
             }
-            
-            return Vector3.Zero;
+
+            if (availableAngles.Count == 0) {
+                Console.WriteLine("TEST");
+                return tank.WorldMatrix.Backward;
+            }
+
+            availableAngles.Sort(new AngleComparer());
+            rotateMatrix = Matrix.CreateRotationY(availableAngles[0]);
+            return Vector3.Transform(currentSteering, rotateMatrix);
+        }
+    }
+
+    public class AngleComparer : Comparer<float>{
+        public override int Compare(float x, float y) {
+            float newX = Math.Abs(x - MathHelper.Pi);
+            float newY = Math.Abs(y - MathHelper.Pi);
+            return newY.CompareTo(newX);
         }
     }
 }

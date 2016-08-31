@@ -31,7 +31,7 @@ namespace SiegeDefense.GameComponents {
         }
         public virtual Vector3 Up {
             get {
-                return Vector3.Normalize(WorldMatrix.Up);
+                return WorldMatrix.Up;
             }
             set {
                 Vector3 rotationAxis = Vector3.Cross(Up, value);
@@ -48,12 +48,12 @@ namespace SiegeDefense.GameComponents {
         }
         public virtual Vector3 Forward {
             get {
-                return Vector3.Normalize(RotationMatrix.Forward);
+                return RotationMatrix.Forward;
             }
         }
         public virtual Vector3 Left {
             get {
-                return Vector3.Normalize(RotationMatrix.Left);
+                return RotationMatrix.Left;
             }
         }
     }

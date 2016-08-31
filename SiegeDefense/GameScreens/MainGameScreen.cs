@@ -8,6 +8,7 @@ using SiegeDefense.GameComponents.Sky;
 using SiegeDefense.GameComponents.Models;
 using System;
 using SiegeDefense.GameComponents.SoundBank;
+using SiegeDefense.GameComponents.TitleScreen;
 
 namespace SiegeDefense.GameScreens {
     public class MainGameScreen : GameObject {
@@ -35,7 +36,7 @@ namespace SiegeDefense.GameScreens {
             Game.Components.Add(map);
             Game.Components.Add(modelManager);
             Game.Components.Add(soundManager);
-
+            
             //Vector3 position = new Vector3(100, 0, 100);
             //Matrix test = Matrix.CreateWorld(position, Vector3.Normalize(new Vector3(10, 0, 10)), Vector3.Up);
             //int dsgdsg = 1;

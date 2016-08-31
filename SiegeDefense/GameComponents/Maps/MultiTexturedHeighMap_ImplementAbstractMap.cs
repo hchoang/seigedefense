@@ -9,10 +9,21 @@ namespace SiegeDefense.GameComponents.Maps {
     public partial class MultiTexturedHeightMap {
 
         public override bool IsAccessibleByFoot(Vector3 position) {
-            
-            if (position.Y <= waterHeight + 1) return false;
-            if (position.Y > 0.5f * mapDeltaHeight) return false;
+
             if (!IsInsideMap(position)) return false;
+
+            Vector3 newPosition = position;
+            newPosition.Y = GetHeight(newPosition);
+            if (newPosition.Y <= waterHeight + 1) return false;
+            if (newPosition.Y > 0.5f * mapDeltaHeight) return false;
+
+            // check map slope
+            Vector3 mapNormal = GetNormal(newPosition);
+            float angle = MathHelper.Clamp(Vector3.Dot(mapNormal, Vector3.Up) / (mapNormal.Length()), -1, 1);
+            angle = (float)Math.Acos(angle);
+            float angleInDegree = angle * 180 / MathHelper.Pi;
+
+            if (Math.Abs(angleInDegree) > 40) return false;
 
             return true;
         }
@@ -24,8 +35,8 @@ namespace SiegeDefense.GameComponents.Maps {
             int gridMapPositionX = (int)(relativePosition.X / mapCellSize);
             int gridMapPositionY = (int)(relativePosition.Z / mapCellSize);
 
-            if (gridMapPositionX < 0 || gridMapPositionX > mapInfoWidth - 1) return false;
-            if (gridMapPositionY < 0 || gridMapPositionY > mapInfoHeight - 1) return false;
+            if (gridMapPositionX < 2 || gridMapPositionX > mapInfoWidth - 3) return false;
+            if (gridMapPositionY < 2 || gridMapPositionY > mapInfoHeight - 3) return false;
 
             return true;
         }

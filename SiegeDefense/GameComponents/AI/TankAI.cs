@@ -50,7 +50,7 @@ namespace SiegeDefense.GameComponents.AI
             VertexPositionColor[] vertices = new VertexPositionColor[2];
             vertices[0].Position = AITank.Position + yOffset;
             vertices[0].Color = Color.Red;
-            vertices[1].Position = AITank.Position + Vector3.Normalize(steeringForce) * 20 + yOffset;
+            vertices[1].Position = AITank.Position + Vector3.Normalize(steeringForce) * 50 + yOffset;
             vertices[1].Color = Color.Red;
 
             int[] indices = new int[2] { 0, 1 };
@@ -92,18 +92,26 @@ namespace SiegeDefense.GameComponents.AI
                 }
             }
 
-            steeringForce += TankBehaviour.MovingOnLandBehaviour(AITank.WorldMatrix, map);
+            steeringForce = TankBehaviour.AdvoidObstacleBehaviour(AITank, steeringForce, map, 50);
+            steeringForce = TankBehaviour.AdvoidObstacleBehaviour(AITank, steeringForce, map,  tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            
             if (steeringForce != Vector3.Zero) {
-                AITank.Move(Vector3.Normalize(AITank.Forward) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+                // project steering force to plane (Forward, Left)
+                Vector3 normalizedUp = Vector3.Normalize(AITank.Up);
+                float t = Vector3.Dot(normalizedUp, steeringForce);
+                steeringForce = steeringForce - t * normalizedUp;
 
                 float steeringAngle = Utility.RotationAngleCalculator(AITank.Forward, steeringForce, AITank.Left);
                 if (steeringAngle != 0) {
                     float steeringDirection = steeringAngle > 0 ? 1 : -1;
                     float tankRotation = steeringDirection * tankRotaionSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (Math.Abs(tankRotation) > Math.Abs(steeringAngle)) {
+                        tankRotation = steeringAngle;
+                    }
                     AITank.RotateTank(tankRotation);
                 }
+                bool moved = AITank.Move(Vector3.Normalize(AITank.Forward) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
 
 

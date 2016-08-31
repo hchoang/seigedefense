@@ -102,6 +102,7 @@ namespace SiegeDefense.GameComponents.Maps {
         }
 
         public override void Draw(GameTime gameTime) {
+
             DrawRefractionMap(gameTime);
             DrawReflectionMap(gameTime);
 

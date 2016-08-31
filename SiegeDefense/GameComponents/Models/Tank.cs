@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents.Cameras;
+using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Physics;
 using System;
 
@@ -33,39 +34,36 @@ namespace SiegeDefense.GameComponents.Models
             base.Update(gameTime);
         }
 
-        public void Move(Vector3 moveDirection) {
-            Vector3 oldPosition = Position;
-            Vector3 newPosition = Position + moveDirection;
-
-            // validate new position on map
-            if (!map.IsInsideMap(newPosition))
-                return;
-
-            // update new position height
-            newPosition.Y = map.GetHeight(newPosition);
-
-            if (!map.IsAccessibleByFoot(newPosition))
-                return;
-
-            Vector3 mapNormal = map.GetNormal(newPosition);
-            float angle = MathHelper.Clamp(Vector3.Dot(mapNormal, Vector3.Up) / (mapNormal.Length()), -1, 1);
-            angle = (float)Math.Acos(angle);
-            angle = angle * 180 / MathHelper.Pi;
-
-            if (Math.Abs(angle) > 45) return;
-
-            Position = newPosition;
+        public bool Moveable(Vector3 testPosition) {
+            if (!map.IsAccessibleByFoot(testPosition))
+                return false;
 
             // collision check with other tanks
+            Vector3 oldPosition = Position;
+            Position = testPosition;
+
             foreach (Tank tank in modelManager.getTankList()) {
                 if (tank == this) continue;
                 if (collisionBox.SphereIntersect(tank.collisionBox)) {
                     Position = oldPosition;
-                    return;
+                    return false;
                 }
             }
 
+            Position = oldPosition;
+            return true;
+        }
+
+        public bool Move(Vector3 moveDirection) {
+            Vector3 newPosition = Position + moveDirection;
+            if (!Moveable(newPosition))
+                return false;
+
+            newPosition.Y = map.GetHeight(newPosition);
+            Position = newPosition;
+            Vector3 mapNormal = map.GetNormal(Position);
             Up = mapNormal;
+            return true;
         }
 
         public void RotateCanon(float rotationAngle)
