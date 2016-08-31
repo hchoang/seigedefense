@@ -22,6 +22,7 @@ namespace SiegeDefense.GameScreens
             spriteBatch.Begin();
             spriteBatch.Draw(texture, drawArea, color);
             spriteBatch.End();
+            base.Draw(gameTime);
         }
     }
 }

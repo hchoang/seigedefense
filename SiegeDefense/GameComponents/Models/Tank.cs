@@ -16,7 +16,7 @@ namespace SiegeDefense.GameComponents.Models
         protected int canonHeadBoneIndex;
         protected int[] wheelBoneIndex;
         public float turretMaxRotaion { get { return 0.2f; } private set { } }
-        protected int blood;
+        public int blood { get; private set; }
 
         public Tank(Model model) : base(model)
         {
@@ -161,6 +161,10 @@ namespace SiegeDefense.GameComponents.Models
             this.blood -= damage;
             if (this.blood <= 0)
             {
+                if (this is AIControlledTank)
+                {
+                    ((UserControlledTank)((AIControlledTank)this).enemy).earnPoint(10);
+                }
                 this.Destroy();
             }
         }

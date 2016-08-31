@@ -56,6 +56,7 @@
     <Compile Include="GameComponents\Models\Bullet.cs" />
     <Compile Include="GameComponents\Models\ModelManager.cs" />
     <Compile Include="GameComponents\Models\Tank.cs" />
+    <Compile Include="GameComponents\Models\UserControlledTank.cs" />
     <Compile Include="GameComponents\Physics\OrientedCollisionBox.cs" />
     <Compile Include="GameComponents\Physics\GamePhysics.cs" />
     <Compile Include="GameComponents\SoundBank\SoundBankManager.cs" />
