@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SiegeDefense.GameComponents {
-    public class Static2DSprite : GameObject {
+namespace SiegeDefense.GameScreens
+{
+     class Static2DSprite : _2DSprite {
         private SpriteBatch spriteBatch;
 
         private Texture2D texture;
