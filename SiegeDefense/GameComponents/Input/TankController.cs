@@ -131,7 +131,7 @@ namespace SiegeDefense.GameComponents.Input {
             }
 
             if (canonRotationAngle != 0) {
-                //controlledTank.RotateCanon(canonRotationAngle);
+                controlledTank.RotateCanon(canonRotationAngle);
             }
         }
     }

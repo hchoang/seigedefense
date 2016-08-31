@@ -5,7 +5,7 @@ using System;
 
 namespace SiegeDefense.GameScreens
 {
-    class GameDetailSprite : _2DSprite
+    public class GameDetailSprite : _2DSprite
     {
         private SpriteBatch spriteBatch;
 
@@ -30,6 +30,19 @@ namespace SiegeDefense.GameScreens
             spriteBatch.DrawString(font, text, position, color);
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font, text, position, color);
+            spriteBatch.End();
+            base.Update(gameTime);
+        }
+
+        public void setText(String text)
+        {
+            this.text = text;
         }
     }
 }
