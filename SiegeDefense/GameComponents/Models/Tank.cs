@@ -156,9 +156,9 @@ namespace SiegeDefense.GameComponents.Models
             this.blood -= damage;
             if (this.blood <= 0)
             {
-                if (this is UserControlledTank)
+                if (this is AIControlledTank)
                 {
-                    ((UserControlledTank)this).earnPoint(10);
+                    ((UserControlledTank)((AIControlledTank)this).enemy).earnPoint(10);
                 }
                 this.Destroy();
             }
