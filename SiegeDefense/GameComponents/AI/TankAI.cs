@@ -20,6 +20,7 @@ namespace SiegeDefense.GameComponents.AI
         private Vector3 tankTarget = Vector3.Zero;
         BasicEffect basicEffect;
         Vector3 steeringForce = Vector3.Zero;
+        private float timer = 0;
         public AIControlledTank _AITank;
         public AIControlledTank AITank
         {
@@ -79,12 +80,17 @@ namespace SiegeDefense.GameComponents.AI
         float wanderingChangeCounter = 0;
         public override void Update(GameTime gameTime)
         {
-            if (AITank.isInRange(AITank.enemy)) {
+            AITank.RotateWheels(-1);
+            if (AITank.isInVisibleRange(AITank.enemy))
+            {
                 wanderingChangeCounter = wanderingChangeTime;
                 steeringForce = TankBehaviour.ChaseTargetBehaviour(AITank.WorldMatrix, AITank.enemy.WorldMatrix);
-            } else {
+            }
+            else
+            {
                 wanderingChangeCounter += (float)gameTime.ElapsedGameTime.TotalSeconds;
-                if (wanderingChangeCounter >= wanderingChangeTime) {
+                if (wanderingChangeCounter >= wanderingChangeTime)
+                {
                     wanderingChangeCounter = 0;
                     Random r = new Random();
                     wanderingChangeTime = r.Next(3, 6);
@@ -105,6 +111,18 @@ namespace SiegeDefense.GameComponents.AI
                     AITank.RotateTank(tankRotation);
                 }
             }
+            Console.Out.WriteLine(AITank.isInFireRange(AITank.enemy));
+            if (AITank.isInFireRange(AITank.enemy) && isAimed())
+            {
+                timer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (timer > 1000)
+                {
+                    AITank.Fire();
+                    timer = 0;
+                }
+            }
+
+            
 
 
             //lastEnemyPosition = AITank.enemy.Position;
@@ -135,6 +153,15 @@ namespace SiegeDefense.GameComponents.AI
         public List<Vector3> PathFinding()
         {
             return null;
+        }
+
+        public bool isAimed()
+        {
+            if (Math.Abs(Utility.RotationAngleCalculator(AITank.Forward + AITank.Position, AITank.enemy.Position, AITank.Left)) <= 0.1)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
