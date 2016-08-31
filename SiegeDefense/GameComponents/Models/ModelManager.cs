@@ -84,7 +84,7 @@ namespace SiegeDefense.GameComponents.Models
             if (spawnCDCounter >= spawnCDTime) {
                 spawnCDCounter = 0;
                 if (tankList.Count() < maxEnemy) {
-                    for (int i=0; i<spawnMaxAttempt; i++) {
+                    for (int j=0; j<spawnMaxAttempt; j++) {
                         Random r = new Random();
                         int spawnIndex = r.Next(spawnPoints.Count);
                         Vector3 newTankLocation = spawnPoints[spawnIndex];
