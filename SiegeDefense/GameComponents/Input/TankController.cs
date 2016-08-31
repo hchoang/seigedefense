@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace SiegeDefense.GameComponents.Input {
     public class TankController : GameObject {
         private IInputManager inputManager;
-        protected float tankMoveSpeed = 200.0f;
+        protected float tankMoveSpeed = 50.0f;
         protected float tankRotateSpeed = 2.0f;
         protected float turretRotateSpeed = 0.05f;
         protected float canonRotateSpeed = 0.05f;
@@ -69,8 +69,6 @@ namespace SiegeDefense.GameComponents.Input {
             // play sound when click mouse
             if (inputManager.isTriggered(GameInput.Fire))
             {
-                SoundEffect se = Game.Content.Load<SoundEffect>(@"Sound/tank-fire");
-                se.Play();
                 //SoundEffectInstance sound = soundManager.FindSound("Tank");
                 //if (sound.State != SoundState.Playing)
                 //{
@@ -131,7 +129,7 @@ namespace SiegeDefense.GameComponents.Input {
             }
 
             if (canonRotationAngle != 0) {
-                //controlledTank.RotateCanon(canonRotationAngle);
+                controlledTank.RotateCanon(canonRotationAngle);
             }
         }
     }

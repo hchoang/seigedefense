@@ -17,13 +17,13 @@ namespace SiegeDefense.GameComponents.AI {
         //    }
         //}
 
-        public static Vector3 ChaseTargetBehaviour(Matrix currentTransform, Matrix targetTransform, float minDistance = 0) {
+        public static Vector3 ChaseTargetBehaviour(Matrix currentTransform, Matrix targetTransform, float minDistance = 80) {
             Vector3 currentPosition = currentTransform.Translation;
             currentPosition.Y = 0;
             Vector3 targetPosition = targetTransform.Translation;
             targetPosition.Y = 0;
             if ((targetPosition - currentPosition).Length() < minDistance)
-                return Vector3.Zero;
+                return currentTransform.Forward;
             return targetPosition - currentPosition;
         }
 
@@ -61,7 +61,6 @@ namespace SiegeDefense.GameComponents.AI {
             }
 
             if (availableAngles.Count == 0) {
-                Console.WriteLine("TEST");
                 return tank.WorldMatrix.Backward;
             }
 

@@ -4,26 +4,35 @@ using System.Collections.Generic;
 
 namespace SiegeDefense.GameComponents.SoundBank
 {
-    class SoundBankManager : GameObject
+    public enum SoundType {
+        TankFire
+    }
+    public class SoundBankManager : GameObject
     {
-        private Dictionary<String, SoundEffectInstance> sounds;
+        private Dictionary<SoundType, SoundEffect> sounds;
 
         public SoundBankManager()
         {
-            sounds = new Dictionary<string, SoundEffectInstance>();
+            sounds = new Dictionary<SoundType, SoundEffect>();
+            sounds.Add(SoundType.TankFire, Game.Content.Load<SoundEffect>(@"Sound/tank-fire"));
         }
 
         protected override void LoadContent()
         {
-            sounds.Add("Tank", Game.Content.Load<SoundEffect>(@"Sound/tank-fire").CreateInstance());
+            
             //sounds.Add("TankMoving", Game.Content.Load<SoundEffect>(@"").Duration());
             //sounds.Add()
             base.LoadContent();
         }
 
-        public SoundEffectInstance FindSound(String name)
+        public void PlaySound(SoundType type) {
+            SoundEffectInstance se = sounds[type].CreateInstance();
+            se.Play();
+        }
+
+        public SoundEffect FindSound(SoundType type)
         {
-            return sounds[name];
+            return sounds[type];
         }
     }
 }

@@ -4,6 +4,7 @@ using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Physics;
 using System;
 using SiegeDefense.GameComponents.Maps;
+using SiegeDefense.GameComponents.SoundBank;
 
 namespace SiegeDefense.GameComponents.Models
 {
@@ -39,6 +40,9 @@ namespace SiegeDefense.GameComponents.Models
                 return _map;
             }
         }
+
+        protected SoundBankManager soundManager;
+        
         public OrientedCollisionBox collisionBox { get; set; }
         public GamePhysics physics { get; set; }
 
@@ -47,6 +51,9 @@ namespace SiegeDefense.GameComponents.Models
             this.model = model;
             collisionBox = new OrientedCollisionBox(this);
             physics = new GamePhysics(this);
+
+            soundManager = Game.Services.GetService<SoundBankManager>();
+
             AddChild(collisionBox);
             AddChild(physics);
 

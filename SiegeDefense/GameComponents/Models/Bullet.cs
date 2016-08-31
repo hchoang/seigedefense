@@ -9,16 +9,19 @@ namespace SiegeDefense.GameComponents.Models
     class Bullet : BaseModel
     {
         protected int damage;
-        public Bullet(Model model): base(model)
+        public BaseModel owner { get; set; }
+        public Bullet(Model model, BaseModel owner): base(model)
         {
             this.damage = 20;
+            this.owner = owner;
         }
 
         public override void Update(GameTime gameTime) {
             // collision checking with other tanks
             Tank collidedTank = null;
             foreach (Tank tank in modelManager.getTankList()) {
-                if (Tag.Equals(tank.Tag)) continue;
+                //if (Tag.Equals(tank.Tag)) continue;
+                if (owner == tank) continue;
 
                 if (collisionBox.Intersect(tank.collisionBox)) {
                     Console.Out.WriteLine("Intersect");

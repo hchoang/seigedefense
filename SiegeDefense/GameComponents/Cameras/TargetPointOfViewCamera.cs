@@ -15,7 +15,7 @@ namespace SiegeDefense.GameComponents.Cameras {
             this.positionOffset = positionOffset;
 
             float aspectRatio = GraphicsDevice.DisplayMode.AspectRatio;
-            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 2, 1000);
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, aspectRatio, 2, 1500);
             UpdateViewMatrix();
         }
 

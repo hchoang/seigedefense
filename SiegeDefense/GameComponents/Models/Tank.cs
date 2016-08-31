@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Physics;
+using SiegeDefense.GameComponents.SoundBank;
 using System;
 
 namespace SiegeDefense.GameComponents.Models
@@ -65,6 +67,7 @@ namespace SiegeDefense.GameComponents.Models
             Position = newPosition;
             Vector3 mapNormal = map.GetNormal(Position);
             Up = mapNormal;
+            
             return true;
         }
 
@@ -130,7 +133,7 @@ namespace SiegeDefense.GameComponents.Models
         }
 
         public virtual void Fire() {
-            BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"));
+            BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"), this);
             bullet.Tag = Tag;
 
             // set bullet position & facing direction
@@ -140,6 +143,8 @@ namespace SiegeDefense.GameComponents.Models
             bullet.physics.Velocity = bullet.Forward * 1000;
 
             modelManager.Add(bullet);
+
+            soundManager.PlaySound(SoundType.TankFire);
         }
 
         public void Destroy() {

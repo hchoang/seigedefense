@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameScreens;
 using SiegeDefense.GameComponents.TitleScreen;
+using SiegeDefense.GameComponents.SoundBank;
 
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
@@ -54,6 +55,10 @@ namespace SiegeDefense {
             basicEffect = new BasicEffect(GraphicsDevice);
             basicEffect.EnableDefaultLighting();
             Services.AddService(basicEffect);
+
+            // Sound
+            SoundBankManager soundManager = new SoundBankManager();
+            Services.AddService(soundManager);
 
             advancedEffect = Content.Load<Effect>("customShader");
             Services.AddService(advancedEffect);

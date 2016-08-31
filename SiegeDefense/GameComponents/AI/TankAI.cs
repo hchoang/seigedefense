@@ -98,8 +98,10 @@ namespace SiegeDefense.GameComponents.AI
                 }
             }
 
-            steeringForce = TankBehaviour.AdvoidObstacleBehaviour(AITank, steeringForce, map, 50);
-            steeringForce = TankBehaviour.AdvoidObstacleBehaviour(AITank, steeringForce, map,  tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            if (steeringForce != Vector3.Zero) {
+                steeringForce = TankBehaviour.AdvoidObstacleBehaviour(AITank, steeringForce, map, 50);
+                steeringForce = TankBehaviour.AdvoidObstacleBehaviour(AITank, steeringForce, map, tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
 
             if (steeringForce != Vector3.Zero) {
 
@@ -119,7 +121,7 @@ namespace SiegeDefense.GameComponents.AI
                 }
                 bool moved = AITank.Move(Vector3.Normalize(AITank.Forward) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             }
-            Console.Out.WriteLine(AITank.isInFireRange(AITank.enemy));
+            
             if (AITank.isInFireRange(AITank.enemy) && isAimed())
             {
                 timer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -165,7 +167,7 @@ namespace SiegeDefense.GameComponents.AI
 
         public bool isAimed()
         {
-            if (Math.Abs(Utility.RotationAngleCalculator(AITank.Forward + AITank.Position, AITank.enemy.Position, AITank.Left)) <= 0.1)
+            if (Math.Abs(Utility.RotationAngleCalculator(AITank.Forward + AITank.Position, AITank.enemy.Position, AITank.Left)) <= 0.2)
             {
                 return true;
             }
