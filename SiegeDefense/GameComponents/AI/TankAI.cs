@@ -132,18 +132,18 @@ namespace SiegeDefense.GameComponents.AI
                 }
             }
 
-            
 
 
             //lastEnemyPosition = AITank.enemy.Position;
             //if (AITank.isInRange(AITank.enemy)) {
-            //    Vector3 newForward = Vector3.Normalize(AITank.enemy.Position - AITank.Position);
-            //    float turretRotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
-                
+            //Vector3 newForward = Vector3.Normalize(AITank.enemy.Position - AITank.Position);
+            //float turretRotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
+
             //    if (!AITank.RotateTurret(-turretRotationAngle * (float)gameTime.ElapsedGameTime.TotalSeconds))
             //    {
             //        Vector3 newTankForward = Vector3.Normalize(AITank.enemy.Position - AITank.Position);
-            //        float rotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
+            //float rotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
+            //Console.Out.WriteLine(rotationAngle);
             //        Vector3 moveDirection = Vector3.Zero;
 
             //        moveDirection += AITank.Forward;
