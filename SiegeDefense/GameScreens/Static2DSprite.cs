@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SiegeDefense.GameScreens
 {
-     class Static2DSprite : _2DSprite {
+     public class Static2DSprite : _2DSprite {
         private SpriteBatch spriteBatch;
 
         private Texture2D texture;

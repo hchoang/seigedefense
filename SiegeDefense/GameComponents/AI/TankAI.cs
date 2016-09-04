@@ -167,7 +167,7 @@ namespace SiegeDefense.GameComponents.AI
 
         public bool isAimed()
         {
-            if (Math.Abs(Utility.RotationAngleCalculator(AITank.Forward + AITank.Position, AITank.enemy.Position, AITank.Left)) <= 0.2)
+            if (Math.Abs(Utility.RotationAngleCalculator(AITank.Forward + AITank.Position, AITank.enemy.Position, AITank.Left)) <= 0.3)
             {
                 return true;
             }

@@ -5,7 +5,8 @@ using System.Collections.Generic;
 namespace SiegeDefense.GameComponents.SoundBank
 {
     public enum SoundType {
-        TankFire
+        TankFire,
+        InBattleBGM
     }
     public class SoundBankManager : GameObject
     {
@@ -14,7 +15,9 @@ namespace SiegeDefense.GameComponents.SoundBank
         public SoundBankManager()
         {
             sounds = new Dictionary<SoundType, SoundEffect>();
+
             sounds.Add(SoundType.TankFire, Game.Content.Load<SoundEffect>(@"Sound/tank-fire"));
+            sounds.Add(SoundType.InBattleBGM, Game.Content.Load<SoundEffect>(@"Sound/in-battle-bgm"));
         }
 
         protected override void LoadContent()
@@ -27,6 +30,7 @@ namespace SiegeDefense.GameComponents.SoundBank
 
         public void PlaySound(SoundType type) {
             SoundEffectInstance se = sounds[type].CreateInstance();
+            se.Volume = 0.2f;
             se.Play();
         }
 

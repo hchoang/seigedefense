@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents.Input;
 using SiegeDefense.GameComponents.AI;
 using SiegeDefense.GameComponents.Maps;
+using Microsoft.Xna.Framework.Audio;
+using SiegeDefense.GameComponents.SoundBank;
 
 namespace SiegeDefense.GameComponents.Models
 {
@@ -21,12 +23,15 @@ namespace SiegeDefense.GameComponents.Models
         protected List<Vector3> spawnPoints = new List<Vector3>();
         protected GameDetailSprite pointSprite;
         protected GameDetailSprite bloodSprite;
+        protected Static2DSprite gameoverSprite;
         protected UserControlledTank userControlledTank;
-        
-        protected int maxEnemy = 20;
+        protected SoundEffectInstance bgm;
+        protected SoundBankManager soundManager;
+
+        protected int maxEnemy = 12;
         protected int spawnMaxAttempt = 50;
-        protected float spawnCDTime = 3;
-        protected float spawnCDCounter = 3;
+        protected float spawnCDTime = 10;
+        protected float spawnCDCounter = 10;
         
         private Map _map;
         private Map map {
@@ -36,17 +41,6 @@ namespace SiegeDefense.GameComponents.Models
                 }
                 return _map;
             }
-        }
-
-        public ModelManager()
-        {
-            models = new List<BaseModel>();
-            userControlledTank = new UserControlledTank(Game.Content.Load<Model>(@"Models/tank"));
-            spawnPoints.Add(new Vector3(580, 0, 292));
-            spawnPoints.Add(new Vector3(830, 0, 737));
-            spawnPoints.Add(new Vector3(1207, 0, 835));
-            spawnPoints.Add(new Vector3(1180, 0, 1210));
-            spawnPoints.Add(new Vector3(700, 0, 1221));
         }
 
         public List<Tank> getTankList() {
@@ -78,9 +72,15 @@ namespace SiegeDefense.GameComponents.Models
 
         public override void Update(GameTime gameTime)
         {
+            bgm.Play();
+            if (userControlledTank.blood == 0) {
+                gameoverSprite.Visible = true;
+                return;
+            }
             bloodSprite.setText("Blood: " + userControlledTank.blood);
             pointSprite.setText("Point: " + userControlledTank.point);
-            for (int i = 0; i < models.Count; i++)
+            
+            // spawn enemy
             if (spawnCDCounter >= spawnCDTime) {
                 spawnCDCounter = 0;
                 if (tankList.Count() < maxEnemy) {
@@ -95,11 +95,11 @@ namespace SiegeDefense.GameComponents.Models
                         if (enemyTank.Moveable(newTankLocation)) {
                             Add(enemyTank);
                             Console.WriteLine(newTankLocation);
+                            break;
                         }
                     }
                 }
             }
-
             spawnCDCounter += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             for (int i = 0; i < models.Count(); i++)
@@ -111,6 +111,24 @@ namespace SiegeDefense.GameComponents.Models
 
         protected override void LoadContent()
         {
+            soundManager = Game.Services.GetService<SoundBankManager>();
+            bgm = soundManager.FindSound(SoundType.InBattleBGM).CreateInstance();
+            bgm.IsLooped = true;
+
+            spawnPoints.Add(new Vector3(580, 0, 292));
+            spawnPoints.Add(new Vector3(830, 0, 738));
+            spawnPoints.Add(new Vector3(1207, 0, 835));
+            spawnPoints.Add(new Vector3(1180, 0, 1210));
+            spawnPoints.Add(new Vector3(700, 0, 1221));
+
+            for (int i=0; i<spawnPoints.Count; i++) {
+                float height = map.GetHeight(spawnPoints[i]);
+                spawnPoints[i] = new Vector3(spawnPoints[i].X, height, spawnPoints[i].Z);
+            }
+
+            userControlledTank = new UserControlledTank(Game.Content.Load<Model>(@"Models/tank"));
+            userControlledTank.Position = spawnPoints[0];
+
             userControlledTank.Tag = "Player";
             userControlledTank.AddChild(new TankController());
             Add(userControlledTank);
@@ -118,15 +136,17 @@ namespace SiegeDefense.GameComponents.Models
             pointSprite = new GameDetailSprite(Game.Content.Load<SpriteFont>(@"Fonts\Arial"), "Point: " + 0, new Vector2(50, 50), Color.Green);
             bloodSprite = new GameDetailSprite(Game.Content.Load<SpriteFont>(@"Fonts\Arial"), "Blood: " + userControlledTank.blood, new Vector2(50, 100), Color.Green);
 
+            gameoverSprite = new Static2DSprite(Game.Content.Load<Texture2D>(@"Sprites\GameOver"), Utility.CalculateDrawArea(Vector2.Zero, new Vector2(1, 1), Game.Services.GetService<GraphicsDeviceManager>()), Color.White);
+            gameoverSprite.Visible = false;
+
             //Camera camera = new FollowTargetCamera(userControlledTank, 50);
             //Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 20, -5));
             Camera camera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, 100));
             Game.Components.Add(camera);
             Game.Components.Add(bloodSprite);
             Game.Components.Add(pointSprite);
+            Game.Components.Add(gameoverSprite);
 
-            Tank enemyTank = new AIControlledTank(Game.Content.Load<Model>(@"Models/tank"), new Vector3(500, 0, 400), new TankAI(), userControlledTank);
-            Add(enemyTank);
             base.LoadContent();
         }
     }

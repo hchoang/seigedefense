@@ -57,8 +57,6 @@ namespace SiegeDefense.GameComponents.Models
             AddChild(collisionBox);
             AddChild(physics);
 
-            Position = PositionGenerate();
-
             absoluteTranform = new Matrix[model.Bones.Count];
             relativeTransform = new Matrix[model.Bones.Count];
             foreach(ModelBone bone in model.Bones)
@@ -95,22 +93,6 @@ namespace SiegeDefense.GameComponents.Models
             }
 
             base.Draw(gameTime);
-        }
-
-        public Vector3 PositionGenerate()
-        {
-            Random rnd = new Random();
-            //Vector3 position =  new Vector3(rnd.Next(0, 500), 0, rnd.Next(0, 500));
-            Vector3 position = new Vector3(500, 0, 600);
-            float height;
-            do
-            {
-                height = map.GetHeight(position);
-            } while (height > 100);
-            
-            
-            position = position + new Vector3(0, height, 0);
-            return position;
         }
 
         public float distanceCaculator(BaseModel model)
