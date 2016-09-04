@@ -83,7 +83,7 @@ namespace SiegeDefense.GameComponents.Models
             // spawn enemy
             if (spawnCDCounter >= spawnCDTime) {
                 spawnCDCounter = 0;
-                if (tankList.Count() < maxEnemy) {
+                if (tankList.Count() <= maxEnemy) {
                     for (int j=0; j<spawnMaxAttempt; j++) {
                         Random r = new Random();
                         int spawnIndex = r.Next(spawnPoints.Count);
