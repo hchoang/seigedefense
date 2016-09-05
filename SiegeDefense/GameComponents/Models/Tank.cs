@@ -156,12 +156,12 @@ namespace SiegeDefense.GameComponents.Models
             return absoluteTranform[turretBoneIndex] * WorldMatrix;
         }
 
-        public void Damaged(int damage)
+        public void Damaged(Bullet bullet)
         {
-            this.blood -= damage;
+            this.blood -= bullet.damage;
             if (this.blood <= 0)
             {
-                if (this is AIControlledTank)
+                if (bullet.owner is UserControlledTank)
                 {
                     ((UserControlledTank)((AIControlledTank)this).enemy).earnPoint(10);
                 }

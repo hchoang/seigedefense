@@ -6,9 +6,9 @@ using System;
 
 namespace SiegeDefense.GameComponents.Models
 {
-    class Bullet : BaseModel
+    public class Bullet : BaseModel
     {
-        protected int damage;
+        public int damage { get; private set; }
         public BaseModel owner { get; set; }
         public Bullet(Model model, BaseModel owner): base(model)
         {
@@ -31,7 +31,7 @@ namespace SiegeDefense.GameComponents.Models
             }
 
             if (collidedTank != null) {
-                collidedTank.Damaged(damage);
+                collidedTank.Damaged(this);
                 modelManager.Remove(this);
             }
 
