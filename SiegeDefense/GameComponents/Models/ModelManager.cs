@@ -94,7 +94,7 @@ namespace SiegeDefense.GameComponents.Models
                         enemyTank.Tag = "Enemy";
                         if (enemyTank.Moveable(newTankLocation)) {
                             Add(enemyTank);
-                            Console.WriteLine(newTankLocation);
+                            //Console.WriteLine(newTankLocation);
                             break;
                         }
                     }

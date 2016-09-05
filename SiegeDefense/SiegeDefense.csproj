@@ -7,7 +7,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{312F83A8-C6C0-4A06-A326-B5AC6DD758F6}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SiegeDefense</RootNamespace>
     <AssemblyName>SiegeDefense</AssemblyName>

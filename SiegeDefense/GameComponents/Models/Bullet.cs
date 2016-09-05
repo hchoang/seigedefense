@@ -24,7 +24,7 @@ namespace SiegeDefense.GameComponents.Models
                 if (owner == tank) continue;
 
                 if (collisionBox.Intersect(tank.collisionBox)) {
-                    Console.Out.WriteLine("Intersect");
+                    //Console.Out.WriteLine("Intersect");
                     collidedTank = tank;
                     break;
                 }
