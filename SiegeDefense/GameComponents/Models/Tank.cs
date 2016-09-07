@@ -46,7 +46,7 @@ namespace SiegeDefense.GameComponents.Models
             Vector3 oldPosition = Position;
             Position = testPosition;
 
-            foreach (Tank tank in modelManager.getTankList()) {
+            foreach (Tank tank in FindObjects<Tank>()) {
                 if (tank == this) continue;
                 if (collisionBox.SphereIntersect(tank.collisionBox)) {
                     Position = oldPosition;
@@ -142,13 +142,13 @@ namespace SiegeDefense.GameComponents.Models
             bullet.physics.MaxSpeed = 500;
             bullet.physics.Velocity = bullet.Forward * 1000;
 
-            modelManager.Add(bullet);
+            Game.Components.Add(bullet);
 
             soundManager.PlaySound(SoundType.TankFire);
         }
 
         public void Destroy() {
-            modelManager.Remove(this);
+            Game.Components.Remove(this);
         }
 
         public Matrix turretMatrix()
@@ -161,9 +161,9 @@ namespace SiegeDefense.GameComponents.Models
             this.blood -= bullet.damage;
             if (this.blood <= 0)
             {
-                if (bullet.owner is UserControlledTank)
+                if (bullet.owner.Tag.Equals("Player"))
                 {
-                    ((UserControlledTank)((AIControlledTank)this).enemy).earnPoint(10);
+                    Game.Services.GetService<GameManager>().Point += 10;
                 }
                 this.Destroy();
             }

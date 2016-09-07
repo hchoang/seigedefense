@@ -14,6 +14,7 @@ namespace SiegeDefense.GameComponents.Maps {
         private Effect multiTexturedEffect;
 
         // Map attributes
+        public string test { get; set; }
         private int mapInfoWidth;
         private int mapInfoHeight;
         private float minMapHeight = float.MaxValue;
@@ -67,11 +68,21 @@ namespace SiegeDefense.GameComponents.Maps {
         private VertexBuffer waterVertexBuffer;
         private VertexPositionTexture[] waterVertices;
         private Texture2D waterBumpMap;
+        private Vector3 windDirection = new Vector3(1, 0, 0);
 
-        public MultiTexturedHeightMap(float mapCellSize, float mapDeltaHeight) {
-            this.mapCellSize = mapCellSize;
-            this.mapDeltaHeight = mapDeltaHeight;
+        public MultiTexturedHeightMap(LevelDescription description) {
+            this.mapCellSize = description.MapCellSize;
+            this.mapDeltaHeight = description.MapDeltaHeight;
 
+            InitMap();
+
+            foreach (Vector3 spawnPoint in description.SpawnPoints) {
+                float height = GetHeight(spawnPoint * mapCellSize);
+                this.SpawnPoints.Add(new Vector3(spawnPoint.X * mapCellSize, height, spawnPoint.Z * mapCellSize));
+            }
+        }
+
+        private void InitMap() {
             sandTexture = Game.Content.Load<Texture2D>(@"Terrain\sand");
             grassTexture = Game.Content.Load<Texture2D>(@"Terrain\grass");
             rockTexture = Game.Content.Load<Texture2D>(@"Terrain\rock");
@@ -99,6 +110,13 @@ namespace SiegeDefense.GameComponents.Maps {
 
             waterHeight = waterHeight * mapDeltaHeight;
             SetupWater();
+        }
+
+        public MultiTexturedHeightMap(float mapCellSize, float mapDeltaHeight) {
+            this.mapCellSize = mapCellSize;
+            this.mapDeltaHeight = mapDeltaHeight;
+
+            InitMap();
         }
 
         public override void Draw(GameTime gameTime) {
@@ -131,6 +149,9 @@ namespace SiegeDefense.GameComponents.Maps {
             waterTechnique.Parameters["WaveHeight"].SetValue(0.01f);
             waterTechnique.Parameters["RefractionMap"].SetValue(refractionRenderTarget);
             waterTechnique.Parameters["CameraPosition"].SetValue(camera.Position);
+            waterTechnique.Parameters["Time"].SetValue((float)gameTime.TotalGameTime.TotalSeconds);
+            waterTechnique.Parameters["WindForce"].SetValue(0.02f);
+            waterTechnique.Parameters["WindDirection"].SetValue(windDirection);
 
             foreach (EffectPass pass in waterTechnique.CurrentTechnique.Passes) {
                 pass.Apply();

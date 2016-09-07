@@ -286,3 +286,6 @@
 /processorParam:Quality=Best
 /build:Sound/in-battle-bgm.wav
 
+#begin Level/level1.xml
+/copy:Level/level1.xml
+

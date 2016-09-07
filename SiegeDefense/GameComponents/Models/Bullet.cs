@@ -19,8 +19,7 @@ namespace SiegeDefense.GameComponents.Models
         public override void Update(GameTime gameTime) {
             // collision checking with other tanks
             Tank collidedTank = null;
-            foreach (Tank tank in modelManager.getTankList()) {
-                //if (Tag.Equals(tank.Tag)) continue;
+            foreach (Tank tank in FindObjects<Tank>()) {
                 if (owner == tank) continue;
 
                 if (collisionBox.Intersect(tank.collisionBox)) {
@@ -32,19 +31,19 @@ namespace SiegeDefense.GameComponents.Models
 
             if (collidedTank != null) {
                 collidedTank.Damaged(this);
-                modelManager.Remove(this);
+                Game.Components.Remove(this);
             }
 
             // remove bullet if outside map or hit the ground
             if (!map.IsInsideMap(Position)) {
-                modelManager.Remove(this);
+                Game.Components.Remove(this);
                 return;
             }
 
             float bulletHeight = Position.Y;
             float mapHeight = map.GetHeight(Position);
             if (bulletHeight < mapHeight) {
-                modelManager.Remove(this);
+                Game.Components.Remove(this);
             }
 
             base.Update(gameTime);

@@ -13,11 +13,11 @@ namespace SiegeDefense.GameComponents.Models
         public Model model { get; protected set; }
         protected Matrix[] absoluteTranform;
         protected Matrix[] relativeTransform;
-        private ModelManager _modelManager;
-        protected ModelManager modelManager {
+        private GameManager _modelManager;
+        protected GameManager modelManager {
             get {
                 if (_modelManager == null) {
-                    _modelManager = FindObjects<ModelManager>()[0];
+                    _modelManager = FindObjects<GameManager>()[0];
                 }
                 return _modelManager;
             }

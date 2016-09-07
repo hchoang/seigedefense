@@ -8,11 +8,13 @@ using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameScreens;
 using SiegeDefense.GameComponents.TitleScreen;
 using SiegeDefense.GameComponents.SoundBank;
+using SiegeDefense.GameComponents.Models;
 
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
         GraphicsDeviceManager graphicDeviceManager;
         GameObject inputManager;
+        GameManager gameManager;
         BasicEffect basicEffect;
         Effect advancedEffect;
 
@@ -30,8 +32,7 @@ namespace SiegeDefense {
             GameObject.Initialize(this);
             RegisterServices();
 
-            Components.Add(inputManager);
-            Components.Add(new MainGameScreen());
+            gameManager.LoadLevel("level1");
 
             base.Initialize();
         }
@@ -56,12 +57,16 @@ namespace SiegeDefense {
             basicEffect.EnableDefaultLighting();
             Services.AddService(basicEffect);
 
+            advancedEffect = Content.Load<Effect>("customShader");
+            Services.AddService(advancedEffect);
+
             // Sound
             SoundBankManager soundManager = new SoundBankManager();
             Services.AddService(soundManager);
 
-            advancedEffect = Content.Load<Effect>("customShader");
-            Services.AddService(advancedEffect);
+            // Game manager
+            gameManager = new GameManager();
+            Services.AddService(gameManager);
         }
         
         protected override void Update(GameTime gameTime) {

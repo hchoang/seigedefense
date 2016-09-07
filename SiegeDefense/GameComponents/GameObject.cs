@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace SiegeDefense.GameComponents {
     public abstract class GameObject : DrawableGameComponent{
@@ -28,20 +29,20 @@ namespace SiegeDefense.GameComponents {
             return _game.Components.Cast<GameObject>().Where(x => tag.Equals(x.Tag)).ToList();
         }
 
-        public T FindComponent<T>() where T : GameObject {
+        public T FindComponents<T>() where T : GameObject {
             GameObject root = this;
             while (root.ParentObject != null) root = root.ParentObject;
 
-            return FindComponent<T>(root);
+            return FindComponents<T>(root);
         }
 
-        private static T FindComponent<T>(GameObject current) where T : GameObject {
+        private static T FindComponents<T>(GameObject current) where T : GameObject {
             if (current is T)
                 return (T)current;
 
             T retValue = null;
             foreach(GameObject childObject in current.childObjects) {
-                retValue = FindComponent<T>(childObject);
+                retValue = FindComponents<T>(childObject);
                 if (retValue != null)
                     return retValue;
             }
@@ -49,7 +50,7 @@ namespace SiegeDefense.GameComponents {
             return retValue;
         }
 
-        public void AddChild(GameObject child) {
+        public virtual void AddChild(GameObject child) {
             childObjects.Add(child);
             child.ParentObject = this;
         }

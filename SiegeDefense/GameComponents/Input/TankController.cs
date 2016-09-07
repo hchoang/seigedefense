@@ -29,14 +29,14 @@ namespace SiegeDefense.GameComponents.Input {
             }
         }
 
-        private ModelManager _modelManager;
-        private ModelManager modelManager
+        private GameManager _modelManager;
+        private GameManager modelManager
         {
             get
             {
                 if (_modelManager == null)
                 {
-                    _modelManager = FindObjects<ModelManager>()[0];
+                    _modelManager = FindObjects<GameManager>()[0];
                 }
                 return _modelManager;
             }
@@ -46,7 +46,7 @@ namespace SiegeDefense.GameComponents.Input {
         private Tank controlledTank {
             get {
                 if (_controlledTank == null) {
-                    _controlledTank = FindComponent<Tank>();
+                    _controlledTank = FindComponents<Tank>();
                 }
                 return _controlledTank;
             }

@@ -36,10 +36,5 @@ namespace SiegeDefense.GameComponents.Models
                 return true;
             return false;
         }
-
-        public override void Fire()
-        {
-            base.Fire();
-        }
     }
 }

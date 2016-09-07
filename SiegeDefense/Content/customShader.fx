@@ -206,6 +206,10 @@ Texture RefractionMap;
 float WaveLength;
 float WaveHeight;
 float WaterDepth;
+float Time;
+float3 WindDirection;
+float WindForce;
+
 
 sampler ReflectionSampler = sampler_state { texture = <ReflectionMap> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
 sampler WaterBumpMapSampler = sampler_state { texture = <WaterBumpMap> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
@@ -220,9 +224,16 @@ void WaterVS(float4 inPos: POSITION0, float2 inTex: TEXCOORD0,
 	float4x4 preReflectionViewProjection = mul (ReflectionView, Projection);
 	float4x4 preWorldReflectionViewProjection = mul (World, preReflectionViewProjection);
 	
+	float3 windDir = normalize(WindDirection);
+	float3 perpDir = cross(WindDirection, float3(0,1,0));
+	float yDot = dot(inTex, WindDirection.xz);
+	float xDot = dot(inTex, perpDir.xz);
+	float2 waterMoveVector = float2(xDot, yDot);
+	waterMoveVector.y += Time * WindForce;
+	
 	outPos = mul(inPos, preWorldViewProjection);
 	outReflectionMapSamplingPos = mul(inPos, preWorldReflectionViewProjection);
-	outBumpMapSamplingPos = inTex / WaveLength;
+	outBumpMapSamplingPos = (waterMoveVector) / WaveLength;
 	outRefractionMapSamplingPos = mul(inPos, preWorldViewProjection);
 	outPosition3D = mul(inPos, World);
 }
@@ -244,13 +255,23 @@ float4 WaterPS(float4 pos: POSITION0, float4 reflectionMapSamplingPos: TEXCOORD1
 	float4 refractiveColor = tex2D(RefractionSampler, perturbatedRefrTexCoords);
 	
 	float3 eyeVector = normalize(CameraPosition - position3D);
-	float3 normalVector = float3(0,1,0);
+	//float3 normalVector = float3(0,1,0);
+	float3 normalVector = (bumpColor.rbg-0.5f)*2.0f;
 	float fresnelTerm = dot(eyeVector, normalVector);    
 	float4 combinedColor = lerp(reflectiveColor, refractiveColor, fresnelTerm);
 	
 	float4 dullColor = float4(0.3f, 0.3f, 0.5f, 1.0f);
+	float4 outColor = lerp(combinedColor, dullColor, 0.2f);
 	
-	return lerp(combinedColor, dullColor, 0.2f);
+	float3 reflectionVector = -reflect(LightDirection, normalVector);
+	float specular = dot(normalize(reflectionVector), normalize(eyeVector));
+	
+	if (specular > 0.95){
+		outColor.rgb += specular;
+	}
+	
+	
+	return outColor;
 }
 
 technique Water {

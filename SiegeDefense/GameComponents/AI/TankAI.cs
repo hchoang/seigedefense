@@ -28,7 +28,7 @@ namespace SiegeDefense.GameComponents.AI
             {
                 if (_AITank == null)
                 {
-                    _AITank =  FindComponent<AIControlledTank>();
+                    _AITank =  FindComponents<AIControlledTank>();
                 }
                 return _AITank;
             }
@@ -131,31 +131,6 @@ namespace SiegeDefense.GameComponents.AI
                     timer = 0;
                 }
             }
-
-
-
-            //lastEnemyPosition = AITank.enemy.Position;
-            //if (AITank.isInRange(AITank.enemy)) {
-            //Vector3 newForward = Vector3.Normalize(AITank.enemy.Position - AITank.Position);
-            //float turretRotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
-
-            //    if (!AITank.RotateTurret(-turretRotationAngle * (float)gameTime.ElapsedGameTime.TotalSeconds))
-            //    {
-            //        Vector3 newTankForward = Vector3.Normalize(AITank.enemy.Position - AITank.Position);
-            //float rotationAngle = Utility.RotationAngleCalculator(AITank.Forward, newForward, AITank.Left);
-            //Console.Out.WriteLine(rotationAngle);
-            //        Vector3 moveDirection = Vector3.Zero;
-
-            //        moveDirection += AITank.Forward;
-
-            //        moveDirection = Vector3.Normalize(moveDirection) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //        rotationAngle = rotationAngle * tankRotaionSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            //        AITank.Move(moveDirection);
-            //        AITank.RotateTank(rotationAngle);
-            //        AITank.RotateWheels(-1);
-            //    }
-
-            //}
 
             base.Update(gameTime);
         }

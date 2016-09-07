@@ -59,8 +59,9 @@ namespace SiegeDefense.GameComponents.Input {
         private float GetValue(GameInput input, bool isCurrent = true) {
 
             // Logical to physical input mapping
-            if (input == GameInput.Up)
+            if (input == GameInput.Up) {
                 return GetValue(Keys.W, isCurrent);
+            }
 
             if (input == GameInput.Down)
                 return GetValue(Keys.S, isCurrent);
