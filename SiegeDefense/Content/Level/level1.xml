@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LevelDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SpawnPoints>
+    <Vector3>
+      <X>58</X>
+      <Y>0</Y>
+      <Z>29.2</Z>
+    </Vector3>
+    <Vector3>
+      <X>83</X>
+      <Y>0</Y>
+      <Z>73.8</Z>
+    </Vector3>
+    <Vector3>
+      <X>120.7</X>
+      <Y>0</Y>
+      <Z>83.5</Z>
+    </Vector3>
+    <Vector3>
+      <X>118</X>
+      <Y>0</Y>
+      <Z>121</Z>
+    </Vector3>
+    <Vector3>
+      <X>70</X>
+      <Y>0</Y>
+      <Z>122.1</Z>
+    </Vector3>
+  </SpawnPoints>
+  <MapCellSize>10</MapCellSize>
+  <MapDeltaHeight>200</MapDeltaHeight>
+</LevelDescription>
