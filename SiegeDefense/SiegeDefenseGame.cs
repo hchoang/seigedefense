@@ -28,10 +28,12 @@ namespace SiegeDefense {
             graphicDeviceManager.PreferredBackBufferHeight = 768;
             graphicDeviceManager.ApplyChanges();
             //IsMouseVisible = true;
-
+            
             GameObject.Initialize(this);
+
             RegisterServices();
 
+            gameManager = Services.GetService<GameManager>();
             gameManager.LoadLevel("level1");
 
             base.Initialize();
@@ -42,13 +44,6 @@ namespace SiegeDefense {
         }
 
         private void RegisterServices() {
-            // Input
-            inputManager = new InputManager();
-            Services.AddService(typeof(IInputManager), inputManager);
-
-            // Graphics device manager
-            Services.AddService(graphicDeviceManager);
-
             // 2D - SpriteBatch
             Services.AddService(new SpriteBatch(GraphicsDevice));
 
@@ -64,9 +59,8 @@ namespace SiegeDefense {
             SoundBankManager soundManager = new SoundBankManager();
             Services.AddService(soundManager);
 
-            // Game manager
-            gameManager = new GameManager();
-            Services.AddService(gameManager);
+            // input
+            Services.AddService(typeof(IInputManager), new InputManager());
         }
         
         protected override void Update(GameTime gameTime) {

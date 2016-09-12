@@ -1,13 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace SiegeDefense {
     public static class Utility {
-        public static Rectangle CalculateDrawArea(double x, double y, double width, double height, GraphicsDeviceManager graphics) {
-            return new Rectangle((int)(x * graphics.PreferredBackBufferWidth),
-                (int)(y * graphics.PreferredBackBufferHeight),
-                (int)(width * graphics.PreferredBackBufferWidth),
-                (int)(height * graphics.PreferredBackBufferHeight));
+        public static object GraphicDevice { get; private set; }
+
+        public static Rectangle CalculateDrawArea(double x, double y, double width, double height, GraphicsDevice graphics) {
+            return new Rectangle((int)(x * graphics.DisplayMode.Width),
+                (int)(y * graphics.DisplayMode.Height),
+                (int)(width * graphics.DisplayMode.Width),
+                (int)(height * graphics.DisplayMode.Height));
         }
 
         public static Rectangle CalculateDrawArea(double x, double y, double width, double height, Rectangle root) {
@@ -17,7 +20,7 @@ namespace SiegeDefense {
                 (int)(height * root.Height));
         }
 
-        public static Rectangle CalculateDrawArea(Vector2 position, Vector2 size, GraphicsDeviceManager graphics) {
+        public static Rectangle CalculateDrawArea(Vector2 position, Vector2 size, GraphicsDevice graphics) {
             return CalculateDrawArea(position.X, position.Y, size.X, size.Y, graphics);
         }
 

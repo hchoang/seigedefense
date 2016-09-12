@@ -12,8 +12,7 @@ namespace SiegeDefense.GameComponents.TitleScreen {
             Texture2D frameTexture = Game.Content.Load<Texture2D>(@"Sprites\MainMenuFrame");
             Vector2 framePosition = new Vector2(0.7f, 0.2f);
             Vector2 frameSize = new Vector2(0.3f, 0.5f);
-            Rectangle frameDrawArea = Utility.CalculateDrawArea(framePosition, frameSize, 
-                Game.Services.GetService<GraphicsDeviceManager>());
+            Rectangle frameDrawArea = Utility.CalculateDrawArea(framePosition, frameSize, Game.GraphicsDevice);
             Color frameColor = Color.White;
             AddChild(new Static2DSprite(frameTexture, frameDrawArea, frameColor));
 

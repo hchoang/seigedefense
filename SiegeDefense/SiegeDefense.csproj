@@ -39,7 +39,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject />
+    <StartupObject>SiegeDefense.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="GameComponents\3DGameObject.cs" />
