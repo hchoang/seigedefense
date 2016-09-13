@@ -5,23 +5,23 @@ using SiegeDefense.GameComponents.Physics;
 using System;
 using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.SoundBank;
+using System.ComponentModel;
 
 namespace SiegeDefense.GameComponents.Models
 {
+    public enum ModelType {
+        [Description(@"Models\tank")]
+        TANK1,
+        [Description(@"Models\bullet")]
+        BULLET1
+    }
+
     public class BaseModel : _3DGameObject
     {
         public Model model { get; protected set; }
         protected Matrix[] absoluteTranform;
         protected Matrix[] relativeTransform;
-        private GameManager _modelManager;
-        protected GameManager modelManager {
-            get {
-                if (_modelManager == null) {
-                    _modelManager = FindObjects<GameManager>()[0];
-                }
-                return _modelManager;
-            }
-        }
+        
         private Camera _camera;
         protected Camera camera {
             get {
@@ -46,16 +46,16 @@ namespace SiegeDefense.GameComponents.Models
         public OrientedCollisionBox collisionBox { get; set; }
         public GamePhysics physics { get; set; }
 
-        public BaseModel(Model model)
+        public BaseModel(ModelType modelType)
         {
-            this.model = model;
+            model = Game.Content.Load<Model>(modelType.ToDescription());
+
             collisionBox = new OrientedCollisionBox(this);
             physics = new GamePhysics(this);
-
-            soundManager = Game.Services.GetService<SoundBankManager>();
-
             AddChild(collisionBox);
             AddChild(physics);
+
+            soundManager = Game.Services.GetService<SoundBankManager>();
 
             absoluteTranform = new Matrix[model.Bones.Count];
             relativeTransform = new Matrix[model.Bones.Count];
@@ -63,11 +63,6 @@ namespace SiegeDefense.GameComponents.Models
             {
                 relativeTransform[bone.Index] = bone.Transform;
             }
-        }
-
-        public BaseModel(Model model, Vector3 Position) : this(model)
-        {
-            this.Position = Position;
         }
 
         public override void Update(GameTime gameTime)

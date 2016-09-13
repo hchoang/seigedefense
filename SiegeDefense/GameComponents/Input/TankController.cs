@@ -11,36 +11,6 @@ using System.Collections.Generic;
 namespace SiegeDefense.GameComponents.Input {
     public class TankController : GameObject {
         private IInputManager inputManager;
-        protected float tankMoveSpeed = 50.0f;
-        protected float tankRotateSpeed = 2.0f;
-        protected float turretRotateSpeed = 0.05f;
-        protected float canonRotateSpeed = 0.05f;
-
-        private SoundBankManager _soundManager;
-        private SoundBankManager soundManager {
-            get
-            {
-                if (_soundManager == null)
-                {
-                    _soundManager = FindObjects<SoundBankManager>()[0];
-                }
-                
-                return _soundManager;
-            }
-        }
-
-        private GameManager _modelManager;
-        private GameManager modelManager
-        {
-            get
-            {
-                if (_modelManager == null)
-                {
-                    _modelManager = FindObjects<GameManager>()[0];
-                }
-                return _modelManager;
-            }
-        }
 
         private Tank _controlledTank;
         private Tank controlledTank {
@@ -51,33 +21,15 @@ namespace SiegeDefense.GameComponents.Input {
                 return _controlledTank;
             }
         }
-        private Map _map;
-        private Map map {
-            get {
-                if (_map == null) {
-                    _map = FindObjects<Map>()[0];
-                }
-                return _map;
-            }
-        }
 
         public TankController() {
             inputManager = Game.Services.GetService<IInputManager>();
         }
 
         public override void Update(GameTime gameTime) {
-            // play sound when click mouse
             if (inputManager.isTriggered(GameInput.Fire))
             {
-                //SoundEffectInstance sound = soundManager.FindSound("Tank");
-                //if (sound.State != SoundState.Playing)
-                //{
-                //    sound.Play();
-                //}
                 controlledTank.Fire();
-                //List<Tank> allTanks = modelManager.models.Where(x => x is Tank).Cast<Tank>().ToList();
-                //foreach (Tank tank in allTanks)
-                //    tank.Fire();
             }
 
             // move & rotate
@@ -91,7 +43,7 @@ namespace SiegeDefense.GameComponents.Input {
             }
 
             if (moveDirection != Vector3.Zero) {
-                moveDirection = Vector3.Normalize(moveDirection) * tankMoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                moveDirection = Vector3.Normalize(moveDirection) * controlledTank.MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                 controlledTank.Move(moveDirection);
             }
@@ -99,10 +51,10 @@ namespace SiegeDefense.GameComponents.Input {
             float rotationAngle = 0;
            // if (moveDirection != Vector3.Zero) {
                 if (inputManager.GetValue(GameInput.Left) != 0) {
-                    rotationAngle += tankRotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    rotationAngle += controlledTank.RotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
                 if (inputManager.GetValue(GameInput.Right) != 0) {
-                    rotationAngle -= tankRotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    rotationAngle -= controlledTank.RotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
           //  }
 
@@ -121,8 +73,8 @@ namespace SiegeDefense.GameComponents.Input {
             }
 
             // rotate turret & cannon
-            float turretRotationAngle = inputManager.GetValue(GameInput.Horizontal) * (float)gameTime.ElapsedGameTime.TotalSeconds * turretRotateSpeed;
-            float canonRotationAngle = inputManager.GetValue(GameInput.Vertical) * (float)gameTime.ElapsedGameTime.TotalSeconds * canonRotateSpeed;
+            float turretRotationAngle = inputManager.GetValue(GameInput.Horizontal) * (float)gameTime.ElapsedGameTime.TotalSeconds * controlledTank.TurretRotateSpeed;
+            float canonRotationAngle = inputManager.GetValue(GameInput.Vertical) * (float)gameTime.ElapsedGameTime.TotalSeconds * controlledTank.CanonRotateSpeed;
 
             if (turretRotationAngle != 0) {
                 controlledTank.RotateTurret(turretRotationAngle);

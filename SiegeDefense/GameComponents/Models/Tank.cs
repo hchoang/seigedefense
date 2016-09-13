@@ -16,9 +16,13 @@ namespace SiegeDefense.GameComponents.Models
         protected int canonHeadBoneIndex;
         protected int[] wheelBoneIndex;
         public float turretMaxRotaion { get { return 0.2f; } private set { } }
-        public int blood { get; private set; }
+        public int HP { get; protected set; }
+        public float MoveSpeed { get; set; } = 50.0f;
+        public float RotateSpeed { get; set; } = 2.0f;
+        public float TurretRotateSpeed { get; set; } = 0.05f;
+        public float CanonRotateSpeed { get; set; } = 0.05f;
 
-        public Tank(Model model) : base(model)
+        public Tank(ModelType modelType) : base(modelType)
         {
             wheelBoneIndex = new int[4];
 
@@ -30,7 +34,7 @@ namespace SiegeDefense.GameComponents.Models
             turretBoneIndex = model.Bones["turret_geo"].Index;  
             canonBoneIndex = model.Bones["canon_geo"].Index;
             canonHeadBoneIndex = model.Bones["canon_head_geo"].Index;
-            blood = 100;   
+            HP = 100;   
         }
 
         public override void Update(GameTime gameTime)
@@ -133,8 +137,8 @@ namespace SiegeDefense.GameComponents.Models
         }
 
         public virtual void Fire() {
-            BaseModel bullet = new Bullet(Game.Content.Load<Model>(@"Models\bullet"), this);
-            bullet.Tag = Tag;
+            BaseModel bullet = new Bullet(ModelType.BULLET1, this);
+            bullet.Tag = this.Tag + "Bullet";
 
             // set bullet position & facing direction
             Matrix canonHeadAbsoluteMatrix = absoluteTranform[canonHeadBoneIndex] * WorldMatrix;
@@ -151,15 +155,10 @@ namespace SiegeDefense.GameComponents.Models
             Game.Components.Remove(this);
         }
 
-        public Matrix turretMatrix()
-        {
-            return absoluteTranform[turretBoneIndex] * WorldMatrix;
-        }
-
         public void Damaged(Bullet bullet)
         {
-            this.blood -= bullet.damage;
-            if (this.blood <= 0)
+            this.HP -= bullet.damage;
+            if (this.HP <= 0)
             {
                 if (bullet.owner.Tag.Equals("Player"))
                 {

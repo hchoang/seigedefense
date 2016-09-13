@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.ComponentModel;
 
 namespace SiegeDefense {
     public static class Utility {
@@ -34,14 +35,6 @@ namespace SiegeDefense {
             destination.Normalize();
             float dot = Vector3.Dot(origin, destination);
             
-            //if (Math.Abs(dot - (-1.0f)) < 0.000001f)
-            //{
-            //    return (float) Math.PI;
-            //}
-            //if (Math.Abs(dot - (1.0f)) < 0.000001f)
-            //{
-            //    return 0f;
-            //}
             float RotationDirection = 1;
             if (Vector3.Dot(left, destination) < 0)
             {
@@ -51,6 +44,11 @@ namespace SiegeDefense {
             float cosForward = dot / (origin.Length() * destination.Length());
 
             return (float) Math.Acos(cosForward) * RotationDirection;
+        }
+
+        public static string ToDescription(this Enum value) {
+            var da = (DescriptionAttribute[])(value.GetType().GetField(value.ToString())).GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return da.Length > 0 ? da[0].Description : value.ToString();
         }
     }
 }

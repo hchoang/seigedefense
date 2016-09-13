@@ -14,7 +14,7 @@ namespace SiegeDefense.GameComponents.Models
         private float fireRange;
         public Tank enemy { get; private set; }
 
-        public AIControlledTank(Model model, Vector3 position, GameObject TankAI, Tank enemy) : base(model)
+        public AIControlledTank(ModelType modelType, Vector3 position, GameObject TankAI, Tank enemy) : base(modelType)
         {
             this.Position = position;
             this.AddChild(TankAI);

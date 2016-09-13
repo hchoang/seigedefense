@@ -29,7 +29,6 @@ namespace SiegeDefense {
             //IsMouseVisible = true;
             
             GameObject.Initialize(this);
-
             RegisterServices();
 
             gameManager.LoadLevel("level1");

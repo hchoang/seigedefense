@@ -7,16 +7,6 @@ using System;
 namespace SiegeDefense.GameComponents.Cameras {
     public class FPSCamera : Camera {
         private GraphicsDevice graphicsDevice;
-
-        private Map _map;
-        public Map map {
-            get {
-                if (_map == null) {
-                    _map = FindObjects<Map>()[0];
-                }
-                return _map;
-            }
-        }
         private float aspectRatio = 0.75f;
         private float nearPlane = 2;
         private float farPlane = 1000;
@@ -27,6 +17,15 @@ namespace SiegeDefense.GameComponents.Cameras {
         private float rotationSpeed = 0.2f;
         private IInputManager inputManager;
         private float jumpForce = 0;
+        private Map _map;
+        private Map map {
+            get {
+                if (_map == null) {
+                    _map = FindObjects<Map>()[0];
+                }
+                return _map;
+            }
+        }
 
         public FPSCamera(Vector3 Position, Vector3 Target, Vector3 Up) {
             this.Position = Position;
@@ -127,7 +126,7 @@ namespace SiegeDefense.GameComponents.Cameras {
         public void Move(Vector3 direction) {
 
             Vector3 newPosition = Position + direction;
-            if (!map.IsInsideMap(newPosition))
+            if (map.IsInsideMap(newPosition))
                 return;
 
             Position = newPosition;

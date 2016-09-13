@@ -11,11 +11,8 @@ namespace SiegeDefense.GameComponents.Sky {
         private TextureCube nightSkyTexture;
         private Vector4 textureWeight = Vector4.Zero;
         private Model skyModel;
-
-        private Effect daynightEffect;
-        private BasicEffect basicEffect;
         private Camera _camera;
-        private Camera camera {
+        protected Camera camera {
             get {
                 if (_camera == null) {
                     _camera = FindObjects<Camera>()[0];
@@ -23,6 +20,9 @@ namespace SiegeDefense.GameComponents.Sky {
                 return _camera;
             }
         }
+
+        private Effect daynightEffect;
+        private BasicEffect basicEffect;
 
         public Skybox() {
             Tag = "Sky";

@@ -1,8 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents.Maps;
-using SiegeDefense.GameComponents.Physics;
-using System;
 
 namespace SiegeDefense.GameComponents.Models
 {
@@ -10,7 +6,7 @@ namespace SiegeDefense.GameComponents.Models
     {
         public int damage { get; private set; }
         public BaseModel owner { get; set; }
-        public Bullet(Model model, BaseModel owner): base(model)
+        public Bullet(ModelType modelType, BaseModel owner): base(modelType)
         {
             this.damage = 20;
             this.owner = owner;

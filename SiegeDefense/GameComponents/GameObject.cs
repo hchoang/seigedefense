@@ -10,17 +10,12 @@ namespace SiegeDefense.GameComponents {
         private List<GameObject> childObjects = new List<GameObject>();
         public GameObject ParentObject { get; set; } = null;
         public string Tag { get; set; } = "";
-        protected GameManager gameManager;
 
         public static void Initialize(Game game) {
             _game = game;
         }
 
-        protected GameObject(Game game) : base(game) {
-        }
-
         public GameObject() : base(_game) {
-            gameManager = Game.Services.GetService<GameManager>();
         }
 
         public static List<T> FindObjects<T>() where T : GameObject {

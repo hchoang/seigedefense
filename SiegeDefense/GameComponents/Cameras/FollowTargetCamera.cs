@@ -11,7 +11,6 @@ namespace SiegeDefense.GameComponents.Cameras {
         private _3DGameObject targetToFollow;
         private float targetDistance;
         private Vector3 cameraToTargetDirection;
-
         private Map _map;
         private Map map {
             get {
