@@ -280,3 +280,46 @@ technique Water {
 		PixelShader = compile PS_SHADERMODEL WaterPS();
 	}
 }
+
+//-------------------------------------------------------------------
+//-----------------Technique: billboard------------------------------
+//-------------------------------------------------------------------
+
+Texture BillboardTexture;
+sampler BillboardSampler = sampler_state { texture = <BillboardTexture> ; magfilter = LINEAR; minfilter = LINEAR; mipfilter=LINEAR; AddressU = mirror; AddressV = mirror;};
+float3 RotateAxis;
+float BillboardSide;
+float BillboardHeight;
+
+void BillboardVS(float4 inPos : POSITION0, float2 inTex : TEXCOORD0,
+				out float4 outPos : POSITION0, out float2 outTex : TEXCOORD0){
+	
+	float3 center = mul(inPos, World);
+	float3 eyeVector = center - CameraPosition;
+	
+	float3 upVector = RotateAxis;
+	upVector = normalize(upVector) * BillboardHeight;
+	float3 sideVector = cross(eyeVector,upVector);
+	sideVector = normalize(sideVector) * BillboardSide;
+	
+	float3 finalPosition = center;
+    finalPosition += (inTex.x-0.5f)*sideVector;
+    finalPosition += (1.5f-inTex.y*1.5f)*upVector;
+	
+	float4 finalPosition4 = float4(finalPosition, 1);
+	float4x4 preViewProjection = mul(View, Projection);
+    
+	outPos = mul(finalPosition4, preViewProjection);
+	outTex = inTex;
+}
+
+float4 BillboardPS(float4 pos : POSITION0, float2 texCoord : TEXCOORD0) : COLOR0 {
+	return tex2D(BillboardSampler, texCoord);
+}
+
+technique Billboard {
+	pass Pass0 {
+		VertexShader = compile VS_SHADERMODEL BillboardVS();
+		PixelShader = compile PS_SHADERMODEL BillboardPS();
+	}
+}

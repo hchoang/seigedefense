@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using SiegeDefense.GameComponents.Billboards;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Physics;
@@ -71,7 +72,7 @@ namespace SiegeDefense.GameComponents.Models
             Position = newPosition;
             Vector3 mapNormal = map.GetNormal(Position);
             Up = mapNormal;
-            
+
             return true;
         }
 
@@ -153,6 +154,15 @@ namespace SiegeDefense.GameComponents.Models
 
         public void Destroy() {
             Game.Components.Remove(this);
+
+            // Drop power-up
+            if (Tag.Equals("Enemy")) {
+                Billboard powerUp = new Billboard(Game.Content.Load<Texture2D>(@"Sprites\HPRestore"));
+                powerUp.Position = Position;
+                powerUp.ScaleMatrix = Matrix.CreateScale(10);
+
+                Game.Components.Add(powerUp);
+            }
         }
 
         public void Damaged(Bullet bullet)

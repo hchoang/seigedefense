@@ -15,6 +15,7 @@ using Microsoft.Xna.Framework.Audio;
 using SiegeDefense.GameComponents.SoundBank;
 using SiegeDefense.GameComponents.Models;
 using SiegeDefense.GameComponents.Sky;
+using SiegeDefense.GameComponents.Billboards;
 
 namespace SiegeDefense.GameComponents
 {
@@ -29,8 +30,8 @@ namespace SiegeDefense.GameComponents
         // Game mechanics
         protected int maxEnemy = 12;
         protected int spawnMaxAttempt = 50;
-        protected float spawnCDTime = 10;
-        protected float spawnCDCounter = 10;
+        protected float spawnCDTime = 200;
+        protected float spawnCDCounter = 200;
         public int Point { get; set; }
 
         // Game world
@@ -56,13 +57,13 @@ namespace SiegeDefense.GameComponents
             // Add game world
             LevelDescription description = LevelDescription.LoadFromXML(Game.Content.RootDirectory + @"\level\" + levelname + ".xml");
             sky = new Skybox();
-            map = new MultiTexturedHeightMap(description);
+            map = new HeightMap(description);
             Game.Components.Add(sky);
             Game.Components.Add(map);
 
             // Add player & camera
             userControlledTank = new Tank(ModelType.TANK1);
-            userControlledTank.Position = map.SpawnPoints[0];
+            userControlledTank.Position = map.PlayerStartPosition;
             userControlledTank.Tag = "Player";
             userControlledTank.AddChild(new TankController());
             Game.Components.Add(userControlledTank);

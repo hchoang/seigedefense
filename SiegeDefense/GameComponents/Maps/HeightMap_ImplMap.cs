@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense.GameComponents.Maps {
-    public partial class MultiTexturedHeightMap {
+    public partial class HeightMap : Map{
 
         public override bool IsAccessibleByFoot(Vector3 position) {
 

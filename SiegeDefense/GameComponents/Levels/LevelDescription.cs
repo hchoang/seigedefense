@@ -12,6 +12,8 @@ namespace SiegeDefense.GameComponents.Maps {
         public List<Vector3> SpawnPoints { get; set; } = new List<Vector3>();
         public float MapCellSize { get; set; }
         public float MapDeltaHeight { get; set; }
+        public Vector3 PlayerStartPoint { get; set; }
+        public Vector3 HeadquarterPosition { get; set; }
 
         public static LevelDescription LoadFromXML(string path) {
             XmlSerializer s = new XmlSerializer(typeof(LevelDescription));

@@ -3,9 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Sky;
 using System;
+using System.Collections.Generic;
 
 namespace SiegeDefense.GameComponents.Maps {
-    public partial class MultiTexturedHeightMap : Map {
+    public partial class HeightMap {
         private Texture2D sandTexture;
         private Texture2D grassTexture;
         private Texture2D rockTexture;
@@ -17,12 +18,12 @@ namespace SiegeDefense.GameComponents.Maps {
         public string test { get; set; }
         private int mapInfoWidth;
         private int mapInfoHeight;
-        private float minMapHeight = float.MaxValue;
-        private float maxMapHeight = float.MinValue;
+        private float minMapHeight = 0;
+        private float maxMapHeight = 255;
 
         // Map configs - will be configued via constructor/setter
         private float mapCellSize = 10.0f;
-        private float mapDeltaHeight = 100.0f; // max height - min height
+        private float mapDeltaHeight = 100.0f;
 
         // Map texture weight
         private float minSandHeight = -0.3f;
@@ -70,7 +71,7 @@ namespace SiegeDefense.GameComponents.Maps {
         private Texture2D waterBumpMap;
         private Vector3 windDirection = new Vector3(1, 0, 0);
 
-        public MultiTexturedHeightMap(LevelDescription description) {
+        public HeightMap(LevelDescription description) {
             this.mapCellSize = description.MapCellSize;
             this.mapDeltaHeight = description.MapDeltaHeight;
 
@@ -80,6 +81,14 @@ namespace SiegeDefense.GameComponents.Maps {
                 float height = GetHeight(spawnPoint * mapCellSize);
                 this.SpawnPoints.Add(new Vector3(spawnPoint.X * mapCellSize, height, spawnPoint.Z * mapCellSize));
             }
+
+            Vector3 playerPos = description.PlayerStartPoint * mapCellSize;
+            playerPos.Y = GetHeight(PlayerStartPosition);
+            this.PlayerStartPosition = playerPos;
+
+            Vector3 HQPos = description.HeadquarterPosition * mapCellSize;
+            HQPos.Y = GetHeight(HQPos);
+            this.HeadquarterPosition = HQPos;
         }
 
         private void InitMap() {
@@ -110,17 +119,11 @@ namespace SiegeDefense.GameComponents.Maps {
 
             waterHeight = waterHeight * mapDeltaHeight;
             SetupWater();
-        }
 
-        public MultiTexturedHeightMap(float mapCellSize, float mapDeltaHeight) {
-            this.mapCellSize = mapCellSize;
-            this.mapDeltaHeight = mapDeltaHeight;
-
-            InitMap();
+            GenerateMapNode();
         }
 
         public override void Draw(GameTime gameTime) {
-
             DrawRefractionMap(gameTime);
             DrawReflectionMap(gameTime);
 
@@ -214,6 +217,7 @@ namespace SiegeDefense.GameComponents.Maps {
             effect.Parameters["xTexture1"].SetValue(grassTexture);
             effect.Parameters["xTexture2"].SetValue(rockTexture);
             effect.Parameters["xTexture3"].SetValue(snowTexture);
+            
             foreach (EffectPass pass in effect.CurrentTechnique.Passes) {
                 pass.Apply();
 
@@ -252,13 +256,13 @@ namespace SiegeDefense.GameComponents.Maps {
                 for (int y=0; y<mapInfoHeight; y++) {
                     heightInfo[x, y] = heightMapColors[x + y * mapInfoWidth].R;
 
-                    if (heightInfo[x, y] < minMapHeight) minMapHeight = heightInfo[x, y];
-                    if (heightInfo[x, y] > maxMapHeight) maxMapHeight = heightInfo[x, y];
+                    //if (heightInfo[x, y] < minMapHeight) minMapHeight = heightInfo[x, y];
+                    //if (heightInfo[x, y] > maxMapHeight) maxMapHeight = heightInfo[x, y];
                 }
             }
 
             // normalize height data to [0-mapDeltaHeight]
-            if (maxMapHeight == minMapHeight) maxMapHeight = minMapHeight + 1;
+            //if (maxMapHeight == minMapHeight) maxMapHeight = minMapHeight + 1;
             for (int x = 0; x < mapInfoWidth; x++) {
                 for (int y = 0; y < mapInfoHeight; y++) {
                     heightInfo[x, y] = (heightInfo[x, y] - minMapHeight) / (maxMapHeight - minMapHeight) * mapDeltaHeight;

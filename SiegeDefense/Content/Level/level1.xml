@@ -2,11 +2,6 @@
 <LevelDescription xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SpawnPoints>
     <Vector3>
-      <X>58</X>
-      <Y>0</Y>
-      <Z>29.2</Z>
-    </Vector3>
-    <Vector3>
       <X>83</X>
       <Y>0</Y>
       <Z>73.8</Z>
@@ -27,6 +22,16 @@
       <Z>122.1</Z>
     </Vector3>
   </SpawnPoints>
+  <PlayerStartPoint>
+	<X>58</X>
+	<Y>0</Y>
+	<Z>29.2</Z>
+  </PlayerStartPoint>
+  <HeadquarterPosition>
+	<X>75</X>
+	<Y>0</Y>
+	<Z>15</Z>
+  </HeadquarterPosition>
   <MapCellSize>10</MapCellSize>
   <MapDeltaHeight>200</MapDeltaHeight>
 </LevelDescription>

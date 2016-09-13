@@ -5,13 +5,15 @@ using System.ComponentModel;
 
 namespace SiegeDefense {
     public static class Utility {
-        public static object GraphicDevice { get; private set; }
 
         public static Rectangle CalculateDrawArea(double x, double y, double width, double height, GraphicsDevice graphics) {
-            return new Rectangle((int)(x * graphics.DisplayMode.Width),
-                (int)(y * graphics.DisplayMode.Height),
-                (int)(width * graphics.DisplayMode.Width),
-                (int)(height * graphics.DisplayMode.Height));
+
+            int screenWidth = graphics.PresentationParameters.BackBufferWidth;
+            int screenHeight = graphics.PresentationParameters.BackBufferHeight;
+            return new Rectangle((int)(x * screenWidth),
+                (int)(y * screenHeight),
+                (int)(width * screenWidth),
+                (int)(height * screenHeight));
         }
 
         public static Rectangle CalculateDrawArea(double x, double y, double width, double height, Rectangle root) {
