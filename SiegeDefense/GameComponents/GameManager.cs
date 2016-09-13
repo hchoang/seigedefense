@@ -50,21 +50,23 @@ namespace SiegeDefense.GameComponents
         // sound & input
         protected SoundEffectInstance bgm;
         protected SoundBankManager soundManager;
-        public InputManager inputManager { get; protected set; }
+        protected InputManager inputManager;
 
         public List<Tank> getTankList() {
             return tankList;
         }
 
         public void Add(BaseModel model) {
-            models.Add(model);
+            //models.Add(model);
+            Game.Components.Add(model);
             if (model is Tank) {
                 tankList.Add((Tank)model);
             }
         }
 
         public void Remove(BaseModel model) {
-            models.Remove(model);
+            //models.Remove(model);
+            Game.Components.Remove(model);
             if (model is Tank) {
                 tankList.Remove((Tank)model);
             }
@@ -115,10 +117,6 @@ namespace SiegeDefense.GameComponents
             bgm.IsLooped = true;
             Game.Components.Add((InputManager)Game.Services.GetService<IInputManager>());
             Game.Components.Add(this);
-        }
-
-        public GameManager(Game game) : base(game) {
-            inputManager = new InputManager();
         }
 
         public override void Update(GameTime gameTime)

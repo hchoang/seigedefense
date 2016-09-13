@@ -14,8 +14,6 @@ namespace SiegeDefense.GameComponents {
 
         public static void Initialize(Game game) {
             _game = game;
-            GameManager gameManager = new GameManager(_game);
-            _game.Services.AddService(gameManager);
         }
 
         protected GameObject(Game game) : base(game) {

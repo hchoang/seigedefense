@@ -13,7 +13,6 @@ using SiegeDefense.GameComponents.Models;
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
         GraphicsDeviceManager graphicDeviceManager;
-        GameObject inputManager;
         GameManager gameManager;
         BasicEffect basicEffect;
         Effect advancedEffect;
@@ -33,7 +32,6 @@ namespace SiegeDefense {
 
             RegisterServices();
 
-            gameManager = Services.GetService<GameManager>();
             gameManager.LoadLevel("level1");
 
             base.Initialize();
@@ -61,6 +59,10 @@ namespace SiegeDefense {
 
             // input
             Services.AddService(typeof(IInputManager), new InputManager());
+
+            // game manager
+            gameManager = new GameManager();
+            Services.AddService(gameManager);
         }
         
         protected override void Update(GameTime gameTime) {
