@@ -25,6 +25,11 @@ namespace SiegeDefense.GameComponents.Physics {
 
         protected BaseModel baseModel;
         
+        public OrientedCollisionBox(BoundingBox baseBoundingBox) {
+            this.baseBoundingBox = baseBoundingBox;
+            baseBoundingSphere = BoundingSphere.CreateFromBoundingBox(baseBoundingBox);
+        }
+
         public OrientedCollisionBox(BaseModel baseModel) {
             this.baseModel = baseModel;
             basicEffect = Game.Services.GetService<BasicEffect>();
@@ -153,6 +158,9 @@ namespace SiegeDefense.GameComponents.Physics {
 
         public override void Draw(GameTime gameTime) {
             Vector3[] boundingCorners = baseBoundingBox.GetCorners();
+            if (baseModel == null) {
+                baseModel = FindComponents<BaseModel>();
+            }
             Matrix refWorldMatrix = baseModel.WorldMatrix;
             Vector3.Transform(boundingCorners, ref refWorldMatrix, boundingCorners);
 

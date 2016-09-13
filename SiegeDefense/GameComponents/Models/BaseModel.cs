@@ -46,6 +46,8 @@ namespace SiegeDefense.GameComponents.Models
         public OrientedCollisionBox collisionBox { get; set; }
         public GamePhysics physics { get; set; }
 
+        public BaseModel() { }
+
         public BaseModel(ModelType modelType)
         {
             model = Game.Content.Load<Model>(modelType.ToDescription());

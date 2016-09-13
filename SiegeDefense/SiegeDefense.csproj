@@ -45,7 +45,7 @@
     <Compile Include="GameComponents\3DGameObject.cs" />
     <Compile Include="GameComponents\AI\TankBehaviour.cs" />
     <Compile Include="GameComponents\AI\TankAI.cs" />
-    <Compile Include="GameComponents\Billboards\Billboard.cs" />
+    <Compile Include="GameComponents\ItemDrops\ItemDrop.cs" />
     <Compile Include="GameComponents\Cameras\Camera.cs" />
     <Compile Include="GameComponents\Cameras\FollowTargetCamera.cs" />
     <Compile Include="GameComponents\Cameras\TargetPointOfViewCamera.cs" />
@@ -67,6 +67,7 @@
     <Compile Include="GameComponents\PathFinding\PriorityQueue.cs" />
     <Compile Include="GameComponents\Physics\OrientedCollisionBox.cs" />
     <Compile Include="GameComponents\Physics\GamePhysics.cs" />
+    <Compile Include="GameComponents\ItemDrops\HPUp.cs" />
     <Compile Include="GameComponents\SoundBank\SoundBankManager.cs" />
     <Compile Include="GameScreens\2DSprite.cs" />
     <Compile Include="GameScreens\GameDetailSprite.cs" />

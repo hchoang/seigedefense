@@ -15,7 +15,7 @@ using Microsoft.Xna.Framework.Audio;
 using SiegeDefense.GameComponents.SoundBank;
 using SiegeDefense.GameComponents.Models;
 using SiegeDefense.GameComponents.Sky;
-using SiegeDefense.GameComponents.Billboards;
+using SiegeDefense.GameComponents.ItemDrops;
 
 namespace SiegeDefense.GameComponents
 {
@@ -30,8 +30,8 @@ namespace SiegeDefense.GameComponents
         // Game mechanics
         protected int maxEnemy = 12;
         protected int spawnMaxAttempt = 50;
-        protected float spawnCDTime = 200;
-        protected float spawnCDCounter = 200;
+        protected float spawnCDTime = 10;
+        protected float spawnCDCounter = 10;
         public int Point { get; set; }
 
         // Game world

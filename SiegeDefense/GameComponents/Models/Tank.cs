@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents.Billboards;
+using SiegeDefense.GameComponents.ItemDrops;
 using SiegeDefense.GameComponents.Cameras;
 using SiegeDefense.GameComponents.Maps;
 using SiegeDefense.GameComponents.Physics;
@@ -17,7 +17,7 @@ namespace SiegeDefense.GameComponents.Models
         protected int canonHeadBoneIndex;
         protected int[] wheelBoneIndex;
         public float turretMaxRotaion { get { return 0.2f; } private set { } }
-        public int HP { get; protected set; }
+        public int HP { get; set; }
         public float MoveSpeed { get; set; } = 50.0f;
         public float RotateSpeed { get; set; } = 2.0f;
         public float TurretRotateSpeed { get; set; } = 0.05f;
@@ -157,7 +157,7 @@ namespace SiegeDefense.GameComponents.Models
 
             // Drop power-up
             if (Tag.Equals("Enemy")) {
-                Billboard powerUp = new Billboard(Game.Content.Load<Texture2D>(@"Sprites\HPRestore"));
+                ItemDrop powerUp = new HPUp();
                 powerUp.Position = Position;
                 powerUp.ScaleMatrix = Matrix.CreateScale(10);
 
