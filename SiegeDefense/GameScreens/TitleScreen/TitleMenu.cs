@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameScreens;
 
-namespace SiegeDefense.GameComponents.TitleScreen {
+namespace SiegeDefense {
     public class TitleMenu : GameObject {
 
         private TitleScreenBackground background = null;
@@ -14,7 +13,7 @@ namespace SiegeDefense.GameComponents.TitleScreen {
             Vector2 frameSize = new Vector2(0.3f, 0.5f);
             Rectangle frameDrawArea = Utility.CalculateDrawArea(framePosition, frameSize, Game.GraphicsDevice);
             Color frameColor = Color.White;
-            AddChild(new Static2DSprite(frameTexture, frameDrawArea, frameColor));
+            //AddComponent(new Static2DSprite(frameTexture, frameDrawArea, frameColor));
 
             // Load buttons
             string[] buttonTexts = { "New Game", "Option", "Credit", "Exit" };
@@ -23,7 +22,7 @@ namespace SiegeDefense.GameComponents.TitleScreen {
 
             for (int i = 0; i < buttonTexts.Length; i++) {
                 double buttonY = i * 1.0 / (buttonTexts.Length + 1) + 0.1;
-                AddChild(new TitleMenuButton(buttonTexts[i], buttonX, buttonY, buttonWidth, buttonHeight, frameDrawArea));
+                //AddComponent(new TitleMenuButton(buttonTexts[i], buttonX, buttonY, buttonWidth, buttonHeight, frameDrawArea));
             }
         }
 

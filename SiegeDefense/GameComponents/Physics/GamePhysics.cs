@@ -1,13 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using SiegeDefense.GameComponents.Maps;
-using SiegeDefense.GameComponents.Models;
-using System;
 
-namespace SiegeDefense.GameComponents.Physics {
-    public class GamePhysics : GameObject {
+namespace SiegeDefense {
+    public class GamePhysics : GameObjectComponent {
         public static Vector3 gravityForce { get; private set; } = new Vector3(0, -9.8f, 0);
 
-        protected BaseModel baseModel { get; set; }
         public float Mass = 1;
         public Vector3 Acceleration { get; set; } = Vector3.Zero;
         public Vector3 Velocity { get; set; } = Vector3.Zero;
@@ -22,11 +18,7 @@ namespace SiegeDefense.GameComponents.Physics {
                 return _map;
             }
         }
-
-        public GamePhysics(BaseModel baseModel) {
-            this.baseModel = baseModel;
-        }
-
+        
         public void AddForce(Vector3 Force) {
             Acceleration += Force / Mass;
         }
@@ -38,11 +30,11 @@ namespace SiegeDefense.GameComponents.Physics {
             if (Velocity.Length() > MaxSpeed) {
                 Velocity = Velocity * MaxSpeed / Velocity.Length();
             }
-            baseModel.Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            baseObject.transformation.Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // apply gravity
-            if (map.IsInsideMap(baseModel.Position)) {
-                float groundDistance = baseModel.Position.Y - map.GetHeight(baseModel.Position);
+            if (map.IsInsideMap(baseObject.transformation.Position)) {
+                float groundDistance = baseObject.transformation.Position.Y - map.GetHeight(baseObject.transformation.Position);
                 if (groundDistance > 0) {
                     Acceleration += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 } else {

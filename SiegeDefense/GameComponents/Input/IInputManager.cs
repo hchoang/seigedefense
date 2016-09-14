@@ -1,4 +1,4 @@
-﻿namespace SiegeDefense.GameComponents.Input {
+﻿namespace SiegeDefense {
     public interface IInputManager {
         float GetValue(GameInput input);
         bool isPressing(GameInput input);

@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using SiegeDefense.GameComponents;
-using System;
-using System.Collections.Generic;
 
-namespace SiegeDefense.GameComponents.Input {
+namespace SiegeDefense {
     public class InputManager : GameObject, IInputManager {
         private KeyboardState currentKeyboardState;
         private KeyboardState previousKeyboardState;

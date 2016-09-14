@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense {
-    public interface INode {
-        Dictionary<INode, double> adjacentNodes { get; set; }
+    public abstract class GameObjectComponent : GameObject {
+        public GameObject baseObject { get; set; }
     }
 }

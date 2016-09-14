@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SiegeDefense.GameComponents.Maps {
+namespace SiegeDefense {
     public struct VertexMultiTextured : IVertexType {
 
         public Vector3 Position;

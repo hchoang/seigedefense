@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiegeDefense.GameComponents.Maps {
+namespace SiegeDefense {
     public partial class HeightMap : Map{
 
         public override bool IsAccessibleByFoot(Vector3 position) {

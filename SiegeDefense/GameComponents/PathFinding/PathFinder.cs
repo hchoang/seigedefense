@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiegeDefense.GameComponents.PathFinding {
+namespace SiegeDefense {
     public class PathFinder {
         public static List<INode> AStar(INode start, INode end, IHeuristic heuristic) {
             Dictionary<INode, INode> comeFrom = new Dictionary<INode, INode>();

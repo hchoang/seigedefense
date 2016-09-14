@@ -1,12 +1,9 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-namespace SiegeDefense.GameComponents.TitleScreen {
+﻿namespace SiegeDefense {
     public class TitleScreenRoot : GameObject {
 
         public TitleScreenRoot() {
-            AddChild(new TitleScreenBackground());
-            AddChild(new TitleMenu());
+            //AddComponent(new TitleScreenBackground());
+            //AddComponent(new TitleMenu());
         }
     }
 }

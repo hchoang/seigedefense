@@ -1,14 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SiegeDefense.GameComponents;
-using SiegeDefense.GameComponents.Input;
-using System.Collections.Generic;
-using SiegeDefense.GameComponents.Cameras;
-using SiegeDefense.GameScreens;
-using SiegeDefense.GameComponents.TitleScreen;
-using SiegeDefense.GameComponents.SoundBank;
-using SiegeDefense.GameComponents.Models;
 
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {

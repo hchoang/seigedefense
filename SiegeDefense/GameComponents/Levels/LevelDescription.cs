@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace SiegeDefense.GameComponents.Maps {
+namespace SiegeDefense {
     public class LevelDescription {
         public List<Vector3> SpawnPoints { get; set; } = new List<Vector3>();
         public float MapCellSize { get; set; }

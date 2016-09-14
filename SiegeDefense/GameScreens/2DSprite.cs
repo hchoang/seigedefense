@@ -1,9 +1,7 @@
-﻿using SiegeDefense.GameComponents;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SiegeDefense.GameScreens
-{
+namespace SiegeDefense {
     public class _2DSprite : GameObject
     {
         public override void Draw(GameTime gameTime)

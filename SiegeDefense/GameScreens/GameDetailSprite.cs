@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents;
 using System;
 
-namespace SiegeDefense.GameScreens
-{
+namespace SiegeDefense {
     public class GameDetailSprite : _2DSprite
     {
         private SpriteBatch spriteBatch;

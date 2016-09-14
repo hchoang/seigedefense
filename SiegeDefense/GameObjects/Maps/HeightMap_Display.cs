@@ -1,11 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents.Cameras;
-using SiegeDefense.GameComponents.Sky;
 using System;
-using System.Collections.Generic;
 
-namespace SiegeDefense.GameComponents.Maps {
+namespace SiegeDefense {
     public partial class HeightMap {
         private Texture2D sandTexture;
         private Texture2D grassTexture;
@@ -41,24 +38,6 @@ namespace SiegeDefense.GameComponents.Maps {
         private int[] vertexIndices;
 
         // Water
-        private Camera _camera;
-        private Camera camera {
-            get {
-                if (_camera == null) {
-                    _camera = FindObjects<Camera>()[0];
-                }
-                return _camera;
-            }
-        }
-        private Skybox _sky;
-        private Skybox sky {
-            get {
-                if (_sky == null) {
-                    _sky = FindObjects<Skybox>()[0];
-                }
-                return _sky;
-            }
-        }
         private float waterHeight = 0.2f;
         private Effect reflectionTechnique;
         private Effect refractionTechnique;
@@ -127,7 +106,7 @@ namespace SiegeDefense.GameComponents.Maps {
             DrawRefractionMap(gameTime);
             DrawReflectionMap(gameTime);
 
-            DrawMap(multiTexturedEffect, camera.ViewMatrix);
+            DrawMap(multiTexturedEffect, mainCamera.ViewMatrix);
 
             DrawWater(gameTime);
         }
@@ -142,16 +121,16 @@ namespace SiegeDefense.GameComponents.Maps {
             Vector3 staticCameraTarget = new Vector3(10, 0, 10);
             Vector3 staticCameraUp = Vector3.Up;
 
-            waterTechnique.Parameters["World"].SetValue(WorldMatrix);
-            waterTechnique.Parameters["View"].SetValue(camera.ViewMatrix);
-            waterTechnique.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            waterTechnique.Parameters["World"].SetValue(transformation.WorldMatrix);
+            waterTechnique.Parameters["View"].SetValue(mainCamera.ViewMatrix);
+            waterTechnique.Parameters["Projection"].SetValue(mainCamera.ProjectionMatrix);
             waterTechnique.Parameters["ReflectionView"].SetValue(reflectionViewMatrix);
             waterTechnique.Parameters["ReflectionMap"].SetValue(reflectionRenderTarget);
             waterTechnique.Parameters["WaterBumpMap"].SetValue(waterBumpMap);
             waterTechnique.Parameters["WaveLength"].SetValue(0.3f);
             waterTechnique.Parameters["WaveHeight"].SetValue(0.01f);
             waterTechnique.Parameters["RefractionMap"].SetValue(refractionRenderTarget);
-            waterTechnique.Parameters["CameraPosition"].SetValue(camera.Position);
+            waterTechnique.Parameters["CameraPosition"].SetValue(mainCamera.Position);
             waterTechnique.Parameters["Time"].SetValue((float)gameTime.TotalGameTime.TotalSeconds);
             waterTechnique.Parameters["WindForce"].SetValue(0.02f);
             waterTechnique.Parameters["WindDirection"].SetValue(windDirection);
@@ -172,11 +151,11 @@ namespace SiegeDefense.GameComponents.Maps {
             Vector3 staticCameraTarget = new Vector3(10, 0, 10);
             Vector3 staticCameraUp = Vector3.Up;
 
-            Vector3 reflCameraPosition = camera.Position;
-            reflCameraPosition.Y = -camera.Position.Y + waterHeight * 2;
-            Vector3 reflTargetPos = camera.Target;
-            reflTargetPos.Y = -camera.Target.Y + waterHeight * 2;
-            Vector3 cameraRight = -camera.Left;
+            Vector3 reflCameraPosition = mainCamera.Position;
+            reflCameraPosition.Y = -mainCamera.Position.Y + waterHeight * 2;
+            Vector3 reflTargetPos = mainCamera.Target;
+            reflTargetPos.Y = -mainCamera.Target.Y + waterHeight * 2;
+            Vector3 cameraRight = -mainCamera.Left;
             Vector3 invUpVector = Vector3.Cross(cameraRight, reflTargetPos - reflCameraPosition);
             //Vector3 invUpVector = Vector3.Up;
             
@@ -203,16 +182,16 @@ namespace SiegeDefense.GameComponents.Maps {
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
             refractionTechnique.Parameters["ClipPlane"].SetValue(new Vector4(Vector3.Down, waterHeight));
-            DrawMap(refractionTechnique, camera.ViewMatrix);
+            DrawMap(refractionTechnique, mainCamera.ViewMatrix);
 
             GraphicsDevice.SetRenderTarget(null);
             GraphicsDevice.PresentationParameters.RenderTargetUsage = oldUseage;
         }
 
         private void DrawMap(Effect effect, Matrix viewMatrix) {
-            effect.Parameters["World"].SetValue(WorldMatrix);
+            effect.Parameters["World"].SetValue(transformation.WorldMatrix);
             effect.Parameters["View"].SetValue(viewMatrix);
-            effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
+            effect.Parameters["Projection"].SetValue(mainCamera.ProjectionMatrix);
             effect.Parameters["xTexture0"].SetValue(sandTexture);
             effect.Parameters["xTexture1"].SetValue(grassTexture);
             effect.Parameters["xTexture2"].SetValue(rockTexture);

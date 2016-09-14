@@ -1,13 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using SiegeDefense.GameComponents.PathFinding;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SiegeDefense.GameComponents.Maps {
-    public class MapNode : _3DGameObject, INode {
+namespace SiegeDefense {
+    public class MapNode : Transformation, INode {
         private Dictionary<INode, double> _adjacentNodes = new Dictionary<INode, double>();
         public Dictionary<INode, double> adjacentNodes {
             get {

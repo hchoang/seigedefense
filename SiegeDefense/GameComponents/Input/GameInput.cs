@@ -1,4 +1,4 @@
-﻿namespace SiegeDefense.GameComponents.Input {
+﻿namespace SiegeDefense {
     public enum GameInput { 
         Up,
         Down,

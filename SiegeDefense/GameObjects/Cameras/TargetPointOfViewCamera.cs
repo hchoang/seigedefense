@@ -1,17 +1,18 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiegeDefense.GameComponents.Cameras {
+namespace SiegeDefense {
     public class TargetPointOfViewCamera : Camera {
-        private _3DGameObject targetToFollow;
+        private Transformation targetTransform;
         private Vector3 positionOffset;
 
-        public TargetPointOfViewCamera(_3DGameObject targetToFollow, Vector3 positionOffset) {
-            this.targetToFollow = targetToFollow;
+        public TargetPointOfViewCamera(GameObject target, Vector3 positionOffset) {
+            this.targetTransform = target.transformation;
             this.positionOffset = positionOffset;
 
             float aspectRatio = GraphicsDevice.DisplayMode.AspectRatio;
@@ -20,9 +21,9 @@ namespace SiegeDefense.GameComponents.Cameras {
         }
 
         private void UpdateViewMatrix() {
-            Vector3 offset = Vector3.Transform(positionOffset, targetToFollow.RotationMatrix);
-            Position = targetToFollow.Position + offset;
-            Target = targetToFollow.Position + targetToFollow.Forward * 100;
+            Vector3 offset = Vector3.Transform(positionOffset, targetTransform.RotationMatrix);
+            Position = targetTransform.Position + offset;
+            Target = targetTransform.Position + targetTransform.Forward * 100;
 
             ViewMatrix = Matrix.CreateLookAt(Position, Target, Up);
         }

@@ -1,11 +1,9 @@
 ﻿
 using Microsoft.Xna.Framework;
-using SiegeDefense.GameComponents.Maps;
-using SiegeDefense.GameComponents.Models;
 using System;
 using System.Collections.Generic;
 
-namespace SiegeDefense.GameComponents.AI {
+namespace SiegeDefense {
     public static class TankBehaviour {
 
         //private static Random RNG = new Random();
@@ -50,7 +48,7 @@ namespace SiegeDefense.GameComponents.AI {
             while (rotateAngle < MathHelper.TwoPi) {
 
                 rotateMatrix = Matrix.CreateRotationY(rotateAngle);
-                Vector3 scanPoint = tank.Position + Vector3.Transform(originalScanVector, rotateMatrix);
+                Vector3 scanPoint = tank.transformation.Position + Vector3.Transform(originalScanVector, rotateMatrix);
 
                 if (tank.Moveable(scanPoint)) {
                     availableAngles.Add(rotateAngle);
@@ -61,7 +59,7 @@ namespace SiegeDefense.GameComponents.AI {
             }
 
             if (availableAngles.Count == 0) {
-                return tank.WorldMatrix.Backward;
+                return tank.transformation.WorldMatrix.Backward;
             }
 
             availableAngles.Sort(new AngleComparer());

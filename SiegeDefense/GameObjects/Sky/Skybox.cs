@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents.Cameras;
 using System;
 
-namespace SiegeDefense.GameComponents.Sky {
+namespace SiegeDefense {
     public class Skybox : _3DGameObject {
         private TextureCube morningSkytexture;
         private TextureCube afternoonSkyTexture;
@@ -38,11 +37,12 @@ namespace SiegeDefense.GameComponents.Sky {
 
             skyModel.Meshes[0].MeshParts[0].Effect = daynightEffect.Clone();
 
-            WorldMatrix *= Matrix.CreateScale(500);
+            transformation = new Transformation();
+            transformation.WorldMatrix *= Matrix.CreateScale(500);
         }
 
         public override void Update(GameTime gameTime) {
-            Position = camera.Position;
+            transformation.Position = camera.Position;
         }
 
         public void DrawReflection(GameTime gameTime, Matrix reflectionViewMatrix, Vector3 reflCamPos) {
@@ -66,7 +66,7 @@ namespace SiegeDefense.GameComponents.Sky {
 
             foreach (ModelMesh mesh in skyModel.Meshes) {
                 foreach (Effect effect in mesh.Effects) {
-                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * WorldMatrix;
+                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * transformation.WorldMatrix;
 
                     effect.Parameters["World"].SetValue(worldMatrix);
                     effect.Parameters["View"].SetValue(reflectionViewMatrix);
@@ -127,7 +127,7 @@ namespace SiegeDefense.GameComponents.Sky {
 
             foreach(ModelMesh mesh in skyModel.Meshes) {
                 foreach(Effect effect in mesh.Effects) {
-                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * WorldMatrix;
+                    Matrix worldMatrix = modelTransforms[mesh.ParentBone.Index] * transformation.WorldMatrix;
                     effect.Parameters["World"].SetValue(worldMatrix);
                     effect.Parameters["View"].SetValue(camera.ViewMatrix);
                     effect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);

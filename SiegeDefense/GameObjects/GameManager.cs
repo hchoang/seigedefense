@@ -1,24 +1,11 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SiegeDefense.GameScreens;
-using SiegeDefense.GameComponents.Cameras;
-using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents.Input;
-using SiegeDefense.GameComponents.AI;
-using SiegeDefense.GameComponents.Maps;
-using Microsoft.Xna.Framework.Audio;
-using SiegeDefense.GameComponents.SoundBank;
-using SiegeDefense.GameComponents.Models;
-using SiegeDefense.GameComponents.Sky;
-using SiegeDefense.GameComponents.ItemDrops;
 
-namespace SiegeDefense.GameComponents
-{
+namespace SiegeDefense {
     public partial class GameManager : GameObject
     {
         // Game details
@@ -63,9 +50,9 @@ namespace SiegeDefense.GameComponents
 
             // Add player & camera
             userControlledTank = new Tank(ModelType.TANK1);
-            userControlledTank.Position = map.PlayerStartPosition;
+            userControlledTank.transformation.Position = map.PlayerStartPosition;
             userControlledTank.Tag = "Player";
-            userControlledTank.AddChild(new TankController());
+            userControlledTank.AddComponent(new TankController());
             Game.Components.Add(userControlledTank);
             mainCamera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, 100));
             Game.Components.Add(mainCamera);

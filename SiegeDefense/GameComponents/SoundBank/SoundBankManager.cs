@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SiegeDefense.GameComponents.SoundBank
+namespace SiegeDefense
 {
     public enum SoundType {
         TankFire,

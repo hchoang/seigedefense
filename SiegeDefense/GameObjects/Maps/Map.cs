@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace SiegeDefense.GameComponents.Maps {
+namespace SiegeDefense {
     public abstract class Map : _3DGameObject {
         public List<Vector3> SpawnPoints { get; set; } = new List<Vector3>();
         public Vector3 PlayerStartPosition { get; set; }

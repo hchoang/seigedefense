@@ -1,13 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
-using SiegeDefense.GameComponents.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiegeDefense.GameComponents {
-    public abstract class _3DGameObject : GameObject {
+namespace SiegeDefense {
+    public class Transformation {
         public virtual Matrix TranslationMatrix { get; set; } = Matrix.Identity;
         public virtual Matrix RotationMatrix { get; set; } = Matrix.Identity;
         public virtual Matrix ScaleMatrix { get; set; } = Matrix.Identity;

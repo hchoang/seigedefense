@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SiegeDefense.GameComponents.TitleScreen {
+namespace SiegeDefense {
     public class TitleScreenBackground : GameObject {
 
         private GraphicsDeviceManager graphics;

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using SiegeDefense.GameComponents.Maps;
+﻿using Microsoft.Xna.Framework;
 
-namespace SiegeDefense.GameComponents.Cameras {
+namespace SiegeDefense {
     public class FollowTargetCamera : Camera {
-        private _3DGameObject targetToFollow;
+        private Transformation targetTransformation;
         private float targetDistance;
         private Vector3 cameraToTargetDirection;
         private Map _map;
@@ -21,10 +15,10 @@ namespace SiegeDefense.GameComponents.Cameras {
             }
         }
 
-        public FollowTargetCamera(_3DGameObject target, float distance) {
-            targetToFollow = target;
+        public FollowTargetCamera(GameObject target, float distance) {
+            targetTransformation = target.transformation;
             targetDistance = distance;
-            cameraToTargetDirection = targetToFollow.Forward;
+            cameraToTargetDirection = targetTransformation.Forward;
 
             
             float aspectRatio = GraphicsDevice.DisplayMode.AspectRatio;
@@ -34,9 +28,9 @@ namespace SiegeDefense.GameComponents.Cameras {
         }
 
         private void UpdateCameraViewMatrix() {
-            Target = targetToFollow.Position;
-            cameraToTargetDirection = targetToFollow.Forward;
-            Vector3 newPosition = targetToFollow.Position + cameraToTargetDirection * targetDistance;
+            Target = targetTransformation.Position;
+            cameraToTargetDirection = targetTransformation.Forward;
+            Vector3 newPosition = targetTransformation.Position + cameraToTargetDirection * targetDistance;
 
             if (map.IsInsideMap(newPosition)) {
                 float height = map.GetHeight(newPosition) + 20;

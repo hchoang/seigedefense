@@ -1,15 +1,25 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace SiegeDefense.GameComponents.Models
-{
-    public class Bullet : BaseModel
+namespace SiegeDefense {
+    public class TankAmmo : _3DGameObject
     {
         public int damage { get; private set; }
-        public BaseModel owner { get; set; }
-        public Bullet(ModelType modelType, BaseModel owner): base(modelType)
+        public _3DGameObject owner { get; set; }
+        public TankAmmo(ModelType modelType, _3DGameObject owner)
         {
             this.damage = 20;
             this.owner = owner;
+
+            Model bulletModel = Game.Content.Load<Model>(modelType.ToDescription());
+            renderer = new ModelRenderer(bulletModel);
+            AddComponent(renderer);
+
+            collider = new Collider(bulletModel);
+            AddComponent(collider);
+
+            physics = new GamePhysics();
+            AddComponent(physics);
         }
 
         public override void Update(GameTime gameTime) {
@@ -18,7 +28,7 @@ namespace SiegeDefense.GameComponents.Models
             foreach (Tank tank in FindObjects<Tank>()) {
                 if (owner == tank) continue;
 
-                if (collisionBox.Intersect(tank.collisionBox)) {
+                if (collider.Intersect(tank.collider)) {
                     //Console.Out.WriteLine("Intersect");
                     collidedTank = tank;
                     break;
@@ -31,13 +41,13 @@ namespace SiegeDefense.GameComponents.Models
             }
 
             // remove bullet if outside map or hit the ground
-            if (!map.IsInsideMap(Position)) {
+            if (!map.IsInsideMap(transformation.Position)) {
                 Game.Components.Remove(this);
                 return;
             }
 
-            float bulletHeight = Position.Y;
-            float mapHeight = map.GetHeight(Position);
+            float bulletHeight = transformation.Position.Y;
+            float mapHeight = map.GetHeight(transformation.Position);
             if (bulletHeight < mapHeight) {
                 Game.Components.Remove(this);
             }

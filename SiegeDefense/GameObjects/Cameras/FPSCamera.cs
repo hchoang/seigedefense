@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents.Input;
-using SiegeDefense.GameComponents.Maps;
-using System;
 
-namespace SiegeDefense.GameComponents.Cameras {
+namespace SiegeDefense {
     public class FPSCamera : Camera {
         private GraphicsDevice graphicsDevice;
         private float aspectRatio = 0.75f;

@@ -1,24 +1,13 @@
 ﻿
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using SiegeDefense.GameComponents.Maps;
-using SiegeDefense.GameComponents.Models;
-using SiegeDefense.GameComponents.SoundBank;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 
-namespace SiegeDefense.GameComponents.Input {
-    public class TankController : GameObject {
+namespace SiegeDefense {
+    public class TankController : GameObjectComponent {
         private IInputManager inputManager;
 
-        private Tank _controlledTank;
         private Tank controlledTank {
             get {
-                if (_controlledTank == null) {
-                    _controlledTank = FindComponents<Tank>();
-                }
-                return _controlledTank;
+                return (Tank)baseObject;
             }
         }
 
@@ -36,9 +25,9 @@ namespace SiegeDefense.GameComponents.Input {
             Vector3 moveDirection = Vector3.Zero;
             int rotationDirection = 1;
             if (inputManager.GetValue(GameInput.Up) != 0)
-                moveDirection += controlledTank.Forward;
+                moveDirection += controlledTank.transformation.Forward;
             else if (inputManager.GetValue(GameInput.Down) != 0) {
-                moveDirection -= controlledTank.Forward;
+                moveDirection -= controlledTank.transformation.Forward;
                 rotationDirection = -1;
             }
 
@@ -69,7 +58,7 @@ namespace SiegeDefense.GameComponents.Input {
             
             if (travelDistance > 0)
             {
-                controlledTank.RotateWheels(-rotationDirection);
+                controlledTank.renderer.RotateWheels(-rotationDirection);
             }
 
             // rotate turret & cannon
@@ -77,11 +66,11 @@ namespace SiegeDefense.GameComponents.Input {
             float canonRotationAngle = inputManager.GetValue(GameInput.Vertical) * (float)gameTime.ElapsedGameTime.TotalSeconds * controlledTank.CanonRotateSpeed;
 
             if (turretRotationAngle != 0) {
-                controlledTank.RotateTurret(turretRotationAngle);
+                controlledTank.renderer.RotateTurret(turretRotationAngle);
             }
 
             if (canonRotationAngle != 0) {
-                controlledTank.RotateCanon(canonRotationAngle);
+                controlledTank.renderer.RotateCanon(canonRotationAngle);
             }
         }
     }

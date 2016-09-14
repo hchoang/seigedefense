@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiegeDefense.GameComponents.PathFinding {
+namespace SiegeDefense {
     public class PriorityQueue<T> {
         private List<T> items = new List<T>();
         private List<double> priorities = new List<double>();

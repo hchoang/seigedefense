@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SiegeDefense.GameComponents.PathFinding {
+namespace SiegeDefense {
     public interface IHeuristic {
         double GetHeuristic(INode a, INode b);
     }

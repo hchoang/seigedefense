@@ -1,11 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SiegeDefense.GameComponents.Cameras;
-using SiegeDefense.GameComponents.Models;
 using System.Collections.Generic;
 
-namespace SiegeDefense.GameComponents.Physics {
-    public class OrientedCollisionBox : _3DGameObject {
+namespace SiegeDefense {
+    public class Collider : GameObjectComponent {
         protected static Dictionary<int, BoundingBox> boundingBoxCaching = new Dictionary<int, BoundingBox>();
         protected static Dictionary<int, BoundingSphere> boundingSphereCaching = new Dictionary<int, BoundingSphere>();
 
@@ -22,19 +20,17 @@ namespace SiegeDefense.GameComponents.Physics {
                 return _camera;
             }
         }
-
-        protected BaseModel baseModel;
         
-        public OrientedCollisionBox(BoundingBox baseBoundingBox) {
+        public Collider(BoundingBox baseBoundingBox) {
+            basicEffect = Game.Services.GetService<BasicEffect>();
+
             this.baseBoundingBox = baseBoundingBox;
             baseBoundingSphere = BoundingSphere.CreateFromBoundingBox(baseBoundingBox);
         }
-
-        public OrientedCollisionBox(BaseModel baseModel) {
-            this.baseModel = baseModel;
+        
+        public Collider(Model model) {
             basicEffect = Game.Services.GetService<BasicEffect>();
 
-            Model model = baseModel.model;
             if (!boundingBoxCaching.ContainsKey(model.GetHashCode())) {
                 baseBoundingBox = new BoundingBox();
                 baseBoundingSphere = new BoundingSphere();
@@ -63,16 +59,6 @@ namespace SiegeDefense.GameComponents.Physics {
                             min = Vector3.Min(min, pos);
                             max = Vector3.Max(max, pos);
                         }
-
-                        /*VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[part.VertexBuffer.VertexCount];
-                        part.VertexBuffer.GetData(vertices);
-                        Vector3 min = vertices[0].Position;
-                        Vector3 max = vertices[0].Position;
-
-                        for (int i = 1; i < vertices.Length; i++) {
-                            min = Vector3.Min(min, vertices[i].Position);
-                            max = Vector3.Max(max, vertices[i].Position);
-                        }*/
 
                         min = Vector3.Transform(min, transform[mesh.ParentBone.Index]);
                         max = Vector3.Transform(max, transform[mesh.ParentBone.Index]);
@@ -110,24 +96,24 @@ namespace SiegeDefense.GameComponents.Physics {
             return lowerBound <= val && val <= upperBound;
         }
 
-        public bool SphereIntersect(OrientedCollisionBox other) {
+        public bool SphereIntersect(Collider other) {
             BoundingSphere bounding1 = baseBoundingSphere;
-            bounding1.Center = baseModel.Position;
+            bounding1.Center = baseObject.transformation.Position;
 
             BoundingSphere bounding2 = other.baseBoundingSphere;
-            bounding2.Center = other.baseModel.Position;
+            bounding2.Center = other.baseObject.transformation.Position;
 
             return bounding1.Intersects(bounding2);
         }
 
-        public bool Intersect(OrientedCollisionBox other) {
+        public bool Intersect(Collider other) {
             
             Vector3[] boundingCorners1 = baseBoundingBox.GetCorners();
-            Matrix refWorldMatrix1 = baseModel.WorldMatrix;
+            Matrix refWorldMatrix1 = baseObject.transformation.WorldMatrix;
             Vector3.Transform(boundingCorners1, ref refWorldMatrix1, boundingCorners1);
 
             Vector3[] boundingCorners2 = other.baseBoundingBox.GetCorners();
-            Matrix refWorldMatrix2 = other.baseModel.WorldMatrix;
+            Matrix refWorldMatrix2 = other.baseObject.transformation.WorldMatrix;
             Vector3.Transform(boundingCorners2, ref refWorldMatrix2, boundingCorners2);
 
             Vector3[] normal1 = { boundingCorners1[0] - boundingCorners1[1], boundingCorners1[1] - boundingCorners1[2], boundingCorners1[0] - boundingCorners1[4] };
@@ -158,10 +144,8 @@ namespace SiegeDefense.GameComponents.Physics {
 
         public override void Draw(GameTime gameTime) {
             Vector3[] boundingCorners = baseBoundingBox.GetCorners();
-            if (baseModel == null) {
-                baseModel = FindComponents<BaseModel>();
-            }
-            Matrix refWorldMatrix = baseModel.WorldMatrix;
+            
+            Matrix refWorldMatrix = baseObject.transformation.WorldMatrix;
             Vector3.Transform(boundingCorners, ref refWorldMatrix, boundingCorners);
 
             VertexPositionColor[] vertices = new VertexPositionColor[8];

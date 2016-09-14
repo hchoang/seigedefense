@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SiegeDefense.GameComponents.TitleScreen {
+namespace SiegeDefense {
     public class TitleMenuButton : GameObject {
         private SpriteBatch spriteBatch;
         
