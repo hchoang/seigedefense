@@ -24,7 +24,7 @@ namespace SiegeDefense {
             nodes = new MapNode[mapInfoWidth * mapInfoHeight];
             for (int i = 0; i < mapInfoWidth; i++) {
                 for (int j = 0; j < mapInfoHeight; j++) {
-                    Vector3 position = vertices[i + j * mapInfoWidth].Position;
+                    Vector3 position = renderer.vertices[i + j * mapInfoWidth].Position;
                     nodes[i + j * mapInfoWidth] = new MapNode();
                     nodes[i + j * mapInfoWidth].Position = position;
                     if (!IsAccessibleByFoot(position)) {
@@ -62,7 +62,7 @@ namespace SiegeDefense {
         }
 
         public MapNode getNode(Vector3 position) {
-            Vector3 firstVertexPosition = vertices[0].Position;
+            Vector3 firstVertexPosition = renderer.vertices[0].Position;
             Vector3 relativePosition = position - firstVertexPosition;
 
             int X = (int)(relativePosition.X / mapCellSize);

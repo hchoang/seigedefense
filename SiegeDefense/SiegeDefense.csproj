@@ -42,8 +42,9 @@
     <StartupObject>SiegeDefense.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GameComponents\Renderers\HeightMapRenderer.cs" />
+    <Compile Include="GameComponents\Renderers\MapRenderer.cs" />
     <Compile Include="GameComponents\Renderers\TankRenderer.cs" />
+    <Compile Include="GameComponents\Renderers\WaterRenderer.cs" />
     <Compile Include="GameObjects\3DGameObject.cs" />
     <Compile Include="GameComponents\AI\TankBehaviour.cs" />
     <Compile Include="GameComponents\AI\TankAI.cs" />
@@ -56,9 +57,8 @@
     <Compile Include="GameObjects\Items\Item.cs" />
     <Compile Include="GameObjects\Maps\HeightMap_PathFinding.cs" />
     <Compile Include="GameObjects\Maps\Map.cs" />
-    <Compile Include="GameObjects\Maps\HeightMap_ImplMap.cs" />
     <Compile Include="GameObjects\Tanks\AIControlledTank.cs" />
-    <Compile Include="GameObjects\Ammos\TankAmmo.cs" />
+    <Compile Include="GameObjects\Ammos\TankBullet.cs" />
     <Compile Include="GameObjects\GameManager.cs" />
     <Compile Include="GameObjects\Tanks\Tank.cs" />
     <Compile Include="GameComponents\PathFinding\IGraph.cs" />

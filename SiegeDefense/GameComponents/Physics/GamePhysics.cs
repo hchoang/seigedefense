@@ -33,14 +33,14 @@ namespace SiegeDefense {
             baseObject.transformation.Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // apply gravity
-            if (map.IsInsideMap(baseObject.transformation.Position)) {
-                float groundDistance = baseObject.transformation.Position.Y - map.GetHeight(baseObject.transformation.Position);
-                if (groundDistance > 0) {
-                    Acceleration += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                } else {
-                    Acceleration = new Vector3(Acceleration.X, 0, Acceleration.Z);
-                }
-            }
+            //if (map.IsInsideMap(baseObject.transformation.Position)) {
+            //    float groundDistance = baseObject.transformation.Position.Y - map.GetHeight(baseObject.transformation.Position);
+            //    if (groundDistance > 0) {
+            //        Acceleration += gravityForce * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //    } else {
+            //        Acceleration = new Vector3(Acceleration.X, 0, Acceleration.Z);
+            //    }
+            //}
         }
     }
 }

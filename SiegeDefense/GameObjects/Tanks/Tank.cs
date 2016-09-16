@@ -69,12 +69,13 @@ namespace SiegeDefense {
         }
 
         public virtual void Fire() {
-            TankAmmo bullet = new TankAmmo(ModelType.BULLET1, this);
+            TankBullet bullet = new TankBullet(ModelType.BULLET1, this);
             bullet.Tag = this.Tag + "Bullet";
 
             // set bullet position & facing direction
-            Matrix canonHeadAbsoluteMatrix = renderer.GetCanonHeadAbsolouteMatrix() * transformation.WorldMatrix;
-            bullet.transformation.WorldMatrix = canonHeadAbsoluteMatrix;
+            bullet.transformation.WorldMatrix = renderer.GetCanonHeadWorldMatrix();
+            bullet.transformation.ScaleMatrix = Matrix.Identity;
+            
             bullet.physics.MaxSpeed = 500;
             bullet.physics.Velocity = bullet.transformation.Forward * 1000;
 
@@ -98,7 +99,7 @@ namespace SiegeDefense {
             }
         }
 
-        public void Damaged(TankAmmo bullet)
+        public void Damaged(TankBullet bullet)
         {
             this.HP -= bullet.damage;
             if (this.HP <= 0)

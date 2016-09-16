@@ -2,11 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SiegeDefense {
-    public class TankAmmo : _3DGameObject
+    public class TankBullet : _3DGameObject
     {
         public int damage { get; private set; }
         public _3DGameObject owner { get; set; }
-        public TankAmmo(ModelType modelType, _3DGameObject owner)
+        public TankBullet(ModelType modelType, _3DGameObject owner)
         {
             this.damage = 20;
             this.owner = owner;
