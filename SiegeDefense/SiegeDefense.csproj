@@ -46,6 +46,7 @@
     <Compile Include="GameComponents\AI\EnemyTankAI.cs" />
     <Compile Include="GameComponents\Physics\BulletPhysics.cs" />
     <Compile Include="GameComponents\Physics\TankPhysics.cs" />
+    <Compile Include="GameComponents\Renderers\HPRenderer.cs" />
     <Compile Include="GameComponents\Renderers\MapRenderer.cs" />
     <Compile Include="GameComponents\Renderers\TankRenderer.cs" />
     <Compile Include="GameComponents\Renderers\WaterRenderer.cs" />

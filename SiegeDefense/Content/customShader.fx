@@ -290,7 +290,7 @@ sampler BillboardSampler = sampler_state { texture = <BillboardTexture> ; magfil
 float3 RotateAxis;
 float BillboardSide;
 float BillboardHeight;
-
+float4 MaskColor = float4(1, 1, 1, 1);
 void BillboardVS(float4 inPos : POSITION0, float2 inTex : TEXCOORD0,
 				out float4 outPos : POSITION0, out float2 outTex : TEXCOORD0){
 	
@@ -314,7 +314,7 @@ void BillboardVS(float4 inPos : POSITION0, float2 inTex : TEXCOORD0,
 }
 
 float4 BillboardPS(float4 pos : POSITION0, float2 texCoord : TEXCOORD0) : COLOR0 {
-	return tex2D(BillboardSampler, texCoord);
+	return tex2D(BillboardSampler, texCoord) * MaskColor.rgba;
 }
 
 technique Billboard {

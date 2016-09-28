@@ -10,6 +10,7 @@ namespace SiegeDefense {
 
         public new TankRenderer renderer { get; set; }
         public new TankPhysics physics { get; set; }
+        public HPRenderer hpRenderer { get; set; }
 
         public Tank(ModelType modelType)
         {
@@ -24,7 +25,16 @@ namespace SiegeDefense {
             physics = new TankPhysics();
             AddComponent(physics);
 
-            HP = 100;   
+            HP = 100;
+            hpRenderer = new HPRenderer(new Vector3(0, 22.5f, 0));
+            hpRenderer.maxHP = HP;
+            AddComponent(hpRenderer);
+        }
+
+        public override void Update(GameTime gameTime) {
+            hpRenderer.currentHP = HP;
+
+            base.Update(gameTime);
         }
 
         public bool Moveable(Vector3 testPosition) {
