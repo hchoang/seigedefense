@@ -59,7 +59,7 @@ namespace SiegeDefense {
 
             // Add game detail
             pointSprite = new GameDetailSprite(Game.Content.Load<SpriteFont>(@"Fonts\Arial"), "Point: " + 0, new Vector2(50, 50), Color.Green);
-            bloodSprite = new GameDetailSprite(Game.Content.Load<SpriteFont>(@"Fonts\Arial"), "Blood: " + userControlledTank.HP, new Vector2(50, 100), Color.Green);
+            bloodSprite = new GameDetailSprite(Game.Content.Load<SpriteFont>(@"Fonts\Arial"), "HP: " + userControlledTank.HP, new Vector2(50, 100), Color.Green);
             gameoverSprite = new Static2DSprite(Game.Content.Load<Texture2D>(@"Sprites\GameOver"), Utility.CalculateDrawArea(Vector2.Zero, new Vector2(1, 1), Game.GraphicsDevice), Color.White);
             gameoverSprite.Visible = false;
             Game.Components.Add(bloodSprite);
@@ -79,11 +79,11 @@ namespace SiegeDefense {
         public override void Update(GameTime gameTime)
         {
             bgm.Play();
-            if (userControlledTank.HP == 0) {
+            if (userControlledTank.HP <= 0) {
                 gameoverSprite.Visible = true;
                 return;
             }
-            bloodSprite.setText("Blood: " + userControlledTank.HP);
+            bloodSprite.setText("HP: " + userControlledTank.HP);
             pointSprite.setText("Point: " + Point);
             
             // spawn enemy

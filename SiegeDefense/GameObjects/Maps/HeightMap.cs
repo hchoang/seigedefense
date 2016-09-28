@@ -36,6 +36,8 @@ namespace SiegeDefense {
             Vector3 HQPos = description.HeadquarterPosition * mapCellSize;
             HQPos.Y = GetHeight(HQPos);
             this.HeadquarterPosition = HQPos;
+
+            GenerateMapNode();
         }
 
         public override bool IsAccessibleByFoot(Vector3 position) {

@@ -4,12 +4,10 @@ using System;
 using System.Collections.Generic;
 
 namespace SiegeDefense {
-    class TankAI : GameObjectComponent
+    class TankAI : AI
     {
-        private Vector3 lastEnemyPosition;
         private float tankMoveSpeed = 30f;
         private float tankRotaionSpeed = 1f;
-        private float turretRotateSpeed = 0.05f;
         private Vector3 tankTarget = Vector3.Zero;
         BasicEffect basicEffect;
         Vector3 steeringForce = Vector3.Zero;

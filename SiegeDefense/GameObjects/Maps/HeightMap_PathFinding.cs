@@ -52,10 +52,10 @@ namespace SiegeDefense {
                     if (top != null && top.Moveable) current.adjacentNodes.Add(top, (top.Position - current.Position).Length());
                     if (bottom != null && bottom.Moveable) current.adjacentNodes.Add(bottom, (bottom.Position - current.Position).Length());
 
-                    if (topLeft != null && topLeft.Moveable) current.adjacentNodes.Add(topLeft, (topLeft.Position - current.Position).Length());
-                    if (bottomLeft != null && bottomLeft.Moveable) current.adjacentNodes.Add(bottomLeft, (bottomLeft.Position - current.Position).Length());
-                    if (topRight != null && topRight.Moveable) current.adjacentNodes.Add(topRight, (topRight.Position - current.Position).Length());
-                    if (bottomRight != null && bottomRight.Moveable) current.adjacentNodes.Add(bottomRight, (bottomRight.Position - current.Position).Length());
+                    if (topLeft != null && topLeft.Moveable && top.Moveable && left.Moveable) current.adjacentNodes.Add(topLeft, (topLeft.Position - current.Position).Length());
+                    if (bottomLeft != null && bottomLeft.Moveable && bottom.Moveable && left.Moveable) current.adjacentNodes.Add(bottomLeft, (bottomLeft.Position - current.Position).Length());
+                    if (topRight != null && topRight.Moveable && top.Moveable && right.Moveable) current.adjacentNodes.Add(topRight, (topRight.Position - current.Position).Length());
+                    if (bottomRight != null && bottomRight.Moveable && bottom.Moveable && right.Moveable) current.adjacentNodes.Add(bottomRight, (bottomRight.Position - current.Position).Length());
                 }
             }
 

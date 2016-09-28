@@ -18,7 +18,7 @@ namespace SiegeDefense {
             collider = new Collider(bulletModel);
             AddComponent(collider);
 
-            physics = new GamePhysics();
+            physics = new BulletPhysics();
             AddComponent(physics);
         }
 

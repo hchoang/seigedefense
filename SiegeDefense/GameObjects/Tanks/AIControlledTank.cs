@@ -11,6 +11,7 @@ namespace SiegeDefense {
         {
             this.transformation.Position = position;
             this.AddComponent(TankAI);
+            //this.AddComponent(new EnemyTankAI());
             this.enemy = enemy;
             this.visibleRange = 600;
             this.fireRange = 400;

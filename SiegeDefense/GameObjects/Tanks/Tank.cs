@@ -5,12 +5,11 @@ namespace SiegeDefense {
     public class Tank : _3DGameObject
     {
         public int HP { get; set; }
-        public float MoveSpeed { get; set; } = 50.0f;
-        public float RotateSpeed { get; set; } = 2.0f;
         public float TurretRotateSpeed { get; set; } = 0.05f;
         public float CanonRotateSpeed { get; set; } = 0.05f;
 
         public new TankRenderer renderer { get; set; }
+        public new TankPhysics physics { get; set; }
 
         public Tank(ModelType modelType)
         {
@@ -22,12 +21,10 @@ namespace SiegeDefense {
             collider = new Collider(tankModel);
             AddComponent(collider);
 
-            HP = 100;   
-        }
+            physics = new TankPhysics();
+            AddComponent(physics);
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
+            HP = 100;   
         }
 
         public bool Moveable(Vector3 testPosition) {
@@ -55,6 +52,7 @@ namespace SiegeDefense {
             if (!Moveable(newPosition))
                 return false;
 
+
             newPosition.Y = map.GetHeight(newPosition);
             transformation.Position = newPosition;
             Vector3 mapNormal = map.GetNormal(transformation.Position);
@@ -75,10 +73,6 @@ namespace SiegeDefense {
             // set bullet position & facing direction
             bullet.transformation.WorldMatrix = renderer.GetCanonHeadWorldMatrix();
             bullet.transformation.ScaleMatrix = Matrix.Identity;
-            
-            bullet.physics.MaxSpeed = 500;
-            bullet.physics.Velocity = bullet.transformation.Forward * 1000;
-
             Game.Components.Add(bullet);
 
             // play sound

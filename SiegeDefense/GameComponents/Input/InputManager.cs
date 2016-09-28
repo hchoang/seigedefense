@@ -27,7 +27,7 @@ namespace SiegeDefense {
             Mouse.SetPosition(centerPosition.X, centerPosition.Y);
             originalMouseState = Mouse.GetState();
             
-            //Game.IsMouseVisible = true;
+            Game.IsMouseVisible = true;
         }
 
         public override void Update(GameTime gameTime) {
@@ -39,11 +39,11 @@ namespace SiegeDefense {
                 manuallySetPosition = Point.Zero;
             }
 
-            if (!GraphicsDevice.Viewport.Bounds.Contains(currentMouseState.Position)) {
-                Mouse.SetPosition(centerPosition.X, centerPosition.Y);
-                manuallySetPosition = currentMouseState.Position - centerPosition;
-                resetCursorPosition = true;
-            }
+            //if (!GraphicsDevice.Viewport.Bounds.Contains(currentMouseState.Position)) {
+            //    Mouse.SetPosition(centerPosition.X, centerPosition.Y);
+            //    manuallySetPosition = currentMouseState.Position - centerPosition;
+            //    resetCursorPosition = true;
+            //}
 
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();

@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SiegeDefense {
     public class Transformation {
@@ -30,7 +26,7 @@ namespace SiegeDefense {
         }
         public virtual Vector3 Up {
             get {
-                return WorldMatrix.Up;
+                return Vector3.Normalize(WorldMatrix.Up);
             }
             set {
                 Vector3 rotationAxis = Vector3.Cross(Up, value);
@@ -47,12 +43,12 @@ namespace SiegeDefense {
         }
         public virtual Vector3 Forward {
             get {
-                return RotationMatrix.Forward;
+                return Vector3.Normalize(WorldMatrix.Forward);
             }
         }
         public virtual Vector3 Left {
             get {
-                return RotationMatrix.Left;
+                return Vector3.Normalize(WorldMatrix.Left);
             }
         }
     }

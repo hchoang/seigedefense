@@ -16,50 +16,32 @@ namespace SiegeDefense {
         }
 
         public override void Update(GameTime gameTime) {
-            if (inputManager.isTriggered(GameInput.Fire))
-            {
+            if (inputManager.isTriggered(GameInput.Fire)) {
                 controlledTank.Fire();
             }
 
-            // move & rotate
-            Vector3 moveDirection = Vector3.Zero;
-            int rotationDirection = 1;
+            // move
+            float forwardForce = 0;
+            int rotateDirection = 1;
             if (inputManager.GetValue(GameInput.Up) != 0)
-                moveDirection += controlledTank.transformation.Forward;
+                forwardForce = 1;
             else if (inputManager.GetValue(GameInput.Down) != 0) {
-                moveDirection -= controlledTank.transformation.Forward;
-                rotationDirection = -1;
+                forwardForce = -1;
+                rotateDirection = -1;
             }
+            controlledTank.physics.ForwardForce = forwardForce;
 
-            if (moveDirection != Vector3.Zero) {
-                moveDirection = Vector3.Normalize(moveDirection) * controlledTank.MoveSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-                controlledTank.Move(moveDirection);
+            // rotate
+            float rotateForce = 0;
+            if (inputManager.GetValue(GameInput.Left) != 0) {
+                rotateForce = 0.1f;
             }
-
-            float rotationAngle = 0;
-           // if (moveDirection != Vector3.Zero) {
-                if (inputManager.GetValue(GameInput.Left) != 0) {
-                    rotationAngle += controlledTank.RotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
-                if (inputManager.GetValue(GameInput.Right) != 0) {
-                    rotationAngle -= controlledTank.RotateSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                }
-          //  }
-
-            if (rotationAngle != 0) {
-                rotationAngle *= rotationDirection;
-                controlledTank.RotateTank(rotationAngle);
+            if (inputManager.GetValue(GameInput.Right) != 0) {
+                rotateForce = -0.1f;
             }
-            // end move & rotate
-
-            //rotate wheels
-            float travelDistance = moveDirection.Length();
             
-            if (travelDistance > 0)
-            {
-                controlledTank.renderer.RotateWheels(-rotationDirection);
-            }
+            rotateForce *= rotateDirection;
+            controlledTank.physics.RotateForce = rotateForce;
 
             // rotate turret & cannon
             float turretRotationAngle = inputManager.GetValue(GameInput.Horizontal) * (float)gameTime.ElapsedGameTime.TotalSeconds * controlledTank.TurretRotateSpeed;

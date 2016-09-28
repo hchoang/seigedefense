@@ -43,9 +43,7 @@ namespace SiegeDefense {
                 RotationDirection = -1;
             }
 
-            float cosForward = dot / (origin.Length() * destination.Length());
-
-            return (float) Math.Acos(cosForward) * RotationDirection;
+            return (float) Math.Acos(dot) * RotationDirection;
         }
 
         public static string ToDescription(this Enum value) {

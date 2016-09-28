@@ -42,6 +42,10 @@
     <StartupObject>SiegeDefense.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameComponents\AI\AI.cs" />
+    <Compile Include="GameComponents\AI\EnemyTankAI.cs" />
+    <Compile Include="GameComponents\Physics\BulletPhysics.cs" />
+    <Compile Include="GameComponents\Physics\TankPhysics.cs" />
     <Compile Include="GameComponents\Renderers\MapRenderer.cs" />
     <Compile Include="GameComponents\Renderers\TankRenderer.cs" />
     <Compile Include="GameComponents\Renderers\WaterRenderer.cs" />
@@ -78,7 +82,7 @@
     <Compile Include="GameComponents\Transformation.cs" />
     <Compile Include="GameScreens\2DSprite.cs" />
     <Compile Include="GameScreens\GameDetailSprite.cs" />
-    <Compile Include="GameObjects\Maps\HeightMap_Display.cs" />
+    <Compile Include="GameObjects\Maps\HeightMap.cs" />
     <Compile Include="GameObjects\Maps\VertexMultitextured.cs" />
     <Compile Include="GameObjects\Sky\Skybox.cs" />
     <Compile Include="GameObjects\Cameras\FPSCamera.cs" />
@@ -111,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GameComponents\GamePlay\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
