@@ -45,7 +45,7 @@ namespace SiegeDefense {
         }
 
         // find other objects -- to be replaced by spartial partition if possible
-        public static List<T> FindObjects<T>() where T : GameObject {
+        public virtual List<T> FindObjects<T>() where T : GameObject {
             return _game.Components.Where(x => x is T).Cast<T>().ToList();
         }
 

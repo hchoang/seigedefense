@@ -48,7 +48,7 @@ namespace SiegeDefense {
             Vector3 oldPosition = transformation.Position;
             transformation.Position = testPosition;
 
-            foreach (Tank tank in FindObjects<Tank>()) {
+            foreach (Tank tank in FindObjectsInPartition<Tank>()) {
                 if (tank == this) continue;
                 if (collider.SphereIntersect(tank.collider)) {
                     transformation.Position = oldPosition;
@@ -86,7 +86,8 @@ namespace SiegeDefense {
             // set bullet position & facing direction
             bullet.transformation.WorldMatrix = renderer.GetCanonHeadWorldMatrix();
             bullet.transformation.ScaleMatrix = Matrix.Identity;
-            Game.Components.Add(bullet);
+            bullet.AddToGameWorld();
+            //Game.Components.Add(bullet);
 
             // play sound
             SoundBankManager soundManager = Game.Services.GetService<SoundBankManager>();
@@ -94,7 +95,8 @@ namespace SiegeDefense {
         }
 
         public void Destroy() {
-            Game.Components.Remove(this);
+            //Game.Components.Remove(this);
+            RemoveFromGameWorld();
 
             // Drop power-up
             if (Tag.Equals("Enemy")) {
@@ -102,7 +104,8 @@ namespace SiegeDefense {
                 item.transformation.Position = transformation.Position;
                 item.transformation.ScaleMatrix = Matrix.CreateScale(10);
 
-                Game.Components.Add(item);
+                //Game.Components.Add(item);
+                item.AddToGameWorld();
             }
         }
 

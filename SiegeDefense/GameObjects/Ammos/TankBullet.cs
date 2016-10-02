@@ -25,7 +25,7 @@ namespace SiegeDefense {
         public override void Update(GameTime gameTime) {
             // collision checking with other tanks
             Tank collidedTank = null;
-            foreach (Tank tank in FindObjects<Tank>()) {
+            foreach (Tank tank in FindObjectsInPartition<Tank>()) {
                 if (owner == tank) continue;
 
                 if (collider.Intersect(tank.collider)) {
@@ -37,19 +37,22 @@ namespace SiegeDefense {
 
             if (collidedTank != null) {
                 collidedTank.Damaged(this);
-                Game.Components.Remove(this);
+                //Game.Components.Remove(this);
+                RemoveFromGameWorld();
             }
 
             // remove bullet if outside map or hit the ground
             if (!map.IsInsideMap(transformation.Position)) {
-                Game.Components.Remove(this);
+                //Game.Components.Remove(this);
+                RemoveFromGameWorld();
                 return;
             }
 
             float bulletHeight = transformation.Position.Y;
             float mapHeight = map.GetHeight(transformation.Position);
             if (bulletHeight < mapHeight) {
-                Game.Components.Remove(this);
+                RemoveFromGameWorld();
+                //Game.Components.Remove(this);
             }
 
             base.Update(gameTime);

@@ -10,7 +10,7 @@ namespace SiegeDefense {
 
         private float mapCellSize = 10.0f;
         private float mapDeltaHeight = 100.0f;
-
+        private BoundingBox? _boundingBox = null;
 
         public new HeightMapRenderer renderer { get; set; }
 
@@ -133,6 +133,18 @@ namespace SiegeDefense {
             Vector3 normal = Vector3.Normalize(Vector3.Lerp(v12, v34, cellPositionY));
 
             return normal;
+        }
+
+        public override BoundingBox GetBoundingBox() {
+            if (_boundingBox == null) {
+                float xMax = (mapInfoWidth - 1) * mapCellSize;
+                float yMax = mapDeltaHeight;
+                float zMax = (mapInfoHeight - 1) * mapCellSize;
+
+                _boundingBox = new BoundingBox(Vector3.Zero, new Vector3(xMax, yMax, zMax));
+            }
+
+            return (BoundingBox)_boundingBox;
         }
     }
 }

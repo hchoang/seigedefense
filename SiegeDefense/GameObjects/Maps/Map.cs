@@ -11,6 +11,7 @@ namespace SiegeDefense {
         public abstract Vector3 GetNormal(Vector3 position);
         public abstract bool IsInsideMap(Vector3 position);
         public abstract bool IsAccessibleByFoot(Vector3 position);
+        public abstract BoundingBox GetBoundingBox();
         public Map() {
             Tag = "Map";
         }

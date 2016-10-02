@@ -25,12 +25,7 @@ namespace SiegeDefense {
         protected Map map { get; set; }
         protected Skybox sky { get; set; }
         protected Camera mainCamera { get; set; }
-
-        // display
-        public SpriteBatch SpriteBatch { get; set; }
-        public BasicEffect BasicEffect { get; set; }
-        public Effect Effect { get; set; }
-        public GraphicsDeviceManager deviceManager { get; set; }
+        public Partition rootPartition { get; set; }
 
         // sound & input
         protected SoundEffectInstance bgm;
@@ -41,6 +36,11 @@ namespace SiegeDefense {
             // Clear all components
             Game.Components.Clear();
 
+            // Load sound & input & game manager
+            soundManager = Game.Services.GetService<SoundBankManager>();
+            Game.Components.Add((InputManager)Game.Services.GetService<IInputManager>());
+            Game.Components.Add(this);
+
             // Add game world
             LevelDescription description = LevelDescription.LoadFromXML(Game.Content.RootDirectory + @"\level\" + levelname + ".xml");
             sky = new Skybox();
@@ -48,12 +48,16 @@ namespace SiegeDefense {
             Game.Components.Add(sky);
             Game.Components.Add(map);
 
+            rootPartition = new Partition(map);
+            Game.Components.Add(rootPartition);
+
             // Add player & camera
             userControlledTank = new Tank(ModelType.TANK1);
             userControlledTank.transformation.Position = map.PlayerStartPosition;
             userControlledTank.Tag = "Player";
             userControlledTank.AddComponent(new TankController());
-            Game.Components.Add(userControlledTank);
+            userControlledTank.AddToGameWorld();
+            //Game.Components.Add(userControlledTank);
             mainCamera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, 100));
             Game.Components.Add(mainCamera);
 
@@ -65,11 +69,6 @@ namespace SiegeDefense {
             Game.Components.Add(bloodSprite);
             Game.Components.Add(pointSprite);
             Game.Components.Add(gameoverSprite);
-
-            // Load sound & input & game manager
-            soundManager = Game.Services.GetService<SoundBankManager>();
-            Game.Components.Add((InputManager)Game.Services.GetService<IInputManager>());
-            Game.Components.Add(this);
 
             // play BGM
             bgm = soundManager.FindSound(SoundType.InBattleBGM).CreateInstance();
@@ -99,9 +98,11 @@ namespace SiegeDefense {
 
                         Tank enemyTank = new AIControlledTank(ModelType.TANK1, newTankLocation, new TankAI(), userControlledTank);
                         enemyTank.Tag = "Enemy";
+                        enemyTank.AddToGameWorld();
                         if (enemyTank.Moveable(newTankLocation)) {
-                            Game.Components.Add(enemyTank);
                             break;
+                        } else {
+                            enemyTank.RemoveFromGameWorld();
                         }
                     }
                 }

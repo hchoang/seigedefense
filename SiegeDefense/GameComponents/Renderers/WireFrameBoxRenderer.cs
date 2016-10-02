@@ -48,6 +48,12 @@ namespace SiegeDefense {
             indices[23] = 7;
         }
 
+        public void SetColor(Color color) {
+            for (int i=0; i<vertices.Length; i++) {
+                vertices[i].Color = color;
+            }
+        }
+
         public override void Draw(GameTime gameTime) {
 
             basicEffect.VertexColorEnabled = true;

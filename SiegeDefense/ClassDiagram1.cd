@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SiegeDefense.GameObject" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAoAwAAAACABAAAAAAAAAAAAAAABAQQAAQ=</HashCode>
+      <FileName>GameObjects\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.GameManager" Collapsed="true">
+    <Position X="1.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQEAAAEBgAgAIAAAKAAAAEAABAkASgQBAAABAAAAA=</HashCode>
+      <FileName>GameObjects\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense._3DGameObject" Collapsed="true">
+    <Position X="3.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAggQAAAAAAAAAAAAAEAAAAEAAEBAAgAA=</HashCode>
+      <FileName>GameObjects\3DGameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.Tank" Collapsed="true">
+    <Position X="1.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAABAAAIAAABAAAAAAEABAQABEAAAAAAEIAIAAgAA=</HashCode>
+      <FileName>GameObjects\Tanks\Tank.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.Skybox" Collapsed="true">
+    <Position X="5.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>GameObjects\Sky\Skybox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.Map" Collapsed="true">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAQCAIAAAAAAAABAAAIAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Maps\Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.Item" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameObjects\Items\Item.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.Camera" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAACAAAAIAAAAACAAAAAgAAAI=</HashCode>
+      <FileName>GameObjects\Cameras\Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.GameObjectComponent" Collapsed="true">
+    <Position X="7.75" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameComponents\GameObjectComponent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.TankController" Collapsed="true">
+    <Position X="8.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAACAgAAAAAAAAAAA=</HashCode>
+      <FileName>GameComponents\Input\TankController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.GamePhysics" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAABAAAAAA=</HashCode>
+      <FileName>GameComponents\Physics\GamePhysics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.Renderer" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAEgAAAAAAAAAAAAAAAAABEAAAAAAAACAAAAA=</HashCode>
+      <FileName>GameComponents\Renderers\Renderer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.Collider" Collapsed="true">
+    <Position X="10.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAEgAAEoAAAEAEABAAAAQAAAAIIAAAACAAAAA=</HashCode>
+      <FileName>GameComponents\Physics\Collider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SiegeDefense.InputManager" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAgIAAgEQAAiAAAAUAAAAKAAgAAAEAQAIAQAAA=</HashCode>
+      <FileName>GameComponents\Input\InputManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SiegeDefense.TankAI" Collapsed="true">
+    <Position X="6" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQBECAAEgAAAgABIAAAAAAAIAEAABAAAMAAQAAAAAA=</HashCode>
+      <FileName>GameComponents\AI\TankAI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

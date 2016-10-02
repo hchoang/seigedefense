@@ -1,4 +1,7 @@
-﻿namespace SiegeDefense {
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace SiegeDefense {
     public class _3DGameObject : GameObject {
         public virtual Renderer renderer { get; protected set; }
         public virtual Collider collider { get; protected set; }
@@ -32,6 +35,26 @@
                 }
                 return _sky;
             }
+        }
+        
+        public Partition partition { get; set; }
+        public void AddToGameWorld() {
+            if (partition == null) {
+                partition = Partition.RootPartition;
+            }
+
+            partition.AddObject(this);
+        }
+
+        public void RemoveFromGameWorld() {
+            if (partition != null) {
+                partition.RemoveObject(this);
+            }
+        }
+
+        public virtual List<T> FindObjectsInPartition<T>() where T:_3DGameObject {
+            return Partition.GetObjectsForCollisionDetection(this).Where(x => x is T).Cast<T>().ToList();
+            //return partition.managedObjects.Where(x => x is T).Cast<T>().ToList();
         }
     }
 }

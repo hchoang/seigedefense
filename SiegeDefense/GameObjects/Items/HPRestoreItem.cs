@@ -13,7 +13,7 @@ namespace SiegeDefense {
         }
 
         public override void Update(GameTime gameTime) {
-            List <Tank> tankList = FindObjects<Tank>();
+            List <Tank> tankList = FindObjectsInPartition<Tank>();
             Tank targetTank = null;
             foreach (Tank tank in tankList) {
                 if (tank.collider.Intersect(this.collider)) {
@@ -24,7 +24,8 @@ namespace SiegeDefense {
 
             if (targetTank != null) {
                 targetTank.HP += 10;
-                Game.Components.Remove(this);
+                //Game.Components.Remove(this);
+                RemoveFromGameWorld();
             }
         }
     }

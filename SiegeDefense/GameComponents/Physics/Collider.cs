@@ -90,16 +90,7 @@ namespace SiegeDefense {
             return bounding1.Intersects(bounding2);
         }
 
-        public bool Intersect(Collider other) {
-            
-            Vector3[] boundingCorners1 = baseBoundingBox.GetCorners();
-            Matrix refWorldMatrix1 = baseObject.transformation.WorldMatrix;
-            Vector3.Transform(boundingCorners1, ref refWorldMatrix1, boundingCorners1);
-
-            Vector3[] boundingCorners2 = other.baseBoundingBox.GetCorners();
-            Matrix refWorldMatrix2 = other.baseObject.transformation.WorldMatrix;
-            Vector3.Transform(boundingCorners2, ref refWorldMatrix2, boundingCorners2);
-
+        private bool Intersect(Vector3[] boundingCorners1, Vector3[] boundingCorners2) {
             Vector3[] normal1 = { boundingCorners1[0] - boundingCorners1[1], boundingCorners1[1] - boundingCorners1[2], boundingCorners1[0] - boundingCorners1[4] };
             Vector3[] normal2 = { boundingCorners2[0] - boundingCorners2[1], boundingCorners2[1] - boundingCorners2[2], boundingCorners2[0] - boundingCorners2[4] };
 
@@ -126,63 +117,30 @@ namespace SiegeDefense {
             return true;
         }
 
-        public override void Draw(GameTime gameTime) {
-            //Vector3[] boundingCorners = baseBoundingBox.GetCorners();
+        public bool Intersect(BoundingBox other) {
+            Vector3[] boundingCorners1 = baseBoundingBox.GetCorners();
+            Matrix refWorldMatrix1 = baseObject.transformation.WorldMatrix;
+            Vector3.Transform(boundingCorners1, ref refWorldMatrix1, boundingCorners1);
+
+            Vector3[] boundingCorners2 = other.GetCorners();
+
+            return Intersect(boundingCorners1, boundingCorners2);
+        }
+
+        public bool Intersect(Collider other) {
             
-            //Matrix refWorldMatrix = baseObject.transformation.WorldMatrix;
-            //Vector3.Transform(boundingCorners, ref refWorldMatrix, boundingCorners);
+            Vector3[] boundingCorners1 = baseBoundingBox.GetCorners();
+            Matrix refWorldMatrix1 = baseObject.transformation.WorldMatrix;
+            Vector3.Transform(boundingCorners1, ref refWorldMatrix1, boundingCorners1);
 
-            //VertexPositionColor[] vertices = new VertexPositionColor[8];
+            Vector3[] boundingCorners2 = other.baseBoundingBox.GetCorners();
+            Matrix refWorldMatrix2 = other.baseObject.transformation.WorldMatrix;
+            Vector3.Transform(boundingCorners2, ref refWorldMatrix2, boundingCorners2);
 
-            //for (int i = 0; i < 8; i++) {
-            //    vertices[i].Position = boundingCorners[i];
-            //    vertices[i].Color = Color.Blue;
-            //}
+            Vector3[] normal1 = { boundingCorners1[0] - boundingCorners1[1], boundingCorners1[1] - boundingCorners1[2], boundingCorners1[0] - boundingCorners1[4] };
+            Vector3[] normal2 = { boundingCorners2[0] - boundingCorners2[1], boundingCorners2[1] - boundingCorners2[2], boundingCorners2[0] - boundingCorners2[4] };
 
-            //int[] indices = new int[24];
-            //indices[0] = 0;
-            //indices[1] = 1;
-            //indices[2] = 1;
-            //indices[3] = 2;
-            //indices[4] = 2;
-            //indices[5] = 3;
-            //indices[6] = 3;
-            //indices[7] = 0;
-
-            //indices[8] = 4;
-            //indices[9] = 5;
-            //indices[10] = 5;
-            //indices[11] = 6;
-            //indices[12] = 6;
-            //indices[13] = 7;
-            //indices[14] = 7;
-            //indices[15] = 4;
-
-            //indices[16] = 0;
-            //indices[17] = 4;
-            //indices[18] = 1;
-            //indices[19] = 5;
-            //indices[20] = 2;
-            //indices[21] = 6;
-            //indices[22] = 3;
-            //indices[23] = 7;
-
-            //if (basicEffect == null)
-            //    basicEffect = (BasicEffect)Game.Services.GetService<BasicEffect>().Clone();
-
-            //basicEffect.VertexColorEnabled = true;
-            //basicEffect.LightingEnabled = false;
-            //basicEffect.FogEnabled = false;
-            //basicEffect.World = Matrix.Identity;
-            //basicEffect.View = camera.ViewMatrix;
-            //basicEffect.Projection = camera.ProjectionMatrix;
-
-            //foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
-            //    pass.Apply();
-            //    GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList, vertices, 0, 8, indices, 0, 12);
-            //}
-
-            base.Draw(gameTime);
+            return Intersect(boundingCorners1, boundingCorners2);
         }
     }
 }
