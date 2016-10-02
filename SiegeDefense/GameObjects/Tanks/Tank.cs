@@ -29,6 +29,9 @@ namespace SiegeDefense {
             hpRenderer = new HPRenderer(new Vector3(0, 22.5f, 0));
             hpRenderer.maxHP = HP;
             AddComponent(hpRenderer);
+
+            // Render bounding box
+            AddComponent(new WireFrameBoxRenderer(collider.baseBoundingBox.GetCorners(), Color.Blue));
         }
 
         public override void Update(GameTime gameTime) {

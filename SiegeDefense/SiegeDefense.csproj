@@ -44,10 +44,15 @@
   <ItemGroup>
     <Compile Include="GameComponents\AI\AI.cs" />
     <Compile Include="GameComponents\AI\EnemyTankAI.cs" />
+    <Compile Include="GameComponents\FSM\AIState.cs" />
+    <Compile Include="GameComponents\FSM\StateMachine.cs" />
+    <Compile Include="GameComponents\Renderers\WireFrameBoxRenderer.cs" />
+    <Compile Include="GameObjects\Partition.cs" />
     <Compile Include="GameComponents\Physics\BulletPhysics.cs" />
     <Compile Include="GameComponents\Physics\TankPhysics.cs" />
     <Compile Include="GameComponents\Renderers\HPRenderer.cs" />
     <Compile Include="GameComponents\Renderers\MapRenderer.cs" />
+    <Compile Include="GameComponents\Renderers\MiniMapRenderer.cs" />
     <Compile Include="GameComponents\Renderers\TankRenderer.cs" />
     <Compile Include="GameComponents\Renderers\WaterRenderer.cs" />
     <Compile Include="GameObjects\3DGameObject.cs" />

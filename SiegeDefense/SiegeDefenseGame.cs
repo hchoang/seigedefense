@@ -15,8 +15,10 @@ namespace SiegeDefense {
         }
 
         protected override void Initialize() {
-            graphicDeviceManager.PreferredBackBufferWidth = 1024;
-            graphicDeviceManager.PreferredBackBufferHeight = 768;
+            graphicDeviceManager.PreferredBackBufferWidth = 1440;
+            graphicDeviceManager.PreferredBackBufferHeight = 900;
+            graphicDeviceManager.IsFullScreen = false;
+            Window.Position = Point.Zero;
             graphicDeviceManager.ApplyChanges();
             //IsMouseVisible = true;
             

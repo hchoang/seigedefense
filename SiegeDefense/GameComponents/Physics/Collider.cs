@@ -7,30 +7,15 @@ namespace SiegeDefense {
         protected static Dictionary<int, BoundingBox> boundingBoxCaching = new Dictionary<int, BoundingBox>();
         protected static Dictionary<int, BoundingSphere> boundingSphereCaching = new Dictionary<int, BoundingSphere>();
 
-        protected BoundingBox baseBoundingBox;
-        protected BoundingSphere baseBoundingSphere;
-
-        protected BasicEffect basicEffect;
-        protected Camera _camera;
-        protected Camera camera {
-            get {
-                if (_camera == null) {
-                    _camera = FindObjects<Camera>()[0];
-                }
-                return _camera;
-            }
-        }
+        public BoundingBox baseBoundingBox { get; set; }
+        public BoundingSphere baseBoundingSphere { get; set; }
         
         public Collider(BoundingBox baseBoundingBox) {
-            basicEffect = Game.Services.GetService<BasicEffect>();
-
             this.baseBoundingBox = baseBoundingBox;
             baseBoundingSphere = BoundingSphere.CreateFromBoundingBox(baseBoundingBox);
         }
         
         public Collider(Model model) {
-            basicEffect = Game.Services.GetService<BasicEffect>();
-
             if (!boundingBoxCaching.ContainsKey(model.GetHashCode())) {
                 baseBoundingBox = new BoundingBox();
                 baseBoundingSphere = new BoundingSphere();
@@ -63,8 +48,7 @@ namespace SiegeDefense {
                         min = Vector3.Transform(min, transform[mesh.ParentBone.Index]);
                         max = Vector3.Transform(max, transform[mesh.ParentBone.Index]);
 
-                        baseBoundingBox.Min = Vector3.Min(baseBoundingBox.Min, min);
-                        baseBoundingBox.Max = Vector3.Max(baseBoundingBox.Max, max);
+                        baseBoundingBox = new BoundingBox(Vector3.Min(baseBoundingBox.Min, min), Vector3.Max(baseBoundingBox.Max, max));
                     }
                 }
 
@@ -143,60 +127,60 @@ namespace SiegeDefense {
         }
 
         public override void Draw(GameTime gameTime) {
-            Vector3[] boundingCorners = baseBoundingBox.GetCorners();
+            //Vector3[] boundingCorners = baseBoundingBox.GetCorners();
             
-            Matrix refWorldMatrix = baseObject.transformation.WorldMatrix;
-            Vector3.Transform(boundingCorners, ref refWorldMatrix, boundingCorners);
+            //Matrix refWorldMatrix = baseObject.transformation.WorldMatrix;
+            //Vector3.Transform(boundingCorners, ref refWorldMatrix, boundingCorners);
 
-            VertexPositionColor[] vertices = new VertexPositionColor[8];
+            //VertexPositionColor[] vertices = new VertexPositionColor[8];
 
-            for (int i = 0; i < 8; i++) {
-                vertices[i].Position = boundingCorners[i];
-                vertices[i].Color = Color.Blue;
-            }
+            //for (int i = 0; i < 8; i++) {
+            //    vertices[i].Position = boundingCorners[i];
+            //    vertices[i].Color = Color.Blue;
+            //}
 
-            int[] indices = new int[24];
-            indices[0] = 0;
-            indices[1] = 1;
-            indices[2] = 1;
-            indices[3] = 2;
-            indices[4] = 2;
-            indices[5] = 3;
-            indices[6] = 3;
-            indices[7] = 0;
+            //int[] indices = new int[24];
+            //indices[0] = 0;
+            //indices[1] = 1;
+            //indices[2] = 1;
+            //indices[3] = 2;
+            //indices[4] = 2;
+            //indices[5] = 3;
+            //indices[6] = 3;
+            //indices[7] = 0;
 
-            indices[8] = 4;
-            indices[9] = 5;
-            indices[10] = 5;
-            indices[11] = 6;
-            indices[12] = 6;
-            indices[13] = 7;
-            indices[14] = 7;
-            indices[15] = 4;
+            //indices[8] = 4;
+            //indices[9] = 5;
+            //indices[10] = 5;
+            //indices[11] = 6;
+            //indices[12] = 6;
+            //indices[13] = 7;
+            //indices[14] = 7;
+            //indices[15] = 4;
 
-            indices[16] = 0;
-            indices[17] = 4;
-            indices[18] = 1;
-            indices[19] = 5;
-            indices[20] = 2;
-            indices[21] = 6;
-            indices[22] = 3;
-            indices[23] = 7;
+            //indices[16] = 0;
+            //indices[17] = 4;
+            //indices[18] = 1;
+            //indices[19] = 5;
+            //indices[20] = 2;
+            //indices[21] = 6;
+            //indices[22] = 3;
+            //indices[23] = 7;
 
-            if (basicEffect == null)
-                basicEffect = (BasicEffect)Game.Services.GetService<BasicEffect>().Clone();
+            //if (basicEffect == null)
+            //    basicEffect = (BasicEffect)Game.Services.GetService<BasicEffect>().Clone();
 
-            basicEffect.VertexColorEnabled = true;
-            basicEffect.LightingEnabled = false;
-            basicEffect.FogEnabled = false;
-            basicEffect.World = Matrix.Identity;
-            basicEffect.View = camera.ViewMatrix;
-            basicEffect.Projection = camera.ProjectionMatrix;
+            //basicEffect.VertexColorEnabled = true;
+            //basicEffect.LightingEnabled = false;
+            //basicEffect.FogEnabled = false;
+            //basicEffect.World = Matrix.Identity;
+            //basicEffect.View = camera.ViewMatrix;
+            //basicEffect.Projection = camera.ProjectionMatrix;
 
-            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
-                pass.Apply();
-                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList, vertices, 0, 8, indices, 0, 12);
-            }
+            //foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
+            //    pass.Apply();
+            //    GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList, vertices, 0, 8, indices, 0, 12);
+            //}
 
             base.Draw(gameTime);
         }
