@@ -53,6 +53,9 @@ namespace SiegeDefense {
         }
 
         public virtual List<T> FindObjectsInPartition<T>() where T:_3DGameObject {
+            if (this.partition == null) {
+                return new List<T>();
+            }
             return Partition.GetObjectsForCollisionDetection(this).Where(x => x is T).Cast<T>().ToList();
             //return partition.managedObjects.Where(x => x is T).Cast<T>().ToList();
         }

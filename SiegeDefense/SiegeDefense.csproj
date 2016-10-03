@@ -45,7 +45,11 @@
     <Compile Include="GameComponents\AI\AI.cs" />
     <Compile Include="GameComponents\AI\EnemyTankAI.cs" />
     <Compile Include="GameComponents\FSM\AIState.cs" />
+    <Compile Include="GameComponents\FSM\ChaseState.cs" />
+    <Compile Include="GameComponents\FSM\AimState.cs" />
+    <Compile Include="GameComponents\FSM\FireState.cs" />
     <Compile Include="GameComponents\FSM\StateMachine.cs" />
+    <Compile Include="GameComponents\FSM\WanderingState.cs" />
     <Compile Include="GameComponents\Renderers\WireFrameBoxRenderer.cs" />
     <Compile Include="GameObjects\Partition.cs" />
     <Compile Include="GameComponents\Physics\BulletPhysics.cs" />
@@ -57,7 +61,6 @@
     <Compile Include="GameComponents\Renderers\WaterRenderer.cs" />
     <Compile Include="GameObjects\3DGameObject.cs" />
     <Compile Include="GameComponents\AI\TankBehaviour.cs" />
-    <Compile Include="GameComponents\AI\TankAI.cs" />
     <Compile Include="GameComponents\GameObjectComponent.cs" />
     <Compile Include="GameObjects\Cameras\Camera.cs" />
     <Compile Include="GameObjects\Cameras\FollowTargetCamera.cs" />
@@ -65,9 +68,8 @@
     <Compile Include="GameComponents\Input\TankController.cs" />
     <Compile Include="GameComponents\Levels\LevelDescription.cs" />
     <Compile Include="GameObjects\Items\Item.cs" />
-    <Compile Include="GameObjects\Maps\HeightMap_PathFinding.cs" />
+    <Compile Include="GameObjects\Maps\MapNode.cs" />
     <Compile Include="GameObjects\Maps\Map.cs" />
-    <Compile Include="GameObjects\Tanks\AIControlledTank.cs" />
     <Compile Include="GameObjects\Ammos\TankBullet.cs" />
     <Compile Include="GameObjects\GameManager.cs" />
     <Compile Include="GameObjects\Tanks\Tank.cs" />

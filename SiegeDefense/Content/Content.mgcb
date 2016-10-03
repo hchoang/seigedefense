@@ -313,3 +313,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/WhiteBar.jpg
 
+#begin AI/EnemyTank.xml
+/copy:AI/EnemyTank.xml
+

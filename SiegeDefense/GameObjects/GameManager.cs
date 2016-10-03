@@ -17,8 +17,8 @@ namespace SiegeDefense {
         // Game mechanics
         protected int maxEnemy = 12;
         protected int spawnMaxAttempt = 50;
-        protected float spawnCDTime = 10;
-        protected float spawnCDCounter = 10;
+        protected float spawnCDTime = 1;
+        protected float spawnCDCounter = 1;
         public int Point { get; set; }
 
         // Game world
@@ -52,7 +52,7 @@ namespace SiegeDefense {
             Game.Components.Add(rootPartition);
 
             // Add player & camera
-            userControlledTank = new Tank(ModelType.TANK1);
+            userControlledTank = new Tank(ModelType.TANK1, 500);
             userControlledTank.transformation.Position = map.PlayerStartPosition;
             userControlledTank.Tag = "Player";
             userControlledTank.AddComponent(new TankController());
@@ -96,10 +96,12 @@ namespace SiegeDefense {
                         Vector3 newTankLocation = map.SpawnPoints[spawnIndex];
                         newTankLocation.Y = map.GetHeight(newTankLocation);
 
-                        Tank enemyTank = new AIControlledTank(ModelType.TANK1, newTankLocation, new TankAI(), userControlledTank);
+                        Tank enemyTank = new Tank(ModelType.TANK1, 40);
                         enemyTank.Tag = "Enemy";
+                        enemyTank.transformation.Position = newTankLocation;
                         enemyTank.AddToGameWorld();
                         if (enemyTank.Moveable(newTankLocation)) {
+                            enemyTank.AddComponent(new EnemyTankAI());
                             break;
                         } else {
                             enemyTank.RemoveFromGameWorld();

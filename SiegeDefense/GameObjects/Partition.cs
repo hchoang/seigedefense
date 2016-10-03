@@ -11,9 +11,9 @@ namespace SiegeDefense {
         public static Partition RootPartition { get; protected set; }
         public static Partition[,,] PartitionList;
         private static int X = 20;
-        private static int Y = 2;
+        private static int Y = 4;
         private static int Z = 20;
-        private static Map map;
+        
         public int x { get; set; }
         public int y { get; set; }
         public int z { get; set; }
@@ -31,7 +31,6 @@ namespace SiegeDefense {
 
         public Partition(Map map) {
             RootPartition = this;
-            Partition.map = map;
 
             this.boundingBox = map.GetBoundingBox();
 

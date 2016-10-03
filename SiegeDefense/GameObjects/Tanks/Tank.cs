@@ -12,7 +12,7 @@ namespace SiegeDefense {
         public new TankPhysics physics { get; set; }
         public HPRenderer hpRenderer { get; set; }
 
-        public Tank(ModelType modelType)
+        public Tank(ModelType modelType, int HP)
         {
             Model tankModel = Game.Content.Load<Model>(modelType.ToDescription());
             
@@ -25,7 +25,7 @@ namespace SiegeDefense {
             physics = new TankPhysics();
             AddComponent(physics);
 
-            HP = 100;
+            this.HP = HP;
             hpRenderer = new HPRenderer(new Vector3(0, 22.5f, 0));
             hpRenderer.maxHP = HP;
             AddComponent(hpRenderer);

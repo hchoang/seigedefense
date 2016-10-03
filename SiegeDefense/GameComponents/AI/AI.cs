@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,5 +34,8 @@ namespace SiegeDefense {
                 _map = value;
             }
         }
+
+        public Vector3 steeringForce { get; set; } = Vector3.Zero;
+        public bool reverse { get; set; } = false;
     }
 }

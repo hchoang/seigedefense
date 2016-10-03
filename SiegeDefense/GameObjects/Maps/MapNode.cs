@@ -29,6 +29,8 @@ namespace SiegeDefense {
                     nodes[i + j * mapInfoWidth].Position = position;
                     if (!IsAccessibleByFoot(position)) {
                         nodes[i + j * mapInfoWidth].Moveable = false;
+                    } else {
+                        nodes[i + j * mapInfoWidth].Moveable = true;
                     }
                 }
             }
@@ -61,7 +63,7 @@ namespace SiegeDefense {
 
         }
 
-        public MapNode getNode(Vector3 position) {
+        public override MapNode GetNode(Vector3 position) {
             Vector3 firstVertexPosition = renderer.vertices[0].Position;
             Vector3 relativePosition = position - firstVertexPosition;
 
