@@ -95,8 +95,12 @@ namespace SiegeDefense {
         }
 
         public void Destroy() {
-            //Game.Components.Remove(this);
             RemoveFromGameWorld();
+
+            // Explosion
+            TankDestroyedExplosion explosion = new TankDestroyedExplosion();
+            explosion.transformation.Position = this.transformation.Position;
+            Game.Components.Add(explosion);
 
             // Drop power-up
             if (Tag.Equals("Enemy")) {

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SiegeDefense {
     public class BillboardRenderer : Renderer {
-        protected Texture2D texture { get; set; }
+        public Texture2D texture { get; set; }
         public Vector3 rotateAxis { get; set; } = Vector3.Up;
         protected VertexPositionTexture[] vertices = new VertexPositionTexture[6];
 

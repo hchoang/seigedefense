@@ -51,6 +51,7 @@
     <Compile Include="GameComponents\FSM\StateMachine.cs" />
     <Compile Include="GameComponents\FSM\WanderingState.cs" />
     <Compile Include="GameComponents\Renderers\WireFrameBoxRenderer.cs" />
+    <Compile Include="GameObjects\Explosions\TankDestroyedExplosion.cs" />
     <Compile Include="GameObjects\Partition.cs" />
     <Compile Include="GameComponents\Physics\BulletPhysics.cs" />
     <Compile Include="GameComponents\Physics\TankPhysics.cs" />

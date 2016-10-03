@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace SiegeDefense {
@@ -53,6 +54,28 @@ namespace SiegeDefense {
 
         public static float ToFloat(this object value) {
             return float.Parse(value.ToString());
+        }
+
+        public static void GetSubTextures(Texture2D largeTexture, int X, int Y, int offsetX, int offsetY, int nX, int nY, 
+            GraphicsDevice graphicsDevice, out List<Texture2D> result) {
+
+            Point textureSize = new Point(largeTexture.Width / nX, largeTexture.Height / nY);
+
+            result = new List<Texture2D>();
+            for (int x = 0; x < X; x++) {
+                for (int y = 0; y < Y; y++) {
+
+                    Point startPoint = new Point(largeTexture.Width * (offsetX + x) / nX, largeTexture.Height * (offsetY + y) / nY);
+                    Rectangle rect = new Rectangle(startPoint, textureSize);
+
+                    Texture2D smallTexture = new Texture2D(graphicsDevice, rect.Width, rect.Height);
+                    Color[] smallTextureData = new Color[rect.Width * rect.Height];
+                    largeTexture.GetData(0, rect, smallTextureData, 0, smallTextureData.Length);
+                    smallTexture.SetData(smallTextureData);
+
+                    result.Add(smallTexture);
+                }
+            }
         }
     }
 }
