@@ -23,20 +23,23 @@ namespace SiegeDefense {
         }
 
         public override void Update(GameTime gameTime) {
-            // collision checking with other tanks
-            Tank collidedTank = null;
-            foreach (Tank tank in FindObjectsInPartition<Tank>()) {
-                if (owner == tank) continue;
+            // collision checking with other vehicles
+            OnlandVehicle collidedVehicle = null;
+            foreach (OnlandVehicle vehicle in FindObjectsInPartition<OnlandVehicle>()) {
+                if (owner == vehicle) continue;
 
-                if (collider.Intersect(tank.collider)) {
+                if (collider.Intersect(vehicle.collider)) {
                     //Console.Out.WriteLine("Intersect");
-                    collidedTank = tank;
+                    collidedVehicle = vehicle;
                     break;
                 }
             }
 
-            if (collidedTank != null) {
-                collidedTank.Damaged(this);
+            if (collidedVehicle != null) {
+                collidedVehicle.Damaged(this.damage);
+                if (this.owner.Tag.Equals("Player")) {
+                    Game.Services.GetService<GameManager>().Point += 10;
+                }
                 //Game.Components.Remove(this);
                 RemoveFromGameWorld();
             }

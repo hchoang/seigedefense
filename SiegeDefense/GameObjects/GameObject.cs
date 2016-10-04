@@ -18,6 +18,7 @@ namespace SiegeDefense {
         public virtual void AddComponent(GameObjectComponent component) {
             component.baseObject = this;
             components.Add(component);
+            component.componentInit();
         }
         public override void Draw(GameTime gameTime) {
             foreach (GameObjectComponent component in components) {
@@ -35,7 +36,7 @@ namespace SiegeDefense {
         #endregion
 
         // avoid passing Game to every constructor
-        private static Game _game;
+        protected static Game _game;
         public static void Initialize(Game game) {
             _game = game;
         }
@@ -44,7 +45,6 @@ namespace SiegeDefense {
             transformation = new Transformation();
         }
 
-        // find other objects -- to be replaced by spartial partition if possible
         public virtual List<T> FindObjects<T>() where T : GameObject {
             return _game.Components.Where(x => x is T).Cast<T>().ToList();
         }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense {
-    public class TankDestroyedExplosion : _3DGameObject {
+    public class Explosion : _3DGameObject {
 
         private static List<Texture2D> explosionTextureList;
         public float changeTextureTime { get; set; } = 0.05f;
@@ -16,7 +16,7 @@ namespace SiegeDefense {
 
         public new BillboardRenderer renderer { get; set; }
 
-        public TankDestroyedExplosion() {
+        public Explosion() {
             Texture2D explosionTexture = Game.Content.Load<Texture2D>(@"Sprites\Explosions");
 
             if (explosionTextureList == null) {
@@ -25,8 +25,6 @@ namespace SiegeDefense {
 
             renderer = new BillboardRenderer(explosionTextureList[0]);
             AddComponent(renderer);
-
-            this.transformation.ScaleMatrix = Matrix.CreateScale(20);
         }
 
         public override void Update(GameTime gameTime) {

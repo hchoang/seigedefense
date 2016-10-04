@@ -12,7 +12,6 @@ namespace SiegeDefense {
         protected GameDetailSprite pointSprite;
         protected GameDetailSprite bloodSprite;
         protected Static2DSprite gameoverSprite;
-        protected Tank userControlledTank;
 
         // Game mechanics
         protected int maxEnemy = 12;
@@ -25,6 +24,7 @@ namespace SiegeDefense {
         protected Map map { get; set; }
         protected Skybox sky { get; set; }
         protected Camera mainCamera { get; set; }
+        protected OnlandVehicle userControlledTank;
         public Partition rootPartition { get; set; }
 
         // sound & input
@@ -52,12 +52,11 @@ namespace SiegeDefense {
             Game.Components.Add(rootPartition);
 
             // Add player & camera
-            userControlledTank = new Tank(ModelType.TANK1, 500);
+            userControlledTank = VehicleFactory.CreateTank(modelType: ModelType.TANK1, HP: 50000);
             userControlledTank.transformation.Position = map.PlayerStartPosition;
             userControlledTank.Tag = "Player";
             userControlledTank.AddComponent(new TankController());
             userControlledTank.AddToGameWorld();
-            //Game.Components.Add(userControlledTank);
             mainCamera = new TargetPointOfViewCamera(userControlledTank, new Vector3(0, 50, 100));
             Game.Components.Add(mainCamera);
 
@@ -88,7 +87,7 @@ namespace SiegeDefense {
             // spawn enemy
             if (spawnCDCounter >= spawnCDTime) {
                 spawnCDCounter = 0;
-                List<Tank> enemyTanks = FindObjectsByTag("Enemy").Cast<Tank>().ToList();
+                List<OnlandVehicle> enemyTanks = FindObjectsByTag("Enemy").Cast<OnlandVehicle>().ToList();
                 if (enemyTanks.Count() < maxEnemy) {
                     for (int i=0; i<spawnMaxAttempt; i++) {
                         Random r = new Random();
@@ -96,15 +95,15 @@ namespace SiegeDefense {
                         Vector3 newTankLocation = map.SpawnPoints[spawnIndex];
                         newTankLocation.Y = map.GetHeight(newTankLocation);
 
-                        Tank enemyTank = new Tank(ModelType.TANK1, 40);
-                        enemyTank.Tag = "Enemy";
-                        enemyTank.transformation.Position = newTankLocation;
-                        enemyTank.AddToGameWorld();
-                        if (enemyTank.Moveable(newTankLocation)) {
-                            enemyTank.AddComponent(new EnemyTankAI());
+                        OnlandVehicle enemyVehicle = VehicleFactory.CreateExplosiveTruck(ModelType.EXPLOSIVE_TRUCK1, 20);
+                        enemyVehicle.Tag = "Enemy";
+                        enemyVehicle.transformation.Position = newTankLocation;
+                        enemyVehicle.AddToGameWorld();
+                        if (enemyVehicle.Moveable(newTankLocation)) {
+                            enemyVehicle.AddComponent(new ExplosiveTruckAI());
                             break;
                         } else {
-                            enemyTank.RemoveFromGameWorld();
+                            enemyVehicle.RemoveFromGameWorld();
                         }
                     }
                 }

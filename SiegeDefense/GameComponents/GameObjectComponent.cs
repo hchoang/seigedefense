@@ -7,5 +7,6 @@ using System.Threading.Tasks;
 namespace SiegeDefense {
     public abstract class GameObjectComponent : GameObject {
         public GameObject baseObject { get; set; }
+        public virtual void componentInit() { }
     }
 }

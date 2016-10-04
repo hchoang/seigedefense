@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace SiegeDefense {
-    public class ChaseState : AIState {
+    public class ChaseState : State {
 
         public float UpdateChasePathTime { get; set; } = 1;
         public float UpdateChasePathCounter { get; set; } = 0;
         public List<MapNode> ChasePath { get; set; } = new List<MapNode>();
 
         private void UpdatChasePath() {
-            MapNode startNode = map.GetNode(AITank.transformation.Position);
+            MapNode startNode = map.GetNode(AIObject.transformation.Position);
             MapNode endNode = map.GetNode(player.transformation.Position);
 
             if (startNode == null || endNode == null) {
@@ -40,12 +40,12 @@ namespace SiegeDefense {
                 return;
             }
 
-            Vector3 steeringForce = ChasePath[0].Position - AITank.transformation.Position;
+            Vector3 steeringForce = ChasePath[0].Position - AIObject.transformation.Position;
             steeringForce.Normalize();
 
             AI.steeringForce = steeringForce;
 
-            float nextPathDistance = (AITank.transformation.Position - ChasePath[0].Position).Length();
+            float nextPathDistance = (AIObject.transformation.Position - ChasePath[0].Position).Length();
             if (nextPathDistance < 10) {
                 ChasePath.RemoveAt(0);
             }

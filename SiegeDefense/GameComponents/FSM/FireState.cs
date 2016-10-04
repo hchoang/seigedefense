@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace SiegeDefense {
-    public class FireState : AIState {
+    public class FireState : State {
 
         public float FireCoolDownTime { get; set; } = 2;
         public float FireCoolDownCouter { get; set; } = 0;
@@ -21,7 +21,7 @@ namespace SiegeDefense {
 
             if (FireCoolDownCouter >= FireCoolDownTime) {
                 FireCoolDownCouter = 0;
-                AITank.Fire();
+                AIVehicle.Fire();
             }
 
             FireCoolDownCouter += (float)gameTime.ElapsedGameTime.TotalSeconds;

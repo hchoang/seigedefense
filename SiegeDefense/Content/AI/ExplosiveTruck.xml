@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:ns="Microsoft.Xna.Framework">
+<fsm startState="WANDER">
+	<state fromState="WANDER">
+		<transition condition="PLAYER_NEAR" toState="CHASE"/>
+		<transition condition="PLAYER_IN_FIRE_RANGE" toState="FIRE"/>
+	</state>
+	
+	<state fromState="CHASE">
+		<transition condition="PLAYER_FAR" toState="WANDER"/>
+		<transition condition="PLAYER_IN_FIRE_RANGE" toState="FIRE"/>
+	</state>
+	
+	<state fromState="FIRE">
+		<transition condition="PLAYER_NEAR" toState="CHASE"/>
+		<transition condition="PLAYER_FAR" toState="WANDER"/>
+	</state>
+	
+	<configurationMap>
+		<configuration name="NEAR_DISTANCE" value="1200" />
+		<configuration name="FIRE_RANGE" value="100" />
+	</configurationMap>
+</fsm>
+</XnaContent>

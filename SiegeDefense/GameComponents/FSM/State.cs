@@ -6,8 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense {
-
-    public abstract class AIState : GameObjectComponent {
+    public abstract class State : GameObjectComponent {
         protected static Random RNG = new Random();
 
         private Map _map;
@@ -20,23 +19,28 @@ namespace SiegeDefense {
             }
         }
 
-        private static Tank _player;
-        protected static Tank player {
+        private static OnlandVehicle _player;
+        protected static OnlandVehicle player {
             get {
                 if (_player == null) {
-                    _player = (Tank)FindObjectsByTag("Player")[0];
+                    _player = (OnlandVehicle)FindObjectsByTag("Player")[0];
                 }
                 return _player;
             }
         }
 
-        public Tank AITank { get; set; }
+        public _3DGameObject AIObject { get; set; }
+        public OnlandVehicle AIVehicle {
+            get {
+                return (OnlandVehicle)AIObject;
+            }
+        }
 
         private AI _AI;
         protected AI AI {
             get {
                 if (_AI == null) {
-                    _AI = AITank.GetComponent<AI>();
+                    _AI = AIObject.GetComponent<AI>();
                 }
                 return _AI;
             }

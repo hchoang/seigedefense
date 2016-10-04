@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense {
-    public class WanderingState : AIState {
+    public class WanderingState : State {
         public float changeDestinationTime { get; set; } = 2;
         public float changeDestinationCounter { get; set; } = 2;
 
@@ -24,7 +24,7 @@ namespace SiegeDefense {
                 
                 if (map.IsAccessibleByFoot(randomPosition)) {
 
-                    MapNode startNode = map.GetNode(AITank.transformation.Position);
+                    MapNode startNode = map.GetNode(AIObject.transformation.Position);
                     MapNode endNode = map.GetNode(randomPosition);
 
                     if (startNode == null || endNode == null) {
@@ -58,12 +58,12 @@ namespace SiegeDefense {
                 return;
             }
 
-            Vector3 steeringForce = pathList[0].Position - AITank.transformation.Position;
+            Vector3 steeringForce = pathList[0].Position - AIObject.transformation.Position;
             steeringForce.Normalize();
 
             AI.steeringForce = steeringForce;
 
-            float nextPathDistance = (AITank.transformation.Position - pathList[0].Position).Length();
+            float nextPathDistance = (AIObject.transformation.Position - pathList[0].Position).Length();
             if (nextPathDistance < 10) {
                 pathList.RemoveAt(0);
             }

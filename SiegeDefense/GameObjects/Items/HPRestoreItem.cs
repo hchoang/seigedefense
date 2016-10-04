@@ -13,9 +13,9 @@ namespace SiegeDefense {
         }
 
         public override void Update(GameTime gameTime) {
-            List <Tank> tankList = FindObjectsInPartition<Tank>();
-            Tank targetTank = null;
-            foreach (Tank tank in tankList) {
+            List <OnlandVehicle> tankList = FindObjectsInPartition<OnlandVehicle>();
+            OnlandVehicle targetTank = null;
+            foreach (OnlandVehicle tank in tankList) {
                 if (tank.collider.Intersect(this.collider)) {
                     targetTank = tank;
                     break;

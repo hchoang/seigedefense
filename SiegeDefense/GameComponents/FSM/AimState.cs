@@ -6,20 +6,26 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace SiegeDefense {
-    public class AimState : AIState {
+    public class AimState : State {
+
+        public Tank AITank {
+            get {
+                return (Tank)AIObject;
+            }
+        }
 
         public override void Update(GameTime gameTime) {
-            Vector3 target = player.transformation.Position - AITank.transformation.Position;
+            Vector3 target = player.transformation.Position - AIObject.transformation.Position;
 
-            float upAngle = Utility.RotationAngleCalculator(AITank.transformation.Up, target, AITank.transformation.Left);
+            float upAngle = Utility.RotationAngleCalculator(AIObject.transformation.Up, target, AIObject.transformation.Left);
             
             if (Math.Abs(Math.Abs(upAngle) - MathHelper.PiOver2) > 0.1f) {
-                AI.steeringForce = AITank.transformation.Forward;
+                AI.steeringForce = AIObject.transformation.Forward;
                 return;
             }
 
             AI.steeringForce = Vector3.Zero;
-            float angle = Utility.RotationAngleCalculator(AITank.transformation.Forward, target, AITank.transformation.Left);
+            float angle = Utility.RotationAngleCalculator(AIObject.transformation.Forward, target, AIObject.transformation.Left);
 
             if (Math.Abs(angle) < 0.1f) {
                 AITank.physics.RotateForce = 0;

@@ -6,6 +6,8 @@ namespace SiegeDefense {
     public enum ModelType {
         [Description(@"Models\tank")]
         TANK1,
+        [Description(@"Models\explosiveTruck")]
+        EXPLOSIVE_TRUCK1,
         [Description(@"Models\bullet")]
         BULLET1
     }
@@ -24,7 +26,7 @@ namespace SiegeDefense {
                 relativeTransform[i] = model.Bones[i].Transform;
             }
         }
-        
+
         public override void Draw(GameTime gameTime) {
 
             model.CopyBoneTransformsFrom(relativeTransform);

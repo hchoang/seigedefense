@@ -35,7 +35,7 @@ namespace SiegeDefense {
             return ChaseTargetBehaviour(currentTransform, Matrix.CreateTranslation(randomTarget), 0);
         }
         
-        public static Vector3 AdvoidObstacleBehaviour(Tank tank, Vector3 currentSteering, Map map, float scanRadius = 50) {
+        public static Vector3 AdvoidObstacleBehaviour(OnlandVehicle tank, Vector3 currentSteering, Map map, float scanRadius = 50) {
             Vector3 originalScanVector = Vector3.Normalize(currentSteering) * scanRadius;
             //Vector3 originalSeePoint = currentTransform.Translation + originalScanVector;
 

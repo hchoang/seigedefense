@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace SiegeDefense {
     public class _3DGameObject : GameObject {
-        public virtual Renderer renderer { get; protected set; }
-        public virtual Collider collider { get; protected set; }
-        public virtual GamePhysics physics { get; protected set; }
+        public virtual Renderer renderer { get; set; }
+        public virtual Collider collider { get; set; }
+        public virtual GamePhysics physics { get; set; }
 
         private Camera _mainCamera;
         protected Camera mainCamera {
