@@ -21,7 +21,7 @@ namespace SiegeDefense {
             renderer = new HeightMapRenderer(Game.Content.Load<Texture2D>(@"Terrain\heightmap"), mapDeltaHeight, mapCellSize, out mapInfoWidth, out mapInfoHeight);
             AddComponent(renderer);
 
-            Renderer waterRenderer = new WaterRenderer(Vector2.Zero, new Vector2(mapInfoWidth * mapCellSize, mapInfoHeight * mapCellSize), waterHeight * mapDeltaHeight);
+            WaterRenderer waterRenderer = new WaterRenderer(Vector2.Zero, new Vector2(mapInfoWidth * mapCellSize, mapInfoHeight * mapCellSize), waterHeight * mapDeltaHeight);
             AddComponent(waterRenderer);
 
             foreach (Vector3 spawnPoint in description.SpawnPoints) {

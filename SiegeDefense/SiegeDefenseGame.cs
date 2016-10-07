@@ -20,12 +20,12 @@ namespace SiegeDefense {
             graphicDeviceManager.IsFullScreen = false;
             Window.Position = Point.Zero;
             graphicDeviceManager.ApplyChanges();
-            //IsMouseVisible = true;
             
             GameObject.Initialize(this);
             RegisterServices();
 
-            gameManager.LoadLevel("level1");
+            //gameManager.LoadLevel("level1");
+            gameManager.LoadTitleScreen();
 
             base.Initialize();
         }

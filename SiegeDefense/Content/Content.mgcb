@@ -103,18 +103,6 @@
 /processorParam:TextureFormat=Color
 /build:Terrain/grass.jpg
 
-#begin Terrain/heightmap.bmp
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Terrain/heightmap.bmp
-
 #begin customShader.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -325,4 +313,10 @@
 
 #begin AI/ExplosiveTruck.xml
 /copy:AI/ExplosiveTruck.xml
+
+#begin Terrain\map1.bmp
+/copy:Terrain\map1.bmp
+
+#begin Terrain/map2.bmp
+/copy:Terrain/map2.bmp
 

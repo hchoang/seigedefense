@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SiegeDefense {
-    public class WireFrameBoxRenderer : Renderer {
+    public class WireFrameBoxRenderer : _3DRenderer {
 
         private Vector3[] corners;
         private VertexPositionColor[] vertices = new VertexPositionColor[8];

@@ -1,14 +1,32 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SiegeDefense {
-    public class BillboardRenderer : Renderer {
-        public Texture2D texture { get; set; }
-        public Vector3 rotateAxis { get; set; } = Vector3.Up;
+    public class HPRenderer : _3DRenderer {
+
+        protected Texture2D hpTexture { get; set; }
+        public Vector3 rotateAxis {
+            get {
+                return baseObject.transformation.Up;
+            }
+        }
+        public float currentHP { get; set; } = 100;
+        public float maxHP { get; set; } = 100;
+        private float hpRatio = 100;
+        private float hpBarLength = 30;
+        protected Vector3 positionOffset { get; set; } = Vector3.Zero;
+
         protected VertexPositionTexture[] vertices = new VertexPositionTexture[6];
 
-        public BillboardRenderer(Texture2D texture) {
-            this.texture = texture;
+        public HPRenderer(Vector3 positionOffset) {
+            this.hpTexture = Game.Content.Load<Texture2D>(@"Sprites\WhiteBar");
+            this.positionOffset = positionOffset;
+
             customEffect.CurrentTechnique = customEffect.Techniques["Billboard"];
 
             vertices[0] = new VertexPositionTexture(Vector3.Zero, new Vector2(0, 0));
@@ -20,15 +38,25 @@ namespace SiegeDefense {
             vertices[5] = new VertexPositionTexture(Vector3.Zero, new Vector2(0, 1));
         }
 
+        public override void Update(GameTime gameTime) {
+            this.transformation.Position = baseObject.transformation.Position + positionOffset;
+
+            hpRatio = currentHP / maxHP;
+            this.transformation.ScaleMatrix = Matrix.CreateScale(hpBarLength * hpRatio, 1, 1);
+
+            base.Update(gameTime);
+        }
+
         public override void Draw(GameTime gameTime) {
-            customEffect.Parameters["World"].SetValue(baseObject.transformation.WorldMatrix);
+            customEffect.Parameters["World"].SetValue(transformation.WorldMatrix);
             customEffect.Parameters["View"].SetValue(camera.ViewMatrix);
             customEffect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
             customEffect.Parameters["CameraPosition"].SetValue(camera.Position);
             customEffect.Parameters["RotateAxis"].SetValue(rotateAxis);
-            customEffect.Parameters["BillboardTexture"].SetValue(texture);
-            customEffect.Parameters["BillboardHeight"].SetValue(baseObject.transformation.ScaleMatrix.Scale.Y);
-            customEffect.Parameters["BillboardSide"].SetValue(baseObject.transformation.ScaleMatrix.Scale.X);
+            customEffect.Parameters["BillboardTexture"].SetValue(hpTexture);
+            customEffect.Parameters["BillboardHeight"].SetValue(transformation.ScaleMatrix.Scale.Y);
+            customEffect.Parameters["BillboardSide"].SetValue(transformation.ScaleMatrix.Scale.X);
+            customEffect.Parameters["MaskColor"].SetValue(new Vector4(1-hpRatio, hpRatio, 0, 0));
 
             BlendState oldBS = GraphicsDevice.BlendState;
             DepthStencilState oldDS = GraphicsDevice.DepthStencilState;

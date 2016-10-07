@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SiegeDefense {
-    public class WaterRenderer : Renderer {
+    public class WaterRenderer : _3DRenderer {
 
         private RenderTarget2D refractionRenderTarget;
         private RenderTarget2D reflectionRenderTarget;

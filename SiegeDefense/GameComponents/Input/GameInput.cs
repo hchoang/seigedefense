@@ -8,6 +8,8 @@
         Vertical,
         Horizontal,
         Jump,
-        Fire
+        Fire,
+        PointerX,
+        PointerY
     }
 }

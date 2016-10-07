@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense.GameComponents.Renderers {
-    public class MiniMapRenderer : Renderer {
+    public class MiniMapRenderer : _3DRenderer {
     }
 }

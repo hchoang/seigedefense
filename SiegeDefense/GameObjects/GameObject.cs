@@ -20,6 +20,7 @@ namespace SiegeDefense {
             components.Add(component);
             component.componentInit();
         }
+
         public override void Draw(GameTime gameTime) {
             foreach (GameObjectComponent component in components) {
                 component.Draw(gameTime);

@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace SiegeDefense {
-    public class HeightMapRenderer : Renderer {
+    public class HeightMapRenderer : _3DRenderer {
         // Texture & weights
         private Texture2D sandTexture;
         private Texture2D grassTexture;

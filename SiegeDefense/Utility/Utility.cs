@@ -56,6 +56,14 @@ namespace SiegeDefense {
             return float.Parse(value.ToString());
         }
 
+        public static Vector2 ToVector2(this Vector3 value) {
+            return new Vector2(value.X, value.Y);
+        }
+
+        public static Vector3 ToVector3(this Vector2 value, float Z) {
+            return new Vector3(value.X, value.Y, Z);
+        }
+
         public static void GetSubTextures(Texture2D largeTexture, int X, int Y, int offsetX, int offsetY, int nX, int nY, 
             GraphicsDevice graphicsDevice, out List<Texture2D> result) {
 

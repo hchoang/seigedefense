@@ -23,7 +23,7 @@ namespace SiegeDefense {
 
             tank.HP = HP;
             float tankHeight = tank.collider.baseBoundingBox.Max.Y - tank.collider.baseBoundingBox.Min.Y;
-            tank.hpRenderer = new HPRenderer(new Vector3(0, tankHeight, 0));
+            tank.hpRenderer = new HPRenderer(new Vector3(0, tankHeight + 2, 0));
             tank.hpRenderer.maxHP = HP;
             tank.hpRenderer.currentHP = HP;
             tank.AddComponent(tank.hpRenderer);
@@ -49,7 +49,7 @@ namespace SiegeDefense {
 
             truck.HP = HP;
             float truckHeight = truck.collider.baseBoundingBox.Max.Y - truck.collider.baseBoundingBox.Min.Y;
-            truck.hpRenderer = new HPRenderer(new Vector3(0, truckHeight, 0));
+            truck.hpRenderer = new HPRenderer(new Vector3(0, truckHeight + 2, 0));
             truck.hpRenderer.maxHP = HP;
             truck.hpRenderer.currentHP = HP;
             truck.AddComponent(truck.hpRenderer);

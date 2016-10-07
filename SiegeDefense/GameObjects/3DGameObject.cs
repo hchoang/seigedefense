@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace SiegeDefense {
     public class _3DGameObject : GameObject {
-        public virtual Renderer renderer { get; set; }
+        public virtual _3DRenderer renderer { get; set; }
         public virtual Collider collider { get; set; }
         public virtual GamePhysics physics { get; set; }
 

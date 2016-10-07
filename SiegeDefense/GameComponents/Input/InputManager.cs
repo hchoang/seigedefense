@@ -82,10 +82,14 @@ namespace SiegeDefense {
                 return GetValue(Keys.Space, isCurrent);
 
             if (input == GameInput.Fire)
-            {
-                
                 return GetValue(MouseButton.LeftButton, isCurrent);
-            }
+
+            if (input == GameInput.PointerX)
+                return GetMousePosition(isCurrent).X;
+
+            if (input == GameInput.PointerY)
+                return GetMousePosition(isCurrent).Y;
+
             return 0;
         }
 

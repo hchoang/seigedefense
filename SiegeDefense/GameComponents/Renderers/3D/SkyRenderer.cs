@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace SiegeDefense {
-    public class SkyRenderer : Renderer {
+    public class SkyRenderer : _3DRenderer {
 
         private TextureCube morningSkytexture;
         private TextureCube afternoonSkyTexture;

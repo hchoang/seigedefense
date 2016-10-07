@@ -12,7 +12,7 @@ namespace SiegeDefense {
         BULLET1
     }
 
-    public class ModelRenderer : Renderer {
+    public class ModelRenderer : _3DRenderer {
         protected Model model;
         protected Matrix[] absoluteTranform;
         protected Matrix[] relativeTransform;
