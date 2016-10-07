@@ -8,6 +8,7 @@ using System.Linq;
 namespace SiegeDefense {
     public enum GameState {
         TITLE_SCREEN,
+        MAP_EDITOR_SCREEN,
         SURVIVAL_GAME,
         DEFENSE_GAME
     }
@@ -55,7 +56,18 @@ namespace SiegeDefense {
             ChangeGame();
             gameState = GameState.TITLE_SCREEN;
 
-            new TitleScreen();
+            Game.Components.Add(new TitleScreen());
+
+            // play BGM
+            bgm = soundManager.FindSound(SoundType.InBattleBGM).CreateInstance();
+            bgm.IsLooped = true;
+        }
+
+        public void LoadMapEditorScreen() {
+            ChangeGame();
+            gameState = GameState.MAP_EDITOR_SCREEN;
+
+            Game.Components.Add(new MapEditorScreen());
 
             // play BGM
             bgm = soundManager.FindSound(SoundType.InBattleBGM).CreateInstance();

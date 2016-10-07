@@ -11,8 +11,8 @@ namespace SiegeDefense {
         private List<GameObjectComponent> components = new List<GameObjectComponent>();
         public virtual string Tag { get; set; } = "";
 
-        public T GetComponent<T>() where T : GameObjectComponent {
-            return (T)components.Where(x => x is T).FirstOrDefault();
+        public List<T> GetComponent<T>() where T : GameObjectComponent {
+            return components.Where(x => x is T).Cast<T>().ToList();
         }
 
         public virtual void AddComponent(GameObjectComponent component) {

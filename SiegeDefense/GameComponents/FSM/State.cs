@@ -40,7 +40,7 @@ namespace SiegeDefense {
         protected AI AI {
             get {
                 if (_AI == null) {
-                    _AI = AIObject.GetComponent<AI>();
+                    _AI = AIObject.GetComponent<AI>()[0];
                 }
                 return _AI;
             }

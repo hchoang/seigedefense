@@ -9,25 +9,33 @@ using System.Threading.Tasks;
 namespace SiegeDefense {
     public class TextRenderer : _2DRenderer {
         public SpriteFont font { get; set; }
-        public Vector2 position;
-        public Color color { get; set; } = Color.White;
         public string text { get; set; }
-        public float rotation { get; set; } = 0;
-        public Vector2 rotationOrigin { get; set; } = Vector2.Zero;
-        public Vector2 scale { get; set; } = new Vector2(1, 1);
         
+        public TextRenderer(string text, SpriteFont font) {
+            this.text = text;
+            this.font = font;
+        }
+
+        public TextRenderer(string text) : this(text, _game.Content.Load<SpriteFont>(@"Fonts\Arial")) { }
+
+        public TextRenderer() : this("", _game.Content.Load<SpriteFont>(@"Fonts\Arial")) { }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
+
+            Vector2 drawPosition = position;
+            if (parentRenderer != null) {
+                Vector2 textSize = font.MeasureString(text);
+                Rectangle parentDrawArea = parentRenderer.GetDrawArea();
+                // middle align
+                drawPosition = new Vector2(parentDrawArea.X + parentDrawArea.Width * position.X / 2 + parentDrawArea.Width / 2 - textSize.X / 2, 
+                                       parentDrawArea.Y + parentDrawArea.Height * position.Y / 2 +  parentDrawArea.Height / 2 - textSize.Y / 2);
+            }
+
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, text, position, color, rotation, rotationOrigin, scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(font, text, drawPosition, color, rotation, rotationOrigin, size, SpriteEffects.None, 0);
             spriteBatch.End();
 
             base.Draw(gameTime, spriteBatch);
-        }
-
-        public Vector2 textSize {
-            get {
-                return (font.MeasureString(text));
-            }
         }
     }
 }
