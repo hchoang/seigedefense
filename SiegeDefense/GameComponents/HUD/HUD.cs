@@ -30,7 +30,7 @@ namespace SiegeDefense {
             float y = inputManager.GetValue(GameInput.PointerY);
 
             if (renderer.GetDrawArea().Contains(x, y)) {
-                if (inputManager.isTriggered(GameInput.Fire)) {
+                if (inputManager.isReleased(GameInput.Fire)) {
                     onClick?.Invoke(this);
                 }
             }

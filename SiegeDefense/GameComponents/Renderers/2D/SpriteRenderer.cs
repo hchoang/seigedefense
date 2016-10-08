@@ -21,7 +21,7 @@ namespace SiegeDefense {
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
             Rectangle drawArea = GetDrawArea();
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, customRS);
             spriteBatch.Draw(sprite, drawArea, null, color, rotation, rotationOrigin, SpriteEffects.None, 0);
             spriteBatch.End();
 

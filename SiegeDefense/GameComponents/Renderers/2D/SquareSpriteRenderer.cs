@@ -32,7 +32,7 @@ namespace SiegeDefense {
                 spriteDrawArea.X += (int)(paddingDrawArea.Width * (0.5f - (ratio / 2)));
             }
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, customRS);
             spriteBatch.Draw(paddingTexture, paddingDrawArea, Color.White);
             spriteBatch.Draw(sprite, spriteDrawArea, color);
             spriteBatch.End();

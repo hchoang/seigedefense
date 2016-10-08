@@ -11,7 +11,7 @@ namespace SiegeDefense {
 
         private SpriteBatch _spriteBatch;
 
-        protected SpriteBatch spriteBatch {
+        public SpriteBatch spriteBatch {
             get {
                 if (_spriteBatch == null) {
                     _spriteBatch = Game.Services.GetService<SpriteBatch>();
@@ -28,6 +28,26 @@ namespace SiegeDefense {
         public virtual _2DRenderer parentRenderer { get; set; }
         public virtual List<_2DRenderer> childRenderers { get; set; } = new List<_2DRenderer>();
         public virtual Rectangle drawArea { get; set; }
+        public RasterizerState customRS { get; set; }
+        public Rectangle? scissorRect { get; set; }
+
+        public void SetRasterizerState(RasterizerState rs, bool recursive) {
+            customRS = rs;
+            if (recursive) {
+                foreach (_2DRenderer childRenderer in childRenderers) {
+                    childRenderer.SetRasterizerState(rs, true);
+                }
+            }
+        }
+
+        public void SetScissorRectangle(Rectangle rect, bool recursive) {
+            scissorRect = rect;
+            if (recursive) {
+                foreach(_2DRenderer childRenderer in childRenderers) {
+                    childRenderer.SetScissorRectangle(rect, true);
+                }
+            }
+        }
 
         public Rectangle GetDrawArea() {
 
@@ -57,6 +77,9 @@ namespace SiegeDefense {
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch) {
+            if (scissorRect != null) {
+                spriteBatch.GraphicsDevice.ScissorRectangle = (Rectangle)scissorRect;
+            }
             foreach (_2DRenderer renderer in childRenderers) {
                 renderer.Draw(gameTime, spriteBatch);
             }

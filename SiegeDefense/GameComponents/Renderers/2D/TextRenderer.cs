@@ -31,7 +31,7 @@ namespace SiegeDefense {
                                        parentDrawArea.Y + parentDrawArea.Height * position.Y / 2 +  parentDrawArea.Height / 2 - textSize.Y / 2);
             }
 
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, customRS);
             spriteBatch.DrawString(font, text, drawPosition, color, rotation, rotationOrigin, size, SpriteEffects.None, 0);
             spriteBatch.End();
 

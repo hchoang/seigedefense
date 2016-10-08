@@ -11,17 +11,27 @@ namespace SiegeDefense {
         public VerticalList<Texture2D> terrainList { get; set; }
         public MapEditorScreen() {
 
+            // map preview
             mapPreview = new _2DRenderer();
             mapPreview.position = new Vector2(0.1f, 0.02f);
             mapPreview.size = new Vector2(0.4f, 0.4f);
             AddComponent(mapPreview);
 
-            // retrieve all terrains path
-            string[] terrainPathList = Directory.GetFiles(Game.Content.RootDirectory + @"\terrain\", "*.bmp", SearchOption.TopDirectoryOnly);
+            // terrain list
+            _2DRenderer terrainListRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuFrame"));
+            terrainListRenderer.position = new Vector2(0.75f, 0.02f);
+            terrainListRenderer.size = new Vector2(0.2f, 0.6f);
 
-            // create item list
+            Vector2 terrainListPadding = new Vector2(0.1f, 0.1f);
+            float nVisibleTerrain = 3.5f;
+            terrainList = new VerticalList<Texture2D>(terrainListRenderer, terrainListPadding, nVisibleTerrain);
+            terrainList.onItemSelected = onTerrainSelected;
+            AddComponent(terrainList);
+
+            // fill data to terrain list
+            string[] terrainPathList = Directory.GetFiles(Game.Content.RootDirectory + @"\terrain\", "*.bmp", SearchOption.TopDirectoryOnly);
             SpriteFont terrainItemFont = Game.Content.Load<SpriteFont>(@"Fonts\Arial");
-            List<ListItem<Texture2D>> terrainItemList = new List<ListItem<Texture2D>>();
+
             foreach (string terrainPath in terrainPathList) {
                 ListItem<Texture2D> terrainItem = new ListItem<Texture2D>();
 
@@ -42,19 +52,8 @@ namespace SiegeDefense {
                 terrainNameRenderer.position = new Vector2(0.3f, 0.05f);
                 terrainItem.renderer.AddChildRenderer(terrainNameRenderer);
 
-                terrainItemList.Add(terrainItem);
+                terrainList.Add(terrainItem);
             }
-
-            // create terrain list
-            Vector2 terrainListPosition = new Vector2(0.75f, 0.02f);
-            Vector2 terrainListSize = new Vector2(0.2f, 0.6f);
-            Vector2 terrainListPadding = new Vector2(0.1f, 0.1f);
-            int nVisibleTerrain = 5;
-            Texture2D terrainFrame = Game.Content.Load<Texture2D>(@"Sprites\MainMenuFrame");
-
-            terrainList = new VerticalList<Texture2D>(terrainItemList, terrainListPosition, terrainListSize, terrainListPadding, nVisibleTerrain, terrainFrame);
-            terrainList.onItemSelected = onTerrainSelected;
-            AddComponent(terrainList);
         }
 
         public void onTerrainSelected(HUD invoker, Texture2D data) {
