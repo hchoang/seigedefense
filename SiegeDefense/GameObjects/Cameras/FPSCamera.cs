@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace SiegeDefense {
     public class FPSCamera : Camera {
@@ -121,10 +122,11 @@ namespace SiegeDefense {
         }
 
         public void Move(Vector3 direction) {
-
             Vector3 newPosition = Position + direction;
-            if (map.IsInsideMap(newPosition))
+
+            if (!map.IsInsideMap(newPosition)) {
                 return;
+            }
 
             Position = newPosition;
             Target += direction;

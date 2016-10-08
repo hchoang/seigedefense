@@ -8,7 +8,8 @@ using System.Linq;
 namespace SiegeDefense {
     public enum GameState {
         TITLE_SCREEN,
-        MAP_EDITOR_SCREEN,
+        MAP_EDITOR_SELECTION,
+        MAP_EDITOR_MODE,
         SURVIVAL_GAME,
         DEFENSE_GAME
     }
@@ -41,7 +42,7 @@ namespace SiegeDefense {
         protected SoundBankManager soundManager;
         protected InputManager inputManager;
 
-        private void ChangeGame() {
+        private void ChangeGame(GameState newState) {
             // Clear all components
             Game.Components.Clear();
 
@@ -50,11 +51,12 @@ namespace SiegeDefense {
             inputManager = (InputManager)Game.Services.GetService<IInputManager>();
             Game.Components.Add(this);
             Game.Components.Add(inputManager);
+
+            gameState = newState;
         }
 
         public void LoadTitleScreen() {
-            ChangeGame();
-            gameState = GameState.TITLE_SCREEN;
+            ChangeGame(GameState.TITLE_SCREEN);
 
             Game.Components.Add(new TitleScreen());
 
@@ -63,9 +65,8 @@ namespace SiegeDefense {
             bgm.IsLooped = true;
         }
 
-        public void LoadMapEditorScreen() {
-            ChangeGame();
-            gameState = GameState.MAP_EDITOR_SCREEN;
+        public void LoadMapEditorSelectionScreen() {
+            ChangeGame(GameState.MAP_EDITOR_SELECTION);
 
             Game.Components.Add(new MapEditorScreen());
 
@@ -75,8 +76,7 @@ namespace SiegeDefense {
         }
 
         public void LoadLevel(string levelname) {
-            ChangeGame();
-            gameState = GameState.SURVIVAL_GAME;
+            ChangeGame(GameState.SURVIVAL_GAME);
 
             // Add game world
             LevelDescription description = LevelDescription.LoadFromXML(Game.Content.RootDirectory + @"\level\" + levelname + ".xml");

@@ -14,6 +14,17 @@ namespace SiegeDefense {
 
         public new HeightMapRenderer renderer { get; set; }
 
+        public HeightMap(Texture2D heightMap) {
+            this.mapCellSize = 1;
+            this.mapDeltaHeight = 20;
+
+            renderer = new HeightMapRenderer(heightMap, mapDeltaHeight, mapCellSize, out mapInfoWidth, out mapInfoHeight);
+            AddComponent(renderer);
+
+            WaterRenderer waterRenderer = new SimpleWaterRenderer(Vector2.Zero, new Vector2(mapInfoWidth * mapCellSize, mapInfoHeight * mapCellSize), waterHeight * mapDeltaHeight);
+            AddComponent(waterRenderer);
+        }
+
         public HeightMap(LevelDescription description) {
             this.mapCellSize = description.MapCellSize;
             this.mapDeltaHeight = description.MapDeltaHeight;

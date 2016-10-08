@@ -9,7 +9,12 @@ namespace SiegeDefense {
 
         public _2DRenderer mapPreview { get; set; }
         public VerticalList<Texture2D> terrainList { get; set; }
+        public HUD editMapButton { get; set; }
+        public Texture2D selectedTerrain { get; set; }
         public MapEditorScreen() {
+            // background
+            _2DRenderer background = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuBackground"));
+            AddComponent(background);
 
             // map preview
             mapPreview = new _2DRenderer();
@@ -54,9 +59,29 @@ namespace SiegeDefense {
 
                 terrainList.Add(terrainItem);
             }
+
+            // edit map button
+            _2DRenderer editMapButtonRenderer = new _2DRenderer();
+            editMapButtonRenderer.AddChildRenderer(new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton")));
+            editMapButtonRenderer.AddChildRenderer(new TextRenderer("Edit"));
+            editMapButtonRenderer.position = terrainListRenderer.position + new Vector2(0, terrainListRenderer.size.Y);
+            editMapButtonRenderer.size = new Vector2(terrainListRenderer.size.X, terrainListRenderer.size.Y / 8);
+            editMapButton = new HUD(editMapButtonRenderer);
+            editMapButton.onClick = onEditClicked;
+            AddComponent(editMapButton);
+        }
+
+        public void onEditClicked(HUD invoker) {
+            if (mapPreview.childRenderers.Count == 0) {
+                return;
+            }
+
+            GameManager gameManager = Game.Services.GetService<GameManager>();
+            gameManager.LoadMapEditorMode(selectedTerrain);
         }
 
         public void onTerrainSelected(HUD invoker, Texture2D data) {
+            selectedTerrain = data;
             SquareSpriteRenderer ssr = new SquareSpriteRenderer(data, Color.Blue);
             ssr.size = new Vector2(1, 0.2f);
             if (mapPreview.childRenderers.Count == 0) {

@@ -5,19 +5,15 @@ using System.Collections.Generic;
 
 namespace SiegeDefense {
     public class TitleScreen : GameObject {
-        public _2DRenderer renderer { get; set; }
 
         public TitleScreen() {
-            renderer = new _2DRenderer();
-            AddComponent(renderer);
-
             _2DRenderer background = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuBackground"));
-            renderer.AddChildRenderer(background);
+            AddComponent(background);
 
             _2DRenderer menuFrame = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuFrame"));
             menuFrame.position = new Vector2(0.7f, 0.2f);
             menuFrame.size = new Vector2(0.3f, 0.5f);
-            renderer.AddChildRenderer(menuFrame);
+            AddComponent(menuFrame);
 
             // load menu buttons
             string[] buttonTexts = { "New Game", "Option", "Map Editor", "Exit" };
@@ -56,7 +52,7 @@ namespace SiegeDefense {
 
         public void MapEditor(HUD invoker) {
             GameManager gameManager = Game.Services.GetService<GameManager>();
-            gameManager.LoadMapEditorScreen();
+            gameManager.LoadMapEditorSelectionScreen();
         }
 
         public void Option(HUD invoker) {

@@ -58,7 +58,7 @@ namespace SiegeDefense {
             base.Draw(gameTime);
         }
 
-        private void DrawReflectionMap(GameTime gameTime) {
+        protected void DrawReflectionMap(GameTime gameTime) {
             // calculate reflection matrix
             Vector3 staticCameraPos = Vector3.Zero;
             Vector3 staticCameraTarget = new Vector3(10, 0, 10);
@@ -89,7 +89,7 @@ namespace SiegeDefense {
             GraphicsDevice.PresentationParameters.RenderTargetUsage = oldUseage;
         }
 
-        private void DrawRefractionMap(GameTime gameTime) {
+        protected void DrawRefractionMap(GameTime gameTime) {
             RenderTargetUsage oldUseage = GraphicsDevice.PresentationParameters.RenderTargetUsage;
             GraphicsDevice.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             GraphicsDevice.SetRenderTarget(refractionRenderTarget);
@@ -103,7 +103,7 @@ namespace SiegeDefense {
             GraphicsDevice.PresentationParameters.RenderTargetUsage = oldUseage;
         }
 
-        private void DrawWater(GameTime gameTime) {
+        protected void DrawWater(GameTime gameTime) {
             RasterizerState oldRsState = GraphicsDevice.RasterizerState;
             RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;

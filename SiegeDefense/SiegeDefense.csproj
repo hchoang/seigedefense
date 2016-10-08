@@ -72,10 +72,13 @@
     <Compile Include="GameComponents\Renderers\2D\SpriteRenderer.cs" />
     <Compile Include="GameComponents\Renderers\2D\SquareSpriteRenderer.cs" />
     <Compile Include="GameComponents\Renderers\2D\TextRenderer.cs" />
+    <Compile Include="GameComponents\Renderers\3D\SimpleWaterRenderer.cs" />
     <Compile Include="GameComponents\Renderers\3D\WireFrameBoxRenderer.cs" />
     <Compile Include="GameComponents\Renderers\Renderer.cs" />
+    <Compile Include="GameObjects\Cameras\RTSCamera.cs" />
     <Compile Include="GameObjects\EmptyObject.cs" />
     <Compile Include="GameObjects\Explosions\Explosion.cs" />
+    <Compile Include="GameObjects\GameManager2.cs" />
     <Compile Include="GameObjects\OnLandVehicles\VehicleFactory.cs" />
     <Compile Include="GameObjects\Partition.cs" />
     <Compile Include="GameComponents\Physics\BulletPhysics.cs" />
