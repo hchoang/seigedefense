@@ -2,17 +2,12 @@
 using Microsoft.Xna.Framework;
 
 namespace SiegeDefense {
-    public class TankController : GameObjectComponent {
-        private IInputManager inputManager;
+    public class TankController : InputListenerComponent {
 
         private Tank controlledTank {
             get {
                 return (Tank)baseObject;
             }
-        }
-
-        public TankController() {
-            inputManager = Game.Services.GetService<IInputManager>();
         }
 
         public override void Update(GameTime gameTime) {

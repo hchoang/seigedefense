@@ -68,6 +68,9 @@
     <Compile Include="GameComponents\FSM\WanderingState.cs" />
     <Compile Include="GameComponents\HUD\HUD.cs" />
     <Compile Include="GameComponents\HUD\ListItem.cs" />
+    <Compile Include="GameComponents\Input\EnemySpawPointController.cs" />
+    <Compile Include="GameComponents\Input\InputListenerComponent.cs" />
+    <Compile Include="GameComponents\Input\PlayerStartPointController.cs" />
     <Compile Include="GameComponents\Renderers\2D\2DRenderer.cs" />
     <Compile Include="GameComponents\Renderers\2D\SpriteRenderer.cs" />
     <Compile Include="GameComponents\Renderers\2D\SquareSpriteRenderer.cs" />

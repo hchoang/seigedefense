@@ -68,7 +68,7 @@ namespace SiegeDefense {
 
             if (input == GameInput.Right)
                 return GetValue(Keys.D, isCurrent);
-
+            
             if (input == GameInput.Zoom)
                 return GetMouseScroll(false) - GetMouseScroll(true);
 
@@ -83,6 +83,9 @@ namespace SiegeDefense {
 
             if (input == GameInput.Fire)
                 return GetValue(MouseButton.LeftButton, isCurrent);
+
+            if (input == GameInput.Fire2)
+                return GetValue(MouseButton.RightButton, isCurrent);
 
             if (input == GameInput.PointerX)
                 return GetMousePosition(isCurrent).X;

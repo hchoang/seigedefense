@@ -33,7 +33,7 @@ namespace SiegeDefense {
             }
         }
 
-        public virtual Transformation transformation { get; protected set; }
+        public virtual Transformation transformation { get; set; }
         #endregion
 
         // avoid passing Game to every constructor

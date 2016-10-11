@@ -9,6 +9,7 @@
         Horizontal,
         Jump,
         Fire,
+        Fire2,
         PointerX,
         PointerY
     }
