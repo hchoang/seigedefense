@@ -11,6 +11,9 @@
         Fire,
         Fire2,
         PointerX,
-        PointerY
+        PointerY,
+        TextInput,
+        Back,
+        NumberInput
     }
 }

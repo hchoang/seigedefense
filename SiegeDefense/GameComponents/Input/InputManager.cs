@@ -93,6 +93,28 @@ namespace SiegeDefense {
             if (input == GameInput.PointerY)
                 return GetMousePosition(isCurrent).Y;
 
+            if (input == GameInput.TextInput) {
+                for (int i=(int)Keys.A; i<=(int)Keys.Z; i++) {
+                    float value = GetValue((Keys)i, isCurrent);
+                    if (value != 0)
+                        return i;
+                }
+                return 0;
+            }
+
+            if (input == GameInput.Back) {
+                return GetValue(Keys.Back, isCurrent);
+            }
+
+            if (input == GameInput.NumberInput) {
+                for (int i=(int)Keys.D0; i<=(int)Keys.D9; i++) {
+                    float value = GetValue((Keys)i, isCurrent);
+                    if (value != 0)
+                        return i;
+                }
+                return 0;
+            }
+
             return 0;
         }
 

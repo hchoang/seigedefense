@@ -61,14 +61,23 @@ namespace SiegeDefense {
             }
 
             // edit map button
-            _2DRenderer editMapButtonRenderer = new _2DRenderer();
-            editMapButtonRenderer.AddChildRenderer(new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton")));
+            _2DRenderer editMapButtonRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton"));
             editMapButtonRenderer.AddChildRenderer(new TextRenderer("Edit"));
             editMapButtonRenderer.position = terrainListRenderer.position + new Vector2(0, terrainListRenderer.size.Y);
             editMapButtonRenderer.size = new Vector2(terrainListRenderer.size.X, terrainListRenderer.size.Y / 8);
             editMapButton = new HUD(editMapButtonRenderer);
             editMapButton.onClick = onEditClicked;
             AddComponent(editMapButton);
+
+            // exit button
+            _2DRenderer exitButtonRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton"));
+            exitButtonRenderer.AddChildRenderer(new TextRenderer("Exit"));
+            exitButtonRenderer.position = editMapButtonRenderer.position + new Vector2(0, editMapButtonRenderer.size.Y + 0.2f);
+            exitButtonRenderer.size = editMapButtonRenderer.size;
+
+            HUD exitButton = new HUD(exitButtonRenderer);
+            exitButton.onClick = onExitClicked;
+            AddComponent(exitButton);
         }
 
         public void onEditClicked(HUD invoker) {
@@ -78,6 +87,11 @@ namespace SiegeDefense {
 
             GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadMapEditorMode(selectedTerrain);
+        }
+
+        public void onExitClicked(HUD invoker) {
+            GameManager gameManager = Game.Services.GetService<GameManager>();
+            gameManager.LoadTitleScreen();
         }
 
         public void onTerrainSelected(HUD invoker, Texture2D data) {

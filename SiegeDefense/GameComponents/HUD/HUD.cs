@@ -6,18 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense {
-    public class HUD : GameObjectComponent {
-        private IInputManager _inputManager;
-        public IInputManager inputManager {
-            get {
-                if (_inputManager == null) {
-                    _inputManager = Game.Services.GetService<IInputManager>();
-                }
-                return _inputManager;
-            }
-        }
+    public class HUD : InputListenerComponent {
 
         public Action<HUD> onClick { get; set; }
+        public Action<HUD> onBlur { get; set; }
 
         public _2DRenderer renderer { get; set; }
 
@@ -32,6 +24,10 @@ namespace SiegeDefense {
             if (renderer.GetDrawArea().Contains(x, y)) {
                 if (inputManager.isReleased(GameInput.Fire)) {
                     onClick?.Invoke(this);
+                }
+            } else {
+                if (inputManager.isReleased(GameInput.Fire)) {
+                    onBlur?.Invoke(this);
                 }
             }
 

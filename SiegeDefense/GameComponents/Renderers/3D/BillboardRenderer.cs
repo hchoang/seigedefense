@@ -5,6 +5,7 @@ namespace SiegeDefense {
     public class BillboardRenderer : _3DRenderer {
         public Texture2D texture { get; set; }
         public Vector3 rotateAxis { get; set; } = Vector3.Up;
+        public Color maskColor { get; set; } = Color.White;
         protected VertexPositionTexture[] vertices = new VertexPositionTexture[6];
 
         public BillboardRenderer(Texture2D texture) {
@@ -29,6 +30,7 @@ namespace SiegeDefense {
             customEffect.Parameters["BillboardTexture"].SetValue(texture);
             customEffect.Parameters["BillboardHeight"].SetValue(baseObject.transformation.ScaleMatrix.Scale.Y);
             customEffect.Parameters["BillboardSide"].SetValue(baseObject.transformation.ScaleMatrix.Scale.X);
+            customEffect.Parameters["MaskColor"].SetValue(maskColor.ToVector4());
 
             BlendState oldBS = GraphicsDevice.BlendState;
             DepthStencilState oldDS = GraphicsDevice.DepthStencilState;

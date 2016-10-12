@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 
 namespace SiegeDefense {
     public static class Utility {
@@ -62,6 +63,20 @@ namespace SiegeDefense {
 
         public static Vector3 ToVector3(this Vector2 value, float Z) {
             return new Vector3(value.X, value.Y, Z);
+        }
+
+        public static string splitByLength(this string value, int lineLength, string delimiter) {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            while (i < value.Length) {
+                string oneSplit = (i + lineLength) <= value.Length ? value.Substring(i, lineLength) : value.Substring(i);
+                sb.Append(oneSplit);
+                i += lineLength;
+                if (i < value.Length) {
+                    sb.Append(delimiter);
+                }
+            }
+            return sb.ToString();
         }
 
         public static void GetSubTextures(Texture2D largeTexture, int X, int Y, int offsetX, int offsetY, int nX, int nY, 

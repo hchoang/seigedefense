@@ -7,9 +7,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SiegeDefense {
-    public class PlayerStartPointController : InputListenerComponent {
+    public class SelectPointController : InputListenerComponent {
 
         public string state { get; set; } = "Selecting";
+        public bool selectable { get; set; } = true;
 
         private Map _map;
         protected Map map {
@@ -67,11 +68,24 @@ namespace SiegeDefense {
                         intersectPoint.Y = map.GetHeight(intersectPoint);
                         baseObject.transformation.Position = intersectPoint;
 
+                        if (!map.IsAccessibleByFoot(intersectPoint)) {
+                            baseObject.GetComponent<BillboardRenderer>()[0].maskColor = Color.Black;
+                            selectable = false;
+                        } else {
+                            baseObject.GetComponent<BillboardRenderer>()[0].maskColor = Color.White;
+                            selectable = true;
+                        }
+                    } else {
+                        baseObject.GetComponent<BillboardRenderer>()[0].maskColor = Color.Black;
+                        selectable = false;
                     }
+                } else {
+                    baseObject.GetComponent<BillboardRenderer>()[0].maskColor = Color.Red;
+                    selectable = false;
                 }
             }
 
-            if (inputManager.isTriggered(GameInput.Fire)) {
+            if (inputManager.isTriggered(GameInput.Fire) && selectable) {
                 state = "Selected";
             }
 
@@ -102,7 +116,7 @@ namespace SiegeDefense {
         }
 
         public Vector3 GetIntersectPoint(Vector3 point1, Vector3 point2) {
-            if ((point1 - point2).Length() < 0.02f) {
+            if ((point1 - point2).Length() < 1) {
                 Vector3 result = point1;
                 result.Y = map.GetHeight(result);
                 return result;
