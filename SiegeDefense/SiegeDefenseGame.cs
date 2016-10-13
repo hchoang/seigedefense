@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
@@ -15,8 +16,8 @@ namespace SiegeDefense {
         }
 
         protected override void Initialize() {
-            graphicDeviceManager.PreferredBackBufferWidth = 1440;
-            graphicDeviceManager.PreferredBackBufferHeight = 900;
+            graphicDeviceManager.PreferredBackBufferWidth =   Convert.ToInt32(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width * 0.8);
+            graphicDeviceManager.PreferredBackBufferHeight = Convert.ToInt32(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height * 0.8);
             graphicDeviceManager.IsFullScreen = false;
             Window.Position = Point.Zero;
             graphicDeviceManager.ApplyChanges();
