@@ -29,7 +29,7 @@ namespace SiegeDefense {
             this.mapCellSize = description.MapCellSize;
             this.mapDeltaHeight = description.MapDeltaHeight;
 
-            renderer = new HeightMapRenderer(Game.Content.Load<Texture2D>(@"Terrain\heightmap"), mapDeltaHeight, mapCellSize, out mapInfoWidth, out mapInfoHeight);
+            renderer = new HeightMapRenderer(Game.Content.Load<Texture2D>(@"Terrain\map1"), mapDeltaHeight, mapCellSize, out mapInfoWidth, out mapInfoHeight);
             AddComponent(renderer);
 
             WaterRenderer waterRenderer = new WaterRenderer(Vector2.Zero, new Vector2(mapInfoWidth * mapCellSize, mapInfoHeight * mapCellSize), waterHeight * mapDeltaHeight);
