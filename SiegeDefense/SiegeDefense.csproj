@@ -81,7 +81,8 @@
     <Compile Include="GameObjects\Cameras\RTSCamera.cs" />
     <Compile Include="GameObjects\EmptyObject.cs" />
     <Compile Include="GameObjects\Explosions\Explosion.cs" />
-    <Compile Include="GameObjects\Managers\GameManager2.cs" />
+    <Compile Include="GameObjects\Managers\GameLevelManager.cs" />
+    <Compile Include="GameObjects\Managers\MapEditorManager.cs" />
     <Compile Include="GameObjects\OnLandVehicles\VehicleFactory.cs" />
     <Compile Include="GameObjects\Partition.cs" />
     <Compile Include="GameComponents\Physics\BulletPhysics.cs" />

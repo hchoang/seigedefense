@@ -7,21 +7,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SiegeDefense {
-    public partial class GameManager {
+    public class MapEditorManager : GameObject {
         public HUD playerStartPointHUD { get; set; }
         public HUD enemySpawnPointHUD { get; set; }
         public _3DGameObject playerStartPointMaker { get; set; }
         public List<_3DGameObject> enemySpawnPointMakers { get; set; }
         public bool isModalDisplaying { get; set; } = false;
-        public void LoadMapEditorMode(Texture2D mapData) {
-            ChangeGame(GameState.MAP_EDITOR_MODE);
 
-            sky = new Skybox();
-            map = new HeightMap(mapData);
+        public void LoadMap(Texture2D mapData) {
+            Skybox sky = new Skybox();
+            Map map = new HeightMap(mapData);
             Game.Components.Add(sky);
             Game.Components.Add(map);
 
-            mainCamera = new RTSCamera(new Vector3(0, 0, 0), 100, -60);
+            Camera mainCamera = new RTSCamera(new Vector3(0, 0, 0), 100, -60);
             Game.Components.Add(mainCamera);
 
             // player start point
@@ -89,7 +88,7 @@ namespace SiegeDefense {
             if (playerStartPointMaker != null) {
                 Game.Components.Remove(playerStartPointMaker);
             }
-            
+
             playerStartPointMaker = new _3DGameObject();
             playerStartPointMaker.Tag = "PlayerStartPoint";
             playerStartPointMaker.renderer = new BillboardRenderer(Game.Content.Load<Texture2D>(@"Sprites\PlayerStartPoint"));
@@ -177,7 +176,7 @@ namespace SiegeDefense {
                 okButton.Tag = "Modal";
                 okButton.onClick = OkButtonClick;
                 Game.Components.Add(okButton);
-                
+
             } else {
                 // ask player to name the map
                 SpriteRenderer namingFrameRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuFrame"));

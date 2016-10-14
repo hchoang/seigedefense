@@ -38,7 +38,7 @@ namespace SiegeDefense {
             if (collidedVehicle != null) {
                 collidedVehicle.Damaged(this.damage);
                 if (this.owner.Tag.Equals("Player")) {
-                    Game.Services.GetService<GameManager>().Point += 10;
+                    FindObjects<GameLevelManager>()[0].Point += 10;
                 }
                 //Game.Components.Remove(this);
                 RemoveFromGameWorld();
