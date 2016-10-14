@@ -6,24 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace SiegeDefense {
-    public enum GameState {
-        TITLE_SCREEN,
-        MAP_EDITOR_SELECTION,
-        MAP_EDITOR_MODE,
-        SURVIVAL_GAME,
-        DEFENSE_GAME // unimplemented
-    }
-
     public class GameManager : GameObject
     {
-        protected GameState gameState;
-
         // sound & input
         protected SoundEffectInstance bgm;
         protected SoundBankManager soundManager;
         protected InputManager inputManager;
 
-        private void ChangeGame(GameState newState) {
+        private void ChangeState() {
             // Clear all components
             Game.Components.Clear();
 
@@ -32,12 +22,10 @@ namespace SiegeDefense {
             inputManager = (InputManager)Game.Services.GetService<IInputManager>();
             Game.Components.Add(this);
             Game.Components.Add(inputManager);
-
-            gameState = newState;
         }
 
         public void LoadTitleScreen() {
-            ChangeGame(GameState.TITLE_SCREEN);
+            ChangeState();
 
             Game.Components.Add(new TitleScreen());
 
@@ -47,7 +35,7 @@ namespace SiegeDefense {
         }
 
         public void LoadMapEditorSelectionScreen() {
-            ChangeGame(GameState.MAP_EDITOR_SELECTION);
+            ChangeState();
 
             Game.Components.Add(new MapEditorScreen());
 
@@ -57,7 +45,7 @@ namespace SiegeDefense {
         }
 
         public void LoadMapEditorMode(Texture2D mapData) {
-            ChangeGame(GameState.MAP_EDITOR_MODE);
+            ChangeState();
 
             MapEditorManager mem = new MapEditorManager();
             Game.Components.Add(mem);
@@ -65,7 +53,7 @@ namespace SiegeDefense {
         }
 
         public void LoadLevel(string levelname) {
-            ChangeGame(GameState.SURVIVAL_GAME);
+            ChangeState();
 
             GameLevelManager glm = new GameLevelManager();
             Game.Components.Add(glm);
