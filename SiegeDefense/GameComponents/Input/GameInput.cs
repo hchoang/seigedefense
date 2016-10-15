@@ -15,6 +15,10 @@
         TextInput,
         Back,
         NumberInput,
-        Pause
+        Pause,
+        ToggleBoundingBox,
+        TogglePartitioner,
+        ToggleHPBar,
+        ToggleSteeringForce
     }
 }

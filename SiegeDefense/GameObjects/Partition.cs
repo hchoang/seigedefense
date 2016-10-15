@@ -11,7 +11,7 @@ namespace SiegeDefense {
         public static Partition RootPartition { get; protected set; }
         public static Partition[,,] PartitionList;
         private static int X = 20;
-        private static int Y = 4;
+        private static int Y = 8;
         private static int Z = 20;
         
         public int x { get; set; }
@@ -33,8 +33,15 @@ namespace SiegeDefense {
             RootPartition = this;
 
             this.boundingBox = map.GetBoundingBox();
+            Vector3 boundingBoxMin = boundingBox.Min;
+            Vector3 boundingBoxMax = boundingBox.Max;
+            Vector3 boundingBoxSize = boundingBoxMax - boundingBoxMin;
 
-            Vector3 boundingBoxSize = boundingBox.Max - boundingBox.Min;
+            boundingBoxMin.Y -= boundingBoxSize.Y / 2;
+            boundingBoxMax.Y += boundingBoxSize.Y / 2;
+            boundingBox = new BoundingBox(boundingBoxMin, boundingBoxMax);
+            boundingBoxSize = boundingBox.Max - boundingBox.Min;
+
             Vector3 unitBoxSize = new Vector3(boundingBoxSize.X / X, boundingBoxSize.Y / Y, boundingBoxSize.Z / Z);
 
             PartitionList = new Partition[X, Y, Z];
@@ -119,6 +126,9 @@ namespace SiegeDefense {
         }
 
         public override void Draw(GameTime gameTime) {
+            if (!GameObject.isPartitionerDisplay) {
+                return;
+            }
             if (this == RootPartition) {
                 foreach (Partition partition in PartitionList) {
                     partition.Draw(gameTime);

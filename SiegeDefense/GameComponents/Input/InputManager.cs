@@ -121,6 +121,22 @@ namespace SiegeDefense {
                 return 0;
             }
 
+            if (input == GameInput.ToggleBoundingBox) {
+                return GetValue(Keys.F1, isCurrent);
+            }
+
+            if (input == GameInput.ToggleHPBar) {
+                return GetValue(Keys.F2, isCurrent);
+            }
+
+            if (input == GameInput.TogglePartitioner) {
+                return GetValue(Keys.F3, isCurrent);
+            }
+
+            if (input == GameInput.ToggleSteeringForce) {
+                return GetValue(Keys.F4, isCurrent);
+            }
+
             return 0;
         }
 

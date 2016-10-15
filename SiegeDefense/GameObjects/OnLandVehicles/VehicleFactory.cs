@@ -28,8 +28,8 @@ namespace SiegeDefense {
             tank.hpRenderer.currentHP = HP;
             tank.AddComponent(tank.hpRenderer);
 
-            // Render bounding box
-            tank.AddComponent(new WireFrameBoxRenderer(tank.collider.baseBoundingBox.GetCorners(), Color.Blue));
+            tank.boundingBoxRenderer = new WireFrameBoxRenderer(tank.collider.baseBoundingBox.GetCorners(), Color.Blue);
+            tank.AddComponent(tank.boundingBoxRenderer);
 
             return tank;
         }
@@ -54,8 +54,8 @@ namespace SiegeDefense {
             truck.hpRenderer.currentHP = HP;
             truck.AddComponent(truck.hpRenderer);
 
-            // Render bounding box
-            truck.AddComponent(new WireFrameBoxRenderer(truck.collider.baseBoundingBox.GetCorners(), Color.Blue));
+            truck.boundingBoxRenderer = new WireFrameBoxRenderer(truck.collider.baseBoundingBox.GetCorners(), Color.Blue);
+            truck.AddComponent(truck.boundingBoxRenderer);
 
             return truck;
         }

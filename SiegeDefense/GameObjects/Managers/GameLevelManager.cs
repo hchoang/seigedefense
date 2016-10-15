@@ -12,10 +12,10 @@ namespace SiegeDefense {
         protected EmptyObject gameoverSprite;
 
         // Game mechanics
-        protected int maxEnemy = 1;
+        protected int maxEnemy = 20;
         protected int spawnMaxAttempt = 50;
-        protected float spawnCDTime = 1;
-        protected float spawnCDCounter = 1;
+        protected float spawnCDTime = 5;
+        protected float spawnCDCounter = 5;
         public int Point { get; set; }
 
         // Game world
@@ -60,7 +60,7 @@ namespace SiegeDefense {
             inputManager.toggleCursor(true);
             gameManager.LoadTitleScreen();
         }
-
+            
         public void ResumeButtonClick(HUD invoker) {
             gameManager.isPaused = false;
             inputManager.toggleCursor(false);
@@ -145,22 +145,12 @@ namespace SiegeDefense {
                 spawnCDCounter = 0;
                 List<OnlandVehicle> enemyTanks = FindObjectsByTag("Enemy").Cast<OnlandVehicle>().ToList();
                 if (enemyTanks.Count < maxEnemy) {
-                    for (int i = 0; i < spawnMaxAttempt; i++) {
-                        Random r = new Random();
-                        int spawnIndex = r.Next(map.SpawnPoints.Count);
-                        Vector3 newTankLocation = map.SpawnPoints[spawnIndex];
-                        newTankLocation.Y = map.GetHeight(newTankLocation);
-
-                        OnlandVehicle enemyVehicle = VehicleFactory.CreateExplosiveTruck(ModelType.EXPLOSIVE_TRUCK1, 20);
-                        enemyVehicle.Tag = "Enemy";
-                        enemyVehicle.transformation.Position = newTankLocation;
-                        enemyVehicle.AddToGameWorld();
-                        if (enemyVehicle.Moveable(newTankLocation)) {
-                            enemyVehicle.AddComponent(new ExplosiveTruckAI());
-                            break;
-                        } else {
-                            enemyVehicle.RemoveFromGameWorld();
-                        }
+                    Random r = new Random();
+                    int randomeValue = r.Next(0, 100);
+                    if (randomeValue > 30) {
+                        SpawnEnemyTank();
+                    } else {
+                        SpawnEnemyTruck();
                     }
                 }
             }
@@ -168,5 +158,46 @@ namespace SiegeDefense {
 
             base.Update(gameTime);
         }
+
+        public void SpawnEnemyTruck() {
+            for (int i = 0; i < spawnMaxAttempt; i++) {
+                Random r = new Random();
+                int spawnIndex = r.Next(map.SpawnPoints.Count);
+                Vector3 newTruckLocation = map.SpawnPoints[spawnIndex];
+                newTruckLocation.Y = map.GetHeight(newTruckLocation);
+
+                OnlandVehicle enemyVehicle = VehicleFactory.CreateExplosiveTruck(ModelType.EXPLOSIVE_TRUCK1, 20);
+                enemyVehicle.Tag = "Enemy";
+                enemyVehicle.transformation.Position = newTruckLocation;
+                enemyVehicle.AddToGameWorld();
+                if (enemyVehicle.Moveable(newTruckLocation)) {
+                    enemyVehicle.AddComponent(new ExplosiveTruckAI());
+                    break;
+                } else {
+                    enemyVehicle.RemoveFromGameWorld();
+                }
+            }
+        }
+
+        public void SpawnEnemyTank() {
+            for (int i = 0; i < spawnMaxAttempt; i++) {
+                Random r = new Random();
+                int spawnIndex = r.Next(map.SpawnPoints.Count);
+                Vector3 newTankLocation = map.SpawnPoints[spawnIndex];
+                newTankLocation.Y = map.GetHeight(newTankLocation);
+
+                OnlandVehicle enemyVehicle = VehicleFactory.CreateTank(ModelType.TANK1, 60);
+                enemyVehicle.Tag = "Enemy";
+                enemyVehicle.transformation.Position = newTankLocation;
+                enemyVehicle.AddToGameWorld();
+                if (enemyVehicle.Moveable(newTankLocation)) {
+                    enemyVehicle.AddComponent(new EnemyTankAI());
+                    break;
+                } else {
+                    enemyVehicle.RemoveFromGameWorld();
+                }
+            }
+        }
     }
+
 }

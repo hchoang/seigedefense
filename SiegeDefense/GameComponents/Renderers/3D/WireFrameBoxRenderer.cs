@@ -55,7 +55,10 @@ namespace SiegeDefense {
         }
 
         public override void Draw(GameTime gameTime) {
-            return;
+            if (!Visible) {
+                return;
+            }
+
             basicEffect.VertexColorEnabled = true;
             basicEffect.LightingEnabled = false;
             basicEffect.FogEnabled = false;

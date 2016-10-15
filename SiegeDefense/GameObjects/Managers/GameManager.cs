@@ -103,6 +103,22 @@ namespace SiegeDefense {
         public override void Update(GameTime gameTime) {
             bgm.Play();
 
+            if (inputManager.isTriggered(GameInput.ToggleBoundingBox)) {
+                GameObject.isBoundingBoxDisplay = !GameObject.isBoundingBoxDisplay;
+            }
+
+            if (inputManager.isTriggered(GameInput.ToggleHPBar)) {
+                GameObject.isHPBarDisplay = !GameObject.isHPBarDisplay;
+            }
+
+            if (inputManager.isTriggered(GameInput.TogglePartitioner)) {
+                GameObject.isPartitionerDisplay = !GameObject.isPartitionerDisplay;
+            }
+
+            if (inputManager.isTriggered(GameInput.ToggleSteeringForce)) {
+                GameObject.isSteeringForceDisplay = !GameObject.isSteeringForceDisplay;
+            }
+
             base.Update(gameTime);
         }
 

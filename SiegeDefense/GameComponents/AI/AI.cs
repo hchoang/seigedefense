@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,6 +76,56 @@ namespace SiegeDefense {
             }
 
             base.Update(gameTime);
+        }
+
+        private BasicEffect _basiscEffect;
+        public BasicEffect basicEffect {
+            get {
+                if (_basiscEffect == null) {
+                    _basiscEffect = Game.Services.GetService<BasicEffect>();
+                }
+                return _basiscEffect;
+            }
+        }
+
+        private Camera _camera;
+        public Camera camera {
+            get {
+                if (_camera == null) {
+                    _camera = FindObjects<Camera>()[0];
+                }
+                return _camera;
+            }
+        }
+
+        public override void Draw(GameTime gameTime) {
+            if (!GameObject.isSteeringForceDisplay) {
+                return;
+            }
+
+            Vector3 yOffset = new Vector3(0, 20, 0);
+            VertexPositionColor[] vertices = new VertexPositionColor[2];
+            vertices[0].Position = baseObject.transformation.Position + yOffset;
+            vertices[0].Color = Color.Red;
+            vertices[1].Position = baseObject.transformation.Position + Vector3.Normalize(steeringForce) * 50 + yOffset;
+            vertices[1].Color = Color.Red;
+
+            int[] indices = new int[2] { 0, 1 };
+            
+            basicEffect.EnableDefaultLighting();
+            basicEffect.VertexColorEnabled = true;
+            basicEffect.LightingEnabled = false;
+            basicEffect.FogEnabled = false;
+            basicEffect.World = Matrix.Identity;
+            basicEffect.View = camera.ViewMatrix;
+            basicEffect.Projection = camera.ProjectionMatrix;
+
+            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes) {
+                pass.Apply();
+                GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.LineList, vertices, 0, 2, indices, 0, 1);
+            }
+
+            base.Draw(gameTime);
         }
     }
 }

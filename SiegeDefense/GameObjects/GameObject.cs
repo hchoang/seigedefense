@@ -7,6 +7,11 @@ using System;
 namespace SiegeDefense {
     public abstract class GameObject : DrawableGameComponent{
 
+        public static bool isBoundingBoxDisplay { get; set; } = false;
+        public static bool isHPBarDisplay { get; set; } = true;
+        public static bool isPartitionerDisplay { get; set; } = false;
+        public static bool isSteeringForceDisplay { get; set; } = false;
+
         #region Components
         private List<GameObjectComponent> components = new List<GameObjectComponent>();
         public virtual string Tag { get; set; } = "";

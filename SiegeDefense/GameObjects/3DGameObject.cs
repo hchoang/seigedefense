@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace SiegeDefense {
     public class _3DGameObject : GameObject {
         public virtual _3DRenderer renderer { get; set; }
         public virtual Collider collider { get; set; }
         public virtual GamePhysics physics { get; set; }
+        public virtual WireFrameBoxRenderer boundingBoxRenderer { get; set; }
 
         private Camera _mainCamera;
         protected Camera mainCamera {
@@ -58,6 +60,14 @@ namespace SiegeDefense {
             }
             return Partition.GetObjectsForCollisionDetection(this).Where(x => x is T).Cast<T>().ToList();
             //return partition.managedObjects.Where(x => x is T).Cast<T>().ToList();
+        }
+
+        public override void Update(GameTime gameTime) {
+            if (boundingBoxRenderer != null) {
+                boundingBoxRenderer.Visible = GameObject.isBoundingBoxDisplay;
+            }
+
+            base.Update(gameTime);
         }
     }
 }

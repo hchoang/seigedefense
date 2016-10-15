@@ -250,9 +250,6 @@
 /processorParam:Quality=Best
 /build:Sound/in-battle-bgm.wav
 
-#begin Level/level1.xml
-/copy:Level/level1.xml
-
 #begin Sprites/HPRestore.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -358,4 +355,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites\EnemySpawnPoint.png
+
+#begin Terrain/map3.bmp
+/copy:Terrain/map3.bmp
 

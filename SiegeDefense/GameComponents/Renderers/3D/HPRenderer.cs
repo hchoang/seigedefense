@@ -48,6 +48,10 @@ namespace SiegeDefense {
         }
 
         public override void Draw(GameTime gameTime) {
+            if (!GameObject.isHPBarDisplay) {
+                return;
+            }
+
             customEffect.Parameters["World"].SetValue(transformation.WorldMatrix);
             customEffect.Parameters["View"].SetValue(camera.ViewMatrix);
             customEffect.Parameters["Projection"].SetValue(camera.ProjectionMatrix);
