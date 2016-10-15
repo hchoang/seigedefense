@@ -34,4 +34,5 @@
   </HeadquarterPosition>
   <MapCellSize>10</MapCellSize>
   <MapDeltaHeight>200</MapDeltaHeight>
+  <TerrainName>map1</TerrainName>
 </LevelDescription>

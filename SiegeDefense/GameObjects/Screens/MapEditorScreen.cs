@@ -8,9 +8,10 @@ namespace SiegeDefense {
     public class MapEditorScreen : GameObject {
 
         public _2DRenderer mapPreview { get; set; }
-        public VerticalList<Texture2D> terrainList { get; set; }
+        public VerticalList<TerrainDescription> terrainList { get; set; }
+        public TerrainDescription selectedTerrain { get; set; }
         public HUD editMapButton { get; set; }
-        public Texture2D selectedTerrain { get; set; }
+        
         public MapEditorScreen() {
             // background
             _2DRenderer background = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuBackground"));
@@ -29,7 +30,7 @@ namespace SiegeDefense {
 
             Vector2 terrainListPadding = new Vector2(0.1f, 0.1f);
             float nVisibleTerrain = 3.5f;
-            terrainList = new VerticalList<Texture2D>(terrainListRenderer, terrainListPadding, nVisibleTerrain);
+            terrainList = new VerticalList<TerrainDescription>(terrainListRenderer, terrainListPadding, nVisibleTerrain);
             terrainList.onItemSelected = onTerrainSelected;
             AddComponent(terrainList);
 
@@ -38,17 +39,19 @@ namespace SiegeDefense {
             SpriteFont terrainItemFont = Game.Content.Load<SpriteFont>(@"Fonts\Arial");
 
             foreach (string terrainPath in terrainPathList) {
-                ListItem<Texture2D> terrainItem = new ListItem<Texture2D>();
+                ListItem<TerrainDescription> terrainItem = new ListItem<TerrainDescription>();
 
                 // item data
                 string terrainName = Path.GetFileNameWithoutExtension(terrainPath);
-                Texture2D terrainData = Game.Content.Load<Texture2D>(@"Terrain\" + terrainName);
-                terrainItem.data = terrainData;
+                Texture2D terrainTexture = Game.Content.Load<Texture2D>(@"Terrain\" + terrainName);
+                terrainItem.data = new TerrainDescription();
+                terrainItem.data.TerrainName = terrainName;
+                terrainItem.data.TerrainTexture = terrainTexture;
 
                 // item display
                 terrainItem.renderer = new _2DRenderer();
 
-                _2DRenderer terrainThumbnailRenderer = new SquareSpriteRenderer(terrainData, Color.Blue);
+                _2DRenderer terrainThumbnailRenderer = new SquareSpriteRenderer(terrainTexture, Color.Blue);
                 terrainThumbnailRenderer.position = new Vector2(0.05f, 0.2f);
                 terrainThumbnailRenderer.size = new Vector2(0, 0.6f);
                 terrainItem.renderer.AddChildRenderer(terrainThumbnailRenderer);
@@ -94,10 +97,10 @@ namespace SiegeDefense {
             gameManager.LoadTitleScreen();
         }
 
-        public void onTerrainSelected(HUD invoker, Texture2D data) {
+        public void onTerrainSelected(HUD invoker, TerrainDescription data) {
             selectedTerrain = data;
-            SquareSpriteRenderer ssr = new SquareSpriteRenderer(data, Color.Blue);
-            ssr.size = new Vector2(1, 0.2f);
+            SquareSpriteRenderer ssr = new SquareSpriteRenderer(data.TerrainTexture, Color.Blue);
+            ssr.size = new Vector2(1, 0);
             if (mapPreview.childRenderers.Count == 0) {
                 mapPreview.AddChildRenderer(ssr);
             } else {

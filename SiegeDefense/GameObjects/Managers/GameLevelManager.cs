@@ -25,10 +25,9 @@ namespace SiegeDefense {
         protected OnlandVehicle userControlledTank;
         public Partition rootPartition { get; set; }
 
-        public void LoadLevel(string levelname) {
+        public void LoadLevel(LevelDescription description) {
 
             // Add game world
-            LevelDescription description = LevelDescription.LoadFromXML(Game.Content.RootDirectory + @"\level\" + levelname + ".xml");
             sky = new Skybox();
             map = new HeightMap(description);
             Game.Components.Add(sky);
@@ -47,8 +46,8 @@ namespace SiegeDefense {
             Game.Components.Add(mainCamera);
 
             // Add game detail
-            pointSprite = new TextRenderer() { font = Game.Content.Load<SpriteFont>(@"Fonts\Arial"), text = "Point: " + 0, position = new Vector2(50, 50), color = Color.Green };
-            bloodSprite = new TextRenderer() { font = Game.Content.Load<SpriteFont>(@"Fonts\Arial"), text = "HP: " + userControlledTank.HP, position = new Vector2(50, 100), color = Color.Green };
+            pointSprite = new TextRenderer() { font = Game.Content.Load<SpriteFont>(@"Fonts\Arial"), text = "Point: " + 0, position = new Vector2(50, 50), color = Color.Red };
+            bloodSprite = new TextRenderer() { font = Game.Content.Load<SpriteFont>(@"Fonts\Arial"), text = "HP: " + userControlledTank.HP, position = new Vector2(50, 100), color = Color.Red };
             gameoverSprite = new EmptyObject();
             gameoverSprite.AddComponent(new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\GameOver")));
             gameoverSprite.Visible = false;
@@ -58,7 +57,7 @@ namespace SiegeDefense {
         }
 
         public override void Update(GameTime gameTime) {
-            if (userControlledTank.HP <= 0) {
+            if (userControlledTank.HP <= 0 || FindObjectsByTag("Player").Count == 0) {
                 gameoverSprite.Visible = true;
                 return;
             }

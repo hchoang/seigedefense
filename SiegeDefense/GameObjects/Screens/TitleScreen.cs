@@ -16,8 +16,8 @@ namespace SiegeDefense {
             AddComponent(menuFrame);
 
             // load menu buttons
-            string[] buttonTexts = { "New Game", "Option", "Map Editor", "Exit" };
-            Action<HUD>[] buttonFuncs = { NewGame, Option, MapEditor, Exit };
+            string[] buttonTexts = { "New Game", "Map Editor", "Exit" };
+            Action<HUD>[] buttonFuncs = { NewGame, MapEditor, Exit };
             Texture2D buttonFrame = Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton");
             SpriteFont buttonTextFont = Game.Content.Load<SpriteFont>(@"Fonts\Arial");
 
@@ -43,7 +43,7 @@ namespace SiegeDefense {
 
         public void NewGame(HUD invoker) {
             GameManager gameManager = Game.Services.GetService<GameManager>();
-            gameManager.LoadLevel("level1");
+            gameManager.LoadSelectLevelScreen();
         }
 
         public void Exit(HUD invoker) {

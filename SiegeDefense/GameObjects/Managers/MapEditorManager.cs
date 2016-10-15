@@ -11,12 +11,14 @@ namespace SiegeDefense {
         public HUD playerStartPointHUD { get; set; }
         public HUD enemySpawnPointHUD { get; set; }
         public _3DGameObject playerStartPointMaker { get; set; }
-        public List<_3DGameObject> enemySpawnPointMakers { get; set; }
         public bool isModalDisplaying { get; set; } = false;
+        public TextBox namingTextbox { get; set; }
+        public string terrainName { get; set; }
 
-        public void LoadMap(Texture2D mapData) {
+        public void LoadMap(TerrainDescription terrainData) {
+            this.terrainName = terrainData.TerrainName;
             Skybox sky = new Skybox();
-            Map map = new HeightMap(mapData);
+            Map map = new HeightMap(terrainData.TerrainTexture);
             Game.Components.Add(sky);
             Game.Components.Add(map);
 
@@ -66,7 +68,7 @@ namespace SiegeDefense {
             saveButtonRenderer.AddChildRenderer(new TextRenderer("Save"));
 
             HUD saveButton = new HUD(saveButtonRenderer);
-            saveButton.onClick = SaveButtonOnClick;
+            saveButton.onClick = SaveButtonClick;
             Game.Components.Add(saveButton);
 
             // exit button
@@ -76,7 +78,7 @@ namespace SiegeDefense {
             exitButtonRenderer.AddChildRenderer(new TextRenderer("Exit"));
 
             HUD exitButton = new HUD(exitButtonRenderer);
-            exitButton.onClick = ExitButtonOnclick;
+            exitButton.onClick = ExitButtonClick;
             Game.Components.Add(exitButton);
         }
 
@@ -85,7 +87,7 @@ namespace SiegeDefense {
                 return;
             }
 
-            if (playerStartPointMaker != null) {
+            if (playerStartPointMaker != null && Game.Components.Contains(playerStartPointMaker)) {
                 Game.Components.Remove(playerStartPointMaker);
             }
 
@@ -114,12 +116,12 @@ namespace SiegeDefense {
             Game.Components.Add(enemyMaker);
         }
 
-        public void ExitButtonOnclick(HUD invoker) {
+        public void ExitButtonClick(HUD invoker) {
             GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadTitleScreen();
         }
 
-        public void SaveButtonOnClick(HUD invoker) {
+        public void SaveButtonClick(HUD invoker) {
             if (isModalDisplaying) {
                 return;
             }
@@ -196,10 +198,59 @@ namespace SiegeDefense {
                 Game.Components.Add(namingFrame);
 
                 // display textbox
-                TextBox namingTextbox = new TextBox(Color.Green * 0.5f, Color.White, new Vector2(0.3f, 0.55f), new Vector2(0.4f, 0.1f));
+                namingTextbox = new TextBox(Color.Green * 0.5f, Color.White, new Vector2(0.3f, 0.55f), new Vector2(0.4f, 0.1f));
                 namingTextbox.Tag = "Modal";
                 Game.Components.Add(namingTextbox);
+
+                // ok & cancel button
+                _2DRenderer okButtonFrame = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton"));
+                okButtonFrame.AddChildRenderer(new TextRenderer("OK"));
+                okButtonFrame.size = new Vector2(0.08f, 0.08f);
+                okButtonFrame.position = new Vector2(0.35f, 0.7f);
+
+                HUD okButton = new HUD(okButtonFrame);
+                okButton.Tag = "Modal";
+                okButton.onClick = SaveMapButtonClick;
+                Game.Components.Add(okButton);
+
+                _2DRenderer cancelButtonFrame = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton"));
+                cancelButtonFrame.AddChildRenderer(new TextRenderer("Cancel"));
+                cancelButtonFrame.size = new Vector2(0.08f, 0.08f);
+                cancelButtonFrame.position = new Vector2(0.55f, 0.7f);
+
+                HUD cancelButton = new HUD(cancelButtonFrame);
+                cancelButton.Tag = "Modal";
+                cancelButton.onClick = CancelButtonClick;
+                Game.Components.Add(cancelButton);
             }
+        }
+
+        public void SaveMapButtonClick(HUD invoker) {
+            if (namingTextbox.textRenderer.text == "") {
+                return;
+            }
+            LevelDescription ld = new LevelDescription();
+            ld.PlayerStartPoint = playerStartPointMaker.transformation.Position;
+            List<GameObject> enemySpawnPoints = FindObjectsByTag("EnemySpawnPoint");
+            foreach (GameObject enemySpawnPoint in enemySpawnPoints) {
+                ld.SpawnPoints.Add(enemySpawnPoint.transformation.Position);
+            }
+            ld.MapCellSize = 10;
+            ld.MapDeltaHeight = 200;
+            ld.TerrainName = terrainName;
+            ld.SaveToXML(Game.Content.RootDirectory + @"\Level\" + namingTextbox.textRenderer.text + ".xml");
+
+            GameManager gameManager = Game.Services.GetService<GameManager>();
+            gameManager.LoadTitleScreen();
+        }
+
+        public void CancelButtonClick(HUD invoker) {
+            List<GameObject> modalComponents = FindObjectsByTag("Modal");
+            foreach (GameObject modalComponent in modalComponents) {
+                Game.Components.Remove(modalComponent);
+            }
+
+            isModalDisplaying = false;
         }
 
         public void OkButtonClick(HUD invoker) {

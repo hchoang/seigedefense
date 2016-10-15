@@ -78,6 +78,7 @@
     <Compile Include="GameComponents\Renderers\3D\SimpleWaterRenderer.cs" />
     <Compile Include="GameComponents\Renderers\3D\WireFrameBoxRenderer.cs" />
     <Compile Include="GameComponents\Renderers\Renderer.cs" />
+    <Compile Include="GameData\TerrainDescription.cs" />
     <Compile Include="GameObjects\Cameras\RTSCamera.cs" />
     <Compile Include="GameObjects\EmptyObject.cs" />
     <Compile Include="GameObjects\Explosions\Explosion.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="GameObjects\Cameras\FollowTargetCamera.cs" />
     <Compile Include="GameObjects\Cameras\TargetPointOfViewCamera.cs" />
     <Compile Include="GameComponents\Input\TankController.cs" />
-    <Compile Include="GameComponents\Levels\LevelDescription.cs" />
+    <Compile Include="GameData\LevelDescription.cs" />
     <Compile Include="GameObjects\Items\Item.cs" />
     <Compile Include="GameObjects\Maps\MapNode.cs" />
     <Compile Include="GameObjects\Maps\Map.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="GameObjects\Maps\VertexMultitextured.cs" />
     <Compile Include="GameComponents\HUD\VerticalList.cs" />
     <Compile Include="GameObjects\Screens\MapEditorScreen.cs" />
+    <Compile Include="GameObjects\Screens\SelectLevelScreen.cs" />
     <Compile Include="GameObjects\Sky\Skybox.cs" />
     <Compile Include="GameObjects\Cameras\FPSCamera.cs" />
     <Compile Include="GameObjects\GameObject.cs" />

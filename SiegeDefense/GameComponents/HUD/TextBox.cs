@@ -14,6 +14,7 @@ namespace SiegeDefense {
         public SpriteRenderer backgroundRenderer { get; set; }
         public TextRenderer textRenderer { get; set; }
         public bool focused { get; set; } = false;
+        
         public TextBox(Color backgroundColor, Color textColor, SpriteFont font, Vector2 position, Vector2 size) {
             this.backgroundColor = backgroundColor;
             this.textColor = textColor;

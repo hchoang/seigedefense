@@ -4,5 +4,6 @@
         bool isPressing(GameInput input);
         bool isTriggered(GameInput input);
         bool isReleased(GameInput input);
+        void setCursorInscreen(bool value);
     }
 }

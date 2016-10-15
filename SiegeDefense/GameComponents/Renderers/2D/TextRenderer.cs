@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace SiegeDefense {
     public class TextRenderer : _2DRenderer {
         public SpriteFont font { get; set; }
-        public string text { get; set; }
+        public string text { get; set; } = "";
         
         public TextRenderer(string text, SpriteFont font) {
             this.text = text;

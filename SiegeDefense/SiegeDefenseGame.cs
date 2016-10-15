@@ -25,7 +25,6 @@ namespace SiegeDefense {
             GameObject.Initialize(this);
             RegisterServices();
 
-            //gameManager.LoadLevel("level1");
             gameManager.LoadTitleScreen();
 
             base.Initialize();

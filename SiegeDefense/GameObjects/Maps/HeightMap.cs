@@ -29,7 +29,7 @@ namespace SiegeDefense {
             this.mapCellSize = description.MapCellSize;
             this.mapDeltaHeight = description.MapDeltaHeight;
 
-            renderer = new HeightMapRenderer(Game.Content.Load<Texture2D>(@"Terrain\map1"), mapDeltaHeight, mapCellSize, out mapInfoWidth, out mapInfoHeight);
+            renderer = new HeightMapRenderer(Game.Content.Load<Texture2D>(@"Terrain\" + description.TerrainName), mapDeltaHeight, mapCellSize, out mapInfoWidth, out mapInfoHeight);
             AddComponent(renderer);
 
             WaterRenderer waterRenderer = new WaterRenderer(Vector2.Zero, new Vector2(mapInfoWidth * mapCellSize, mapInfoHeight * mapCellSize), waterHeight * mapDeltaHeight);
@@ -57,8 +57,8 @@ namespace SiegeDefense {
 
             Vector3 newPosition = position;
             newPosition.Y = GetHeight(newPosition);
-            if (newPosition.Y <= waterHeight + 1) return false;
-            if (newPosition.Y > 0.5f * mapDeltaHeight) return false;
+            if (newPosition.Y < (waterHeight - 0.05f) * mapDeltaHeight) return false;
+            //if (newPosition.Y > 0.5f * mapDeltaHeight) return false;
 
             // check map slope
             Vector3 mapNormal = GetNormal(newPosition);
@@ -66,7 +66,7 @@ namespace SiegeDefense {
             angle = (float)Math.Acos(angle);
             float angleInDegree = angle * 180 / MathHelper.Pi;
 
-            if (Math.Abs(angleInDegree) > 40) return false;
+            if (Math.Abs(angleInDegree) > 60) return false;
 
             return true;
         }

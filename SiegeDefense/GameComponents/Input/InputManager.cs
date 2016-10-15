@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace SiegeDefense {
@@ -13,6 +14,7 @@ namespace SiegeDefense {
         private Point centerPosition;
         private Point manuallySetPosition;
         private bool resetCursorPosition = false;
+        private bool keepCursorInscreen = false;
 
         private enum MouseButton {
             LeftButton,
@@ -39,11 +41,11 @@ namespace SiegeDefense {
                 manuallySetPosition = Point.Zero;
             }
 
-            //if (!GraphicsDevice.Viewport.Bounds.Contains(currentMouseState.Position)) {
-            //    Mouse.SetPosition(centerPosition.X, centerPosition.Y);
-            //    manuallySetPosition = currentMouseState.Position - centerPosition;
-            //    resetCursorPosition = true;
-            //}
+            if (keepCursorInscreen && !GraphicsDevice.Viewport.Bounds.Contains(currentMouseState.Position)) {
+                Mouse.SetPosition(centerPosition.X, centerPosition.Y);
+                manuallySetPosition = currentMouseState.Position - centerPosition;
+                resetCursorPosition = true;
+            }
 
             previousMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
@@ -156,6 +158,11 @@ namespace SiegeDefense {
         private Vector2 GetMousePosition(bool isCurrent) {
             MouseState ms = isCurrent ? currentMouseState : previousMouseState;
             return ms.Position.ToVector2();
+        }
+
+        public void setCursorInscreen(bool value) {
+            keepCursorInscreen = value;
+            Game.IsMouseVisible = !keepCursorInscreen;
         }
     }
 }

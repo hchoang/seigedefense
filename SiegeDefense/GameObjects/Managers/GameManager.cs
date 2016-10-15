@@ -22,12 +22,29 @@ namespace SiegeDefense {
             inputManager = (InputManager)Game.Services.GetService<IInputManager>();
             Game.Components.Add(this);
             Game.Components.Add(inputManager);
+
+            // reset cursor
+            inputManager.setCursorInscreen(false);
+            // reset bgm
+            if (bgm != null) {
+                bgm.Stop();
+            }
         }
 
         public void LoadTitleScreen() {
             ChangeState();
 
             Game.Components.Add(new TitleScreen());
+
+            // play BGM
+            bgm = soundManager.FindSound(SoundType.InBattleBGM).CreateInstance();
+            bgm.IsLooped = true;
+        }
+
+        public void LoadSelectLevelScreen() {
+            ChangeState();
+
+            Game.Components.Add(new SelectLevelScreen());
 
             // play BGM
             bgm = soundManager.FindSound(SoundType.InBattleBGM).CreateInstance();
@@ -44,24 +61,32 @@ namespace SiegeDefense {
             bgm.IsLooped = true;
         }
 
-        public void LoadMapEditorMode(Texture2D mapData) {
+        public void LoadMapEditorMode(TerrainDescription terrainData) {
             ChangeState();
 
             MapEditorManager mem = new MapEditorManager();
             Game.Components.Add(mem);
-            mem.LoadMap(mapData);
+            mem.LoadMap(terrainData);
         }
 
-        public void LoadLevel(string levelname) {
+        public void LoadLevel(LevelDescription levelDescrption) {
             ChangeState();
+
+            inputManager.setCursorInscreen(true);
 
             GameLevelManager glm = new GameLevelManager();
             Game.Components.Add(glm);
-            glm.LoadLevel(levelname);
+            glm.LoadLevel(levelDescrption);
 
             // Add BGM
             bgm = soundManager.FindSound(SoundType.InBattleBGM).CreateInstance();
             bgm.IsLooped = true;
+        }
+
+        public override void Update(GameTime gameTime) {
+            bgm.Play();
+
+            base.Update(gameTime);
         }
 
     }
