@@ -368,3 +368,6 @@
 #begin Terrain/map7.bmp
 /copy:Terrain/map7.bmp
 
+#begin Level/dummy.txt
+/copy:Level/dummy.txt
+
