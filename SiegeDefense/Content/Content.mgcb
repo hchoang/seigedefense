@@ -329,9 +329,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/TerrainListFrame.png
 
-#begin Terrain/test.bmp
-/copy:Terrain/test.bmp
-
 #begin Sprites/PlayerStartPoint.png
 /importer:TextureImporter
 /processor:TextureProcessor
