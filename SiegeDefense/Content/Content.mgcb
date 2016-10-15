@@ -359,3 +359,15 @@
 #begin Terrain/map3.bmp
 /copy:Terrain/map3.bmp
 
+#begin Terrain/map4.bmp
+/copy:Terrain/map4.bmp
+
+#begin Terrain/map5.bmp
+/copy:Terrain/map5.bmp
+
+#begin Terrain/map6.bmp
+/copy:Terrain/map6.bmp
+
+#begin Terrain/map7.bmp
+/copy:Terrain/map7.bmp
+
