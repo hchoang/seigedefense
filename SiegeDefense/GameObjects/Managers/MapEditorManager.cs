@@ -11,7 +11,6 @@ namespace SiegeDefense {
         public HUD playerStartPointHUD { get; set; }
         public HUD enemySpawnPointHUD { get; set; }
         public _3DGameObject playerStartPointMaker { get; set; }
-        public bool isModalDisplaying { get; set; } = false;
         public TextBox namingTextbox { get; set; }
         public string terrainName { get; set; }
 
@@ -83,10 +82,6 @@ namespace SiegeDefense {
         }
 
         public void SelectPlayerStartPoint(HUD invoker) {
-            if (isModalDisplaying) {
-                return;
-            }
-
             if (playerStartPointMaker != null && Game.Components.Contains(playerStartPointMaker)) {
                 Game.Components.Remove(playerStartPointMaker);
             }
@@ -102,10 +97,6 @@ namespace SiegeDefense {
         }
 
         public void SelectedEnemySpawnPoint(HUD invoker) {
-            if (isModalDisplaying) {
-                return;
-            }
-
             _3DGameObject enemyMaker = new _3DGameObject();
             enemyMaker.Tag = "EnemySpawnPoint";
             enemyMaker.renderer = new BillboardRenderer(Game.Content.Load<Texture2D>(@"Sprites\EnemySpawnPoint"));
@@ -117,15 +108,10 @@ namespace SiegeDefense {
         }
 
         public void ExitButtonClick(HUD invoker) {
-            GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadTitleScreen();
         }
 
         public void SaveButtonClick(HUD invoker) {
-            if (isModalDisplaying) {
-                return;
-            }
-
             string warningMessage = null;
 
             List<GameObject> enemySpawnPoint = FindObjectsByTag("EnemySpawnPoint");
@@ -148,7 +134,7 @@ namespace SiegeDefense {
             HUD modalBackground = new HUD(modalBackgroundRenderer);
             modalBackground.Tag = "Modal";
             Game.Components.Add(modalBackground);
-            isModalDisplaying = true;
+            gameManager.isPaused = true;
 
             if (warningMessage != null) {
                 // display warning message
@@ -240,26 +226,16 @@ namespace SiegeDefense {
             ld.TerrainName = terrainName;
             ld.SaveToXML(Game.Content.RootDirectory + @"\Level\" + namingTextbox.textRenderer.text + ".xml");
 
-            GameManager gameManager = Game.Services.GetService<GameManager>();
+            gameManager.isPaused = false;
             gameManager.LoadTitleScreen();
         }
 
         public void CancelButtonClick(HUD invoker) {
-            List<GameObject> modalComponents = FindObjectsByTag("Modal");
-            foreach (GameObject modalComponent in modalComponents) {
-                Game.Components.Remove(modalComponent);
-            }
-
-            isModalDisplaying = false;
+            gameManager.isPaused = false;
         }
 
         public void OkButtonClick(HUD invoker) {
-            List<GameObject> modalComponents = FindObjectsByTag("Modal");
-            foreach (GameObject modalComponent in modalComponents) {
-                Game.Components.Remove(modalComponent);
-            }
-
-            isModalDisplaying = false;
+            gameManager.isPaused = false;
         }
     }
 }

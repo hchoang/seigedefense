@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SiegeDefense {
     public abstract class AI : GameObjectComponent {
         private GameObject _player;
-        protected GameObject Player {
+        public GameObject Player {
             get {
                 if (_player == null) {
                     _player = FindObjectsByTag("Player")[0];
@@ -46,6 +46,7 @@ namespace SiegeDefense {
         public Tank AITank { get { return (Tank)baseObject; } }
 
         public override void Update(GameTime gameTime) {
+
             foreach (KeyValuePair<string, string> transition in stateMachine.transitionMap[currentState]) {
                 bool conditionMeet = conditionMap[transition.Key]();
                 if (conditionMeet) {

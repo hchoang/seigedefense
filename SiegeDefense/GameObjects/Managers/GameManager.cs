@@ -12,6 +12,20 @@ namespace SiegeDefense {
         protected SoundEffectInstance bgm;
         protected SoundBankManager soundManager;
         protected InputManager inputManager;
+        public bool _isPaused = false;
+        public bool isPaused {
+            get {
+                return _isPaused;
+            } set {
+                if (value == false) {
+                    List<GameObject> modalComponents = FindObjectsByTag("Modal");
+                    foreach (GameObject modalComponent in modalComponents) {
+                        Game.Components.Remove(modalComponent);
+                    }
+                }
+                _isPaused = value;
+            }
+        }
 
         private void ChangeState() {
             // Clear all components
@@ -24,7 +38,10 @@ namespace SiegeDefense {
             Game.Components.Add(inputManager);
 
             // reset cursor
-            inputManager.setCursorInscreen(false);
+            inputManager.toggleCursor(true);
+            // reset pause state
+            isPaused = false;
+
             // reset bgm
             if (bgm != null) {
                 bgm.Stop();
@@ -72,7 +89,7 @@ namespace SiegeDefense {
         public void LoadLevel(LevelDescription levelDescrption) {
             ChangeState();
 
-            inputManager.setCursorInscreen(true);
+            inputManager.toggleCursor(false);
 
             GameLevelManager glm = new GameLevelManager();
             Game.Components.Add(glm);

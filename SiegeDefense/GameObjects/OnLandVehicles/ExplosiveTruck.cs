@@ -39,7 +39,7 @@ namespace SiegeDefense {
                     continue;
                 }
 
-                float forceMagnitude = 10000 / distance;
+                float forceMagnitude = MathHelper.Clamp(10000 / distance, 0, 100);
                 impactForce = Vector3.Normalize(impactForce) * forceMagnitude;
                 vehicle.physics.ImpactForce = impactForce;
                 vehicle.Damaged((int)forceMagnitude);

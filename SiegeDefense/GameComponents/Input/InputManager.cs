@@ -108,6 +108,10 @@ namespace SiegeDefense {
                 return GetValue(Keys.Back, isCurrent);
             }
 
+            if (input == GameInput.Pause) {
+                return GetValue(Keys.Escape, isCurrent);
+            }
+
             if (input == GameInput.NumberInput) {
                 for (int i=(int)Keys.D0; i<=(int)Keys.D9; i++) {
                     float value = GetValue((Keys)i, isCurrent);
@@ -160,9 +164,9 @@ namespace SiegeDefense {
             return ms.Position.ToVector2();
         }
 
-        public void setCursorInscreen(bool value) {
-            keepCursorInscreen = value;
-            Game.IsMouseVisible = !keepCursorInscreen;
+        public void toggleCursor(bool isVisible) {
+            keepCursorInscreen = !isVisible;
+            Game.IsMouseVisible = isVisible;
         }
     }
 }

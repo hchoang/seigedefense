@@ -88,12 +88,10 @@ namespace SiegeDefense {
                 return;
             }
 
-            GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadMapEditorMode(selectedTerrain);
         }
 
         public void onExitClicked(HUD invoker) {
-            GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadTitleScreen();
         }
 

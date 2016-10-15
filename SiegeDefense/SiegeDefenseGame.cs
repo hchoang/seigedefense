@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace SiegeDefense {
     public class SiegeDefenseGame : Game {
@@ -9,6 +10,7 @@ namespace SiegeDefense {
         GameManager gameManager;
         BasicEffect basicEffect;
         Effect advancedEffect;
+        InputManager inputManager;
 
         public SiegeDefenseGame() {
             graphicDeviceManager = new GraphicsDeviceManager(this);
@@ -51,7 +53,8 @@ namespace SiegeDefense {
             Services.AddService(soundManager);
 
             // input
-            Services.AddService(typeof(IInputManager), new InputManager());
+            inputManager = new InputManager();
+            Services.AddService(typeof(IInputManager), inputManager);
 
             // game manager
             gameManager = new GameManager();
@@ -59,10 +62,18 @@ namespace SiegeDefense {
         }
         
         protected override void Update(GameTime gameTime) {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            //    Exit();
 
-            base.Update(gameTime);
+            if (gameManager.isPaused) {
+                List<GameObject> modalObjects = GameObject.FindObjectsByTag("Modal");
+                foreach(GameObject modalObject in modalObjects) {
+                    modalObject.Update(gameTime);
+                }
+                inputManager.Update(gameTime);
+            } else {
+                base.Update(gameTime);
+            }
         }
         
         protected override void Draw(GameTime gameTime) {

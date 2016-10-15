@@ -46,6 +46,15 @@ namespace SiegeDefense {
             transformation = new Transformation();
         }
 
+        private GameManager _gameManager;
+        public GameManager gameManager {
+            get {
+                if (_gameManager == null) {
+                    _gameManager = Game.Services.GetService<GameManager>();
+                }
+                return _gameManager;
+            }
+        }
         public virtual List<T> FindObjects<T>() where T : GameObject {
             return _game.Components.Where(x => x is T).Cast<T>().ToList();
         }

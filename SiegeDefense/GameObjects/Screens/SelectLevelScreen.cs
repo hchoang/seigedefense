@@ -85,7 +85,6 @@ namespace SiegeDefense {
         }
 
         public void onExitClicked(HUD invoker) {
-            GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadTitleScreen();
         }
 
@@ -94,7 +93,6 @@ namespace SiegeDefense {
                 return;
             }
 
-            GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadLevel(selectedLevel);
         }
 

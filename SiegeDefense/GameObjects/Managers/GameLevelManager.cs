@@ -12,7 +12,7 @@ namespace SiegeDefense {
         protected EmptyObject gameoverSprite;
 
         // Game mechanics
-        protected int maxEnemy = 12;
+        protected int maxEnemy = 1;
         protected int spawnMaxAttempt = 50;
         protected float spawnCDTime = 1;
         protected float spawnCDCounter = 1;
@@ -24,6 +24,7 @@ namespace SiegeDefense {
         protected Camera mainCamera { get; set; }
         protected OnlandVehicle userControlledTank;
         public Partition rootPartition { get; set; }
+        public IInputManager inputManager { get; set; }
 
         public void LoadLevel(LevelDescription description) {
 
@@ -48,19 +49,94 @@ namespace SiegeDefense {
             // Add game detail
             pointSprite = new TextRenderer() { font = Game.Content.Load<SpriteFont>(@"Fonts\Arial"), text = "Point: " + 0, position = new Vector2(50, 50), color = Color.Red };
             bloodSprite = new TextRenderer() { font = Game.Content.Load<SpriteFont>(@"Fonts\Arial"), text = "HP: " + userControlledTank.HP, position = new Vector2(50, 100), color = Color.Red };
-            gameoverSprite = new EmptyObject();
-            gameoverSprite.AddComponent(new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\GameOver")));
-            gameoverSprite.Visible = false;
+            
             Game.Components.Add(bloodSprite);
             Game.Components.Add(pointSprite);
-            Game.Components.Add(gameoverSprite);
+
+            inputManager = Game.Services.GetService<IInputManager>();
+        }
+
+        public void ExitButtonClick(HUD invoker) {
+            inputManager.toggleCursor(true);
+            gameManager.LoadTitleScreen();
+        }
+
+        public void ResumeButtonClick(HUD invoker) {
+            gameManager.isPaused = false;
+            inputManager.toggleCursor(false);
+        }
+
+        public void ShowGameOverScreen() {
+            if (gameoverSprite == null) {
+                gameoverSprite = new EmptyObject();
+                gameoverSprite.AddComponent(new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\GameOver")));
+                Game.Components.Add(gameoverSprite);
+
+                // exit button
+                _2DRenderer exitButtonRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton"));
+                exitButtonRenderer.AddChildRenderer(new TextRenderer("Exit"));
+                exitButtonRenderer.position = new Vector2(0.45f, 0.65f);
+                exitButtonRenderer.size = new Vector2(0.1f, 0.1f);
+
+                HUD exitButton = new HUD(exitButtonRenderer);
+                exitButton.onClick = ExitButtonClick;
+                Game.Components.Add(exitButton);
+
+                inputManager.toggleCursor(true);
+            }
+        }
+
+        public void DisplayPauseGameScreen() {
+            // modal background
+            _2DRenderer modalBackgroundRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\WhiteBar"));
+            modalBackgroundRenderer.color = Color.Black * 0.5f;
+            HUD modalBackground = new HUD(modalBackgroundRenderer);
+            modalBackground.Tag = "Modal";
+            Game.Components.Add(modalBackground);
+
+            // resume button
+            _2DRenderer resumeButtonRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton"));
+            resumeButtonRenderer.AddChildRenderer(new TextRenderer("Resume"));
+            resumeButtonRenderer.position = new Vector2(0.35f, 0.5f);
+            resumeButtonRenderer.size = new Vector2(0.1f, 0.1f);
+
+            HUD resumeButton = new HUD(resumeButtonRenderer);
+            resumeButton.Tag = "Modal";
+            resumeButton.onClick = ResumeButtonClick;
+            Game.Components.Add(resumeButton);
+
+            // exit button
+            _2DRenderer exitButtonRenderer = new SpriteRenderer(Game.Content.Load<Texture2D>(@"Sprites\MainMenuButton"));
+            exitButtonRenderer.AddChildRenderer(new TextRenderer("Exit"));
+            exitButtonRenderer.position = new Vector2(0.55f, 0.5f);
+            exitButtonRenderer.size = new Vector2(0.1f, 0.1f);
+
+            HUD exitButton = new HUD(exitButtonRenderer);
+            exitButton.Tag = "Modal";
+            exitButton.onClick = ExitButtonClick;
+            Game.Components.Add(exitButton);
         }
 
         public override void Update(GameTime gameTime) {
-            if (userControlledTank.HP <= 0 || FindObjectsByTag("Player").Count == 0) {
-                gameoverSprite.Visible = true;
+            if (userControlledTank.HP <= 0) {
+                ShowGameOverScreen();
+                List<GameObject> enemies = FindObjectsByTag("Enemy");
+                foreach (GameObject enemy in enemies) {
+                    Game.Components.Remove(enemy);
+                }
                 return;
             }
+
+            if (inputManager.isTriggered(GameInput.Pause)) {
+                gameManager.isPaused = !gameManager.isPaused;
+                if (gameManager.isPaused) {
+                    DisplayPauseGameScreen();
+                    inputManager.toggleCursor(true);
+                } else {
+                    inputManager.toggleCursor(false);
+                }
+            }
+
             bloodSprite.text = "HP: " + userControlledTank.HP;
             pointSprite.text = "Point: " + Point;
 

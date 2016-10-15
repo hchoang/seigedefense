@@ -14,6 +14,7 @@
         PointerY,
         TextInput,
         Back,
-        NumberInput
+        NumberInput,
+        Pause
     }
 }

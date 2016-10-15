@@ -42,7 +42,6 @@ namespace SiegeDefense {
         }
 
         public void NewGame(HUD invoker) {
-            GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadSelectLevelScreen();
         }
 
@@ -51,7 +50,6 @@ namespace SiegeDefense {
         }
 
         public void MapEditor(HUD invoker) {
-            GameManager gameManager = Game.Services.GetService<GameManager>();
             gameManager.LoadMapEditorSelectionScreen();
         }
 

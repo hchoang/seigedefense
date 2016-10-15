@@ -19,8 +19,8 @@ namespace SiegeDefense {
             }
         }
 
-        private static OnlandVehicle _player;
-        protected static OnlandVehicle player {
+        private OnlandVehicle _player;
+        protected OnlandVehicle player {
             get {
                 if (_player == null) {
                     _player = (OnlandVehicle)FindObjectsByTag("Player")[0];
